@@ -1,0 +1,174 @@
+
+0. What is JMCCE?
+--------------------
+
+  JMCE  :JauMing (frame buffer console) Chinese Environment (BIG5 code)
+
+  CCE   :A vga mode Simplified Chinese Environment (GB code)
+
+  JMCCE :A better jmce+cce double mode (BIG5 & GB) Chinese console
+
+
+  "JMCCE" is a better version of BIG5 traditional Chinese Console
+  "JMCE", plus the functions of GB simplified Chinese Console "CCE".
+
+  It could handle 40 types of Chinese Input Methods,include phrase
+  input,BIG5 Japanese input,Symbol input ....etc. All the famous
+  Chinese Input Methods could work on it.
+
+
+
+1. How to install JMCCE ?
+--------------------------
+
+ make 
+ make install
+
+
+
+
+ Files installed:
+
+    Binary(suid root):       /usr/bin/jmcce
+    Manual:                  /usr/local/man/man1/jmcce.1
+    Fonts:                   /usr/share/fonts/chinese
+                              (include Tranditional & Simplified fonts)
+    Input Methods key definition file:
+                             /usr/share/inputref/*.ikt (or *.ekt)
+    Input Methods phrase box ref table:
+                             /usr/share/inputref/*.tui
+    Virtual keyboard symbol input methods:
+                             /usr/share/inputref/*.vkt
+
+
+
+2. How to use JMCCE ?
+----------------------
+
+ Started usage:
+
+     jmcce [ -GB ] [-BIG5]
+     
+ Will excute jmcce on GB (Simplified Chinese) or BIG5 (Traditional
+ Chinese) mode. Include some famous Input Methods of them.
+ 
+ *** Note ***
+ 
+     After version 1.0-2.7, the usage sytax change to following:
+ 
+     Usage: jmcce [options]
+
+       -h  show this help
+       -d  display only, without loading any input methods
+       -b  force to big5 mode
+       -g  force to gb mode
+       -db force to big5 mode display only
+       -dg force to gb mode display only
+       
+
+ Use Ctrl+Space to change Chinese/English input state, Ctrl+Alt+0-9
+ to change input method. Ctrl+Alt+0 is the internal code input method.
+
+
+ BIG5 traditional Chinese Mode: (default)
+
+ Ctrl+Space              Toggle Chinese/English
+ Shift+Space             Toggle Full/Half English Char
+ Ctrl+Alt+1              CJ Input Method
+ Ctrl+Alt+2  (new)       junior CJ Input Method
+ Ctrl+Alt+3              Phone Input Method
+ Ctrl+Alt+4              Boshiamy Input Method (if you have legal file)
+ Ctrl+Alt+5              Array30 Input Method (if you have legal file)
+ Ctrl+Alt+6  (new)       English to Chinese Input Method (by Square fast Co.)
+ Ctrl+Alt+7  (new)       EZ 100 thousand phrase Input Method (by EZ info.)
+ Ctrl+Alt+8  (new)       BIG5 Japanese Romanize Input Method (by EZ info.)
+ Ctrl+Alt+9  (new)       Chion 300 thousand phrase Input Method (by Chion Kwan)
+ Ctrl+Alt+0              Internal Code Input Method 
+ Ctrl+Alt+G  (new)       Repeat the last input phrase or char
+ 
+                         Other input methods could be choice by light bar menu
+                         and configed at /usr/lib/jmcce/jmcceb5.ini  
+ 
+
+ GB simplified Chinese Mode: (default)
+
+ Ctrl+Space              Toggle Chinese/English
+ Shift+Space             Toggle Full/Half English Char
+ Ctrl+Alt+1              No tone Pinyin Input Method
+ Ctrl+Alt+2              Toned Pinyin Input Method
+ Ctrl+Alt+3  (new)       CCDOS shorter Pinyin Input Method
+ Ctrl+Alt+4  (new)       Qian Ma Input Method (if you have legal file) 
+ Ctrl+Alt+5              Five-Stroke (Wubi) Input Method (if you have legal file)
+ Ctrl+Alt+6  (new)       English to Chinese Input Method (CXterm version)
+ Ctrl+Alt+7  (new)       Head and Tail Input Method (if you have legal file)
+ Ctrl+Alt+8  (new)       CTLau Cantonese Input Method (if you have legal file) 
+ Ctrl+Alt+9  (new)       Telegraph Code Input Method
+ Ctrl+Alt+0              Internal Code Input Method 
+ Ctrl+Alt+G  (new)       Repeat the last input phrase or char
+ 
+                         Other input methods could be choice by light bar menu
+                         and configed at /usr/lib/jmcce/jmccegb.ini   
+
+ Console window operation:
+
+ ScrollLock              Enter/Leave History Mode
+ Ctrl+Alt+A              Add a new console window
+ Ctrl+Alt+X              Exit current console window
+ Ctrl+Alt+P              Change to previous console window
+ Ctrl+Alt+N              Change to next console window
+ Ctrl+Alt+R              Redraw current console window
+ 
+ If you want to input Chinese under bash, please put the following lines 
+ into your $HOME/.inputrc file:
+
+      set meta-flag on
+      set convert-meta off
+      set output-meta on
+ 
+ Then bash won't consider Chinese characters as Escape Chars.
+ Or you can just copy the sample inputrc to your $HOME/.inputrc
+
+
+3. How I develop JMCE?
+---------------------
+
+ Please see the document file: readme.jmce
+
+
+4. Why we develop JMCCE?
+--------------------------
+
+ We want to use a better version of jmce,
+ we want to use simplified Chinese on the same program,
+ we want to use some famous Chinese Input Method,
+ we want to use the faster phrase input method,
+ we don't want to write a lot of programs to add a
+    lot of Chinese Input Methods.
+
+
+5. About bugs & suggestion
+--------------------------
+
+ (JMCE)
+ This release is only in alpha/beta state, if you find
+ any bugs or you have any suggestions please send email
+ to me(jauming@yahoo.com). Thank you for your
+ support.
+
+                                 kevin
+                               Apr 06,2k
+
+ (JMCCE)
+ Bug reports and comments/suggestions about jmcce could
+ be send to Taiwan Linux Co. LTD. (webmaster@t-linux.com.tw)
+
+
+                                Taiwan Linux Co. LTD.
+                                           Oct 1,2000
+
+
+ # Other detail desciption about JMCCE, please see README.big5
+   or README.jmcce (note:"README" is upper case)
+
+ # The change notes of JMCCE version 1.3, please see file:
+   README.jmcce.1.3 

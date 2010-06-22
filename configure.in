@@ -1,0 +1,97 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/jmcce.c)
+AM_CONFIG_HEADER(include/config.h)
+AC_CONFIG_AUX_DIR(build)
+AM_INIT_AUTOMAKE(jmcce, "1.4RC2")
+
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AM_PROG_LIBTOOL
+
+
+dnl Checks for libraries.
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS(\
+	fcntl.h \
+	sys/ioctl.h \
+	sys/mman.h \
+	sys/types.h \
+	unistd.h\
+	signal.h \
+)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+AC_CANONICAL_HOST
+
+dnl Checks for platform
+
+JMCCE_ARCH="LINUX"
+case "$host" in
+i?86-*-linux*)
+    JMCCE_ARCH="LINUX";;
+i?86-*-freebsd*)
+    JMCCE_ARCH="FREEBSD";;
+*)
+    echo "Sorry, JMCCE only supports x86 Linux and FreeBSD."; exit 1 ;;
+esac
+
+AC_SUBST(JMCCE_ARCH)
+
+#AC_DEFINE(JMCCE_ARCH)
+
+dnl Checks for library functions.
+AC_PROG_GCC_TRADITIONAL
+AC_FUNC_MEMCMP
+AC_FUNC_MMAP
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(mkdir select strstr)
+AC_CHECK_LIB(vga, main,,[echo "Sorry, JMCCE need vga library."; exit 1])
+AC_CHECK_LIB(ncurses, main,,[echo "Sorry, JMCCE need ncurses library."; exit 1])
+
+
+#sysconfdir='${prefix}/etc/chinese/jmcce'
+if test "${sysconfdir}" = '${prefix}/etc'
+then
+    JMCCE_CONFDIR='${prefix}/etc/chinese/jmcce'
+else
+    JMCCE_CONFDIR='${sysconfdir}'
+fi
+
+AC_SUBST(JMCCE_CONFDIR)
+
+JMCCE_DATADIR='$(datadir)/$(PACKAGE)/inputref'
+AC_SUBST(JMCCE_DATADIR)
+
+AC_WITH_JMCCE_FONTDIR
+
+JMCCE_EXTRAS_DIR='$(top_srcdir)/extras'
+AC_SUBST(JMCCE_EXTRAS_DIR)
+
+#DEFS='@DEFS@ -I$(JMCCE_EXTRAS_DIR)/chewing/include'
+#AC_SUBST(DEFS)
+
+
+AC_OUTPUT(\
+	Makefile \
+	src/Makefile \
+	util/Makefile \
+	extras/Makefile \
+	extras/chewing/Makefile \
+	extras/chewing/util/Makefile \
+	fonts/Makefile \
+	inputref/Makefile \
+	conf/Makefile \
+	doc/Makefile \
+)

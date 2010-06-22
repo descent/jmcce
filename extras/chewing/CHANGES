@@ -1,0 +1,16 @@
+chewing-0.0.5
+  1. 加入手動加詞功能
+  2. 修改原本使用右邊 shift鍵的 bug
+  3. 修改 Scroll Lock鍵打開時的 bug
+
+chewing-0.0.4-xcin2.5.2pre1.tar.gz :
+  1. 配合 xcin新的標示詞的功能
+  2. 選字程式改成呼叫 xcin的函式
+  3. 增加 patch_chewing 這個自動 patch script
+  4. 修正插入字串時，中斷點不會移動的Bug
+
+chewing-0.0.3.tar.gz : 
+  1. 增加許氏鍵盤的設定,只要設定xcinrc中chewing設定的KB_TYPE即可
+  2. 修正以往產生CORE DUMP的問題
+  3. 拿掉DATA_PREFIX的設定,直接讀取XCIN預設目錄下的資料檔
+
