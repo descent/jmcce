@@ -1,0 +1,93 @@
+------------------------------------------------------------------------------
+                  Bcs16 ( Buggy Chinese System 16x16 font version)
+                  Bcs16 中文終端机 0.07 版使用說明
+------------------------------------------------------------------------------
+
+◎  版權聲明 ( Copyright Announcement )
+    請參考 README.yact ( 原本 yact package 中的 README 檔 )
+
+    Bcs16 is modified from yact.
+
+    Yact Release I BETA             Copyright (c) 1995     Nicholas ,  Pearl
+      Nicholas.bbs@bbs.csie.nctu.edu.tw
+      oror.bbs@bbs.csie.nctu.edu.tw
+
+    Bcs16 Release                   Copyright (c) 1997     Server
+      cnoize.bbs@bbs.cis.nctu.edu.tw
+
+◎  源起
+        當初修改 yact 的原因是我的螢幕無法達到它所使用的解析度 1024x768
+    然後就改了這一個版本: 640x480 256 color..
+    ...
+    ...
+    等到 0.10 版再補充吧..
+
+Install:
+    1. Install yact package first.
+       
+    2. cp data/* /usr/local/lib/yact/
+         
+          data/bcs16.hbf ( et 16 字型 hbf )
+          data/8x16 ( 8x16 是 /usr/lib/kbd/consolefonts/default8x16 in linux )
+          data/cclib16.hbf ( GB )
+          data/jis.hbf ( seem can't use )
+          data/sjis.hbf ( 可看 kon, wnn 的日文說明.. 是 EUC 碼.. )
+          data/ksc16.hbf ( 韓文 )
+
+    3. 取得合法的倚天 16 字型，和 liubig5.tab ，放進 /usr/local/lib/yact
+       spcfont.15, spcfsupp.15, stdfont.15, liubig5.tab
+
+    4. make 
+       compile 出 bcs16
+ 
+    5. cp bcs16 /usr/local/bin/
+
+    6. ( 選用 )
+       取得字型.. 解幵後放入 /usr/local/lib/yact
+       GB => 140.111.1.10:/Chinese/ifcss/software/fonts/gb/hbf/
+             cclib.16.gz cclib.16a.gz
+       SJIS => 140.111.1.10:/Chinese/ifcss/software/fonts/misc/hbf
+             jis.16.gz
+       中國海字集 chinasea.15e ( 或倚天造字檔 usrfont.15m )
+       =>     /usr/local/lib/yact/usrfont.15m
+
+    7. run it..
+
+    8. 按 ALT_H 看簡單的使用說明，詳細的使用說明要等到我中文輸入的速度
+       達到 100 字/分 時才會寫
+
+功能說明:
+ver. 0.04:
+    press ALT_H when you run it..
+    ALT_Z 未完成
+    詳細的說明請等 1.00 版..
+
+ver. 0.05:
+    ALT_Z 有作用了..
+    ALT_N, ALT_B 改成新的切換方式: 1, 11, 21, 31, 41, 1， 
+    可用 ALT_O, X 將 ALT_N, ALT_B 換回原本的 Link 切換方式..
+
+ver. 0.06:
+
+liubig5.tab support 參考資料:
+  嘸蝦米輸入法  劉重次 著 行易有限公司出版
+  一九九五年九月十三版
+
+新版的 bcs16 ( ver. > 0.05 ) 已增加了獨立的嘸蝦米輸入法的支援，
+所以如果不需要其他 yact 的輸入法，就不必先安裝 yact ..
+
+0.06 版有個改變是將原本輸入法的方式做一些改變，如果習慣舊做法的人
+請將 hzinput.c 中的一行 "#undef OL<D_HZ_FILTER" 改成 "#define OLD_HZ_FILTER"
+
+    ★ 改變顯示字型
+       ALT_P, H =>
+       "Multi-hbf: ' ', (B)ig5, (G)b, (J)is, (S)hift-Jis" 
+       ' ' 不改變
+
+ver. 0.07:
+  新增中國海字集的支援( 直接讀取倚天造字檔內容 )
+  參考資料:
+  倚天中文系統 新環境 技朮手冊 倚天資訊股份有限公司發行
+  82 年十月三版
+
+  other/jconv 是日文的五种內碼轉換程式..

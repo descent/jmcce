@@ -1,0 +1,25 @@
+
+6. ¥Î Ctrl-[1-9] ¨Ó¥[µü®É¡A¥[¤J 5 ¦rµü®É¡AÅã¥Ü¡u¥[¤J-xxxxx¡v³B·|¶Ã±¼¡C
+   ©ÎªÌ¡A¥ý¥[¤Jªøªºµü«á¡A¦A¥[¤Jµuµü¡A«hµuµüªºÅã¥Ü·|¿ù»~¡C¡]¦ý¦³¥¿½Tªº¥[¤J¡^
+   /* fixed by gugod */
+   /*
+      ­ì¦]¡G
+      xcin_chewing.c :
+      in CheingXimInit , inpinfo->s_keystroke ªø«×ºâ¿ù¤
+      in ShowStateAndZuin , memset ªø«×¤]ºâ¿ù
+	-> ¬ÒÀ³¬° MAX_PHRASE_LEN + 3 (10 + 3)
+   */
+
+5. µLªk¥´¥X¤j¤p¼gªº­^¤å¥þ§Î¦r¥À¡C
+
+4. ­^¤å¼Ò¦¡¤U«ç»ò¼Ë³£µLªk¥´¥X¤j¼g¦r¥À¡A¤Ï¦Ó¬O­n¤Á´«¨ì¤¤¤å¼Ò¦¡¤U¡A«ö¦í
+   shift ¤~±o¥H¥´¥X¤j¼g­^¤å¦r¥À¡A»á©Ç¡C
+
+3. ·í¿é¤J²Ä¤@­Ó¦r«á«ö"¤U"Áä¡AÀH«K¿ï¤@­Ó¦r¦A¥X«ö backspace
+   §R°£¡A¦¹®É¤S¥X²{¿ï¦rµe­±¥i¬O«oµLªk¿ï¦r¡C
+
+2. ¦b¿é¤J²Ä¤@­Ó¦rªº®É­Ô¤£·|Åã¥Ü¥Xª`­µ²Å¸¹ (OverTheSpot)
+
+1. ¦³¨Çµüªº­µ¤£¥¿½T¡A³o¬O¦]¬°±q libtabe¤¤ªºµü­ì¥»´N¦³¿ù»~¡A¦ý¬O¦]¬°
+   ¼Æ¶q¤Ó¦h¡A©Ò¥H¥²¶·½Ð¤j®aÀ°¦£­×¥¿¡A¥i¥H§â patchÀÉ±H¨ì 
+   chewing@gugu.oio.cx ¨Ó

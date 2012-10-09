@@ -1,0 +1,75 @@
+1. How to install CCE 0.1?
+--------------------------
+
+ make 
+ make install
+
+ type cce to start & enjoy cce!
+
+ Binary(suid root):       /usr/local/bin/cce
+ Manual:                  /usr/local/man/man1/cce.1
+ Font & Input Methods:    /usr/local/lib/cce/*
+
+
+2. How to use CCE 0.1?
+----------------------
+ 
+ Ctrl+Space    Toggle Chinese/English
+ Shift+Space   Toggle Full/Half English Char
+ Ctrl+Alt+0    Internal Code Input Method(included in cce)
+ Ctrl+Alt+1    QuanPin Input Method
+ Ctrl+Alt+2    WuBi Input Method
+ Ctrl+Alt+3-Ctrl+Alt+9   Other Input Methods
+ (you can use the options -in1...-in9 to indicate the input methods,
+  they should exist in the directory /usr/local/lib/cce)
+
+ ScrollLock    Enter/Leave History Mode
+ Ctrl+Alt+A    Add a new console window
+ Ctrl+Alt+X    Exit current console window
+ Ctrl+Alt+P    Change to previous console window
+ Ctrl+Alt+N    Change to next console window
+
+ Please man cce for more information, but I haven't enough time
+ to write the documentation, I think the best method is to read
+ the source of CCE to find out how it works and how to use it :-))
+
+ If you want to input Chinese under bash, please put the following lines 
+ into your $HOME/.inputrc file:
+
+      set meta-flag on
+      set convert-meta off
+      set output-meta on
+ 
+ Then bash won't consider Chinese characters as Escape Chars.
+ Or you can just copy the sample inputrc to your $HOME/.inputrc
+
+3. How I develop CCE?
+---------------------
+
+ The kernel code is from yact 0.4, but it use 1024x768x256 color, it seems
+ that many display cards have some problem supporting this video mode. So
+ I change it to standard VGA mode(640x480x16 color) and read some source
+ from bcs16(640x480x256 color) and chdrv(640x480x16 color).
+
+ I rewrite the input module of yact and make it work like xcin. I include
+ four input methods in this releae(QuanPin, ShuanPin, WuBi, ZiRanMa) and
+ by default CCE loads QuanPin & WuBi. Thanks dfbb for his work of porting
+ UCDOS's input methods to XCIN :-)) 
+
+ The display module of CCE is mainly from chdrv and I have written some new 
+ assemble functions. I put all the assemble functions int the file
+ asm_routine.S.
+
+ If you have time to develop CCE, please do it! Fix bugs and add new
+ features.... Let's work together to program a good console Chinese software...
+
+4. About bugs & suggestion
+--------------------------
+
+ This release is only in alpha/beta state, if you find
+ any bugs or you have any suggestions please send email
+ to me(herui@info.cs.tsinghua.edu.cn). Thank you for your
+ support.
+
+                                 raner
+                               May 21,98

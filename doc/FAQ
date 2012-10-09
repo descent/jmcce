@@ -1,0 +1,135 @@
+~
+1. 什麼是 JMCCE?
+
+   JMCCE 簡單的說就是中文系統，技術一點的說就是中文終端機模擬程式。JMCCE
+   是把台灣繁體版的 JMCE，與大陸簡體版的 CCE，做一整合工作，
+   並大幅加強。除了能同時用一個程式使用簡繁兩種模式，而不需具備 JMCE 及 CCE
+   兩套之外，並把JMCE大幅增加許多的功能。
+
+2. JMCCE Team 在做什麼?
+
+   JMCCE 長期以來由許多熱心 Linux 中文發展的前輩們所開發。不過在 JMCCE 在 
+   1.3 後缺乏維護，使得 JMCCE 在目前的 Linux 環境下使用已不太方便。不久之前
+   在許多熱心人士的幫助下，組織了 JMCCE 維護團隊，負責 JMCCE 日後的發展與維護。          
+
+   JMCCE 的網址為: http://jmcce.slat.org/
+
+3. 問題或建議要回報給誰? 要如何加入 JMCCE? 是否有 CVS?
+
+   問題或建議可以 mail:jmcce-bug@linux.org.tw
+
+   JMCCE 的討論在 bbs.sayya.org 的 jmcce-devel 版，
+   欲訂閱 mailing-list 的朋友請以 subscribe 為信件標題寄信 
+   至 jmcce-request@tlug.sinica.edu.tw 即可。
+
+   CVS:
+   cvs -d :pserver:annon@tlug.sinica.edu.tw:/home/service/cvsroot/jmcce login
+   (passwd: just press enter)
+
+
+4. 如何切換注音用的鍵盤排列方式，例如大千、倚天等?
+
+   修改 jmcceb5.ini (/etc/chinese/jmcce/jmcceb5.ini)
+   將 零壹 取消(前面數字改成 ;)改用 倚天注音即可(前面加上數字 3).
+   如下:                                                          
+
+   3 倚天注音輸入法 BIG5 倚注 etzy.tui     xxxxx.xxx    xxxxx.xxx xxxxx.xxx
+   ; 零壹注音輸入法 BIG5 注音 zozy.tui     xxxxx.xxx    xxxxx.xxx xxxxx.xxx
+
+   不過，這個方法所用的是倚天鍵 41 鍵，不是倚天 26 鍵。
+   如果使用的是酷音輸入法，在酷音輸入模式下可使用 CTRL + A 來設定酷音所使用
+   的鍵盤排列方式, 計有大千,許氏,IBM, 精業,倚天,倚天26。       
+
+5. 如何才能使用行列30輸入法?
+
+   JMCCE 1.4 已將行列 30 納入，可使用 CTRL+ALT+5 來啟動輸入法。
+
+6. 如何才能使用無蝦米輸入法?
+
+   1) 取得合法的 boshiamy.tit (或 liu.tit)
+   2) 利用 tit2tui 轉換, 方式為 tit2tui boshiamy.tit boshiamy.tui
+   3) 將轉換好的 boshiamy.tui 複製到 /usr/share/jmcce/inputref/ 目錄裡
+   4) 確認 /etc/chinese/jmcce/jmcceb5.ini 設定檔的資料是否正確
+
+7. 如何增加其它輸入法?
+
+   1) 先下載欲加入的輸入法資料檔, 例如下載的檔案為 new30.tit
+   2) 利用 tit2tui 轉換, 方式為 tit2tui new30.tit new30.tui
+   3) 將轉換好的 new30.tui 複製到 /usr/share/jmcce/inputref/ 目錄裡
+   4) 建立 new30.tit 所使用的按鍵定義檔 new30.ikt, 格式稍後介紹
+   5) 修改 /etc/chinese/jmcce/jmcceb5.ini, 依格式將 new30 的輸入法
+      資料建立好.
+  
+   按鍵定義檔 *.ikt 的格式定義如下:
+   第一個字元代表欲定義的按鍵
+   第二個字元為 [
+   第三、四個字元代表該按鍵由 JMCCE 所顯示的字串內容
+   第五個字元為 ]
+   第六個字元為 T (該按鍵不使用來輸入字根) 或 0 (該按鍵用使用輸入字根)
+   若有第八個字元，則代表該按鍵為選擇字使用
+   範例：
+
+.[9v]0M
+1[１]0<1>M
+
+   代表 . 鍵在輸入時會顯示 9v，1 鍵在輸入時會顯示 １，同時 1 這個鍵也用來
+   選字.
+   
+   在設定新的按鍵定義時請將其它可使用的 .ikt 檔複製後修改即可.
+
+8. 在編譯時出現 "Sorry, jmcce need vga library"，怎麼辦?
+
+   裝上 mdk cd disc 內的 libsvgalib1-devel package。你可以簡單執行
+   urpmi libsvgalib1-devel 就可以安裝上。                         
+
+   網路 download 的話 :
+
+   mandrake linux 8.0 :
+
+   ftp://mdk.linux.org.tw/pub/mandrake-old/8.0/i586/Mandrake/RPMS/
+
+   svgalib-1.4.3-0.pre.20001010.1mdk.i586.rpm
+   svgalib-devel-1.4.3-0.pre.20001010.1mdk.i586.rpm
+
+   mandrake linux 8.1 :
+   ftp://mdk.linux.org.tw/pub/mandrake-old/8.1/i586/Mandrake/RPMS/
+
+   svgalib-1.4.3-1mdk.i586.rpm
+   svgalib-devel-1.4.3-1mdk.i586.rpm
+
+   mandrake linux 8.2 :
+
+   libsvgalib1-1.4.3-2mdk.i586.rpm
+   libsvgalib1-devel-1.4.3-2mdk.i586.rpm
+   svgalib-1.4.3-2mdk.i586.rpm
+
+   一般 linux dist 對於 svgalib 套件打包，主要的執行檔案，包含
+   svgalib 的程式庫，都是放在 svgalib rpm package 內。development
+   程式套件則是打包放在 svgalib-devel 內。                       
+
+   mandrake linux 目前套件打包原則逐漸採行 debian package 命名的
+   policy，所以以 svgalib 來說，svgalib package 提供相關執行檔案，
+   libsvgalib 放置程式庫，libsvgalib-devel 放 development 用的
+   header 引入檔。
+ 
+   redhat linux 7.x :
+
+   redhat 7.x 將 svgalib 移往至 powertools 內，要使用的話可以簡單
+   由這邊取得:
+
+   ftp://cle.linux.org.tw/pub/CLE/stable/v1.0/i386/RedHat/RPMS/
+
+   svgalib-1.4.1-12.i386.rpm
+   svgalib-devel-1.4.1-12.i386.rpm
+
+
+9. 可以在 FreeBSD 上使用嗎?
+
+   JMCCE 目前只能在 Linux 下執行，未來版本會支援 FreeBSD.
+
+10.可以在 FrameBuffer 模式下使用 JMCCE 嗎?
+   
+   目前 JMCCE 僅支援 640x480x256 的顯示模式，可以在 /etc/lilo.conf
+   中指定開機用 framebuffer 模式為 vga=769，則可以在開機後在        
+   FrameBuffer 模式下使用 JMCCE.                          
+

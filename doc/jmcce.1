@@ -1,0 +1,164 @@
+.TH jmcce 1 "jmcce v1.4" "May 2001"
+
+.SH NAME
+jmce \- JauMing (frame buffer console) Chinese Environment
+jmcce \- A better jmce+cce double mode (BIG5 & GB) Chinese Environment
+
+.SH SYNTAX 
+.B jmcce [-g] [-b] [-d] [-dg] [-db] [--help]
+
+Usage: jmcce [options]
+
+       -h  show this help
+       -d  display only, without loading any input methods
+       -b  force to big5 mode
+       -g  force to gb mode
+       -db force to big5 mode display only
+       -dg force to gb mode display only
+
+.SH DESCRIPTION
+"jmcce" is a better version of BIG5 traditional Chinese Console
+"jmce", plus the functions of GB simplified Chinese Console "cce".
+
+It could handle 40 types of Chinese Input Methods,include phrase
+input,BIG5 Japanese input,Symbol input ....etc. All the famous
+Chinese Input Methods could work on it.
+
+Use Ctrl+Space to change Chinese/English input state, Ctrl+Alt+0-9 
+to change input method. Ctrl+Alt+0 is the internal code input method. 
+
+.SH OPTIONS
+.B -BIG5  -GB
+.PP
+Specify the internal code of Chinese. Also operation mode.
+.PP
+For example: 
+.PP
+jmcce -g
+
+Will excute jmcce and force to display in GB code, simplified
+Chinese mode. And append some famous simplified Chinese Input 
+Methods.
+
+.SH USAGE
+BIG5 traditional Chinese Mode: (default)
+
+.br
+ Ctrl+Space         Toggle Chinese/English
+.br
+ Shift+Space        Toggle Full/Half English Char
+.br
+ Ctrl+Alt+1         CJ Input Method
+.br
+ Ctrl+Alt+2 (new)   junior CJ Input Method
+.br
+ Ctrl+Alt+3         Phone Input Method
+.br
+ Ctrl+Alt+4         Chion 300 thousand phrase Input Method
+.br
+                       (by Chion Kwan)
+.br
+ Ctrl+Alt+5         Array30 Input Method 
+.br
+ Ctrl+Alt+6 (new)   English to Chinese Input Method 
+.br
+                       (by Square fast Co.)
+.br
+ Ctrl+Alt+7 (new)   Chewing Input Method 
+.br
+                       (http://chewing.good-man.org/)
+.br
+ Ctrl+Alt+8 (new)   BIG5 Japanese Romanize Input Method 
+.br
+                       (by EZ info.)
+.br
+ Ctrl+Alt+9 (new)   Boshiamy Input Method
+.br
+ Ctrl+Alt+0         Internal Code Input Method 
+.br
+ Ctrl+Alt+G (new)   Repeat the last input phrase or char
+.PP
+Other input methods could be choice by light bar menu
+and configed at /etc/chinese/jmcce/jmcceb5.ini  
+ 
+
+GB simplified Chinese Mode: (default)
+
+.br
+ Ctrl+Space         Toggle Chinese/English
+.br
+ Shift+Space        Toggle Full/Half English Char
+.br
+ Ctrl+Alt+1         No tone Pinyin Input Method
+.br
+ Ctrl+Alt+2         Toned Pinyin Input Method
+.br
+ Ctrl+Alt+3 (new)   CCDOS shorter Pinyin Input Method
+.br
+ Ctrl+Alt+4 (new)   Qian Ma Input Method  
+.br
+ Ctrl+Alt+5         Five-Stroke (Wubi) Input Method 
+.br
+                       (if you have legal file)
+.br
+ Ctrl+Alt+6 (new)   English to Chinese Input Method 
+.br
+                       (CXterm version)
+.br
+ Ctrl+Alt+7 (new)   Head and Tail Input Method  
+.br
+                       (if you have legal file)
+.br
+ Ctrl+Alt+8 (new)   CTLau Cantonese Input Method 
+.br
+                       (if you have legal file)
+.br
+ Ctrl+Alt+9 (new)   Telegraph Code Input Method
+.br
+ Ctrl+Alt+0         Internal Code Input Method 
+.br
+ Ctrl+Alt+G (new)   Repeat the last input phrase or char
+.PP
+Other input methods could be choice by light bar menu
+and configed at /usr/lib/jmcce/jmccegb.ini   
+
+Console window operation:
+
+.br
+  ScrollLock      Enter/Leave History Mode
+.br
+  Ctrl+Alt+A      Add a new console window
+.br
+  Ctrl+Alt+X      Exit current console window
+.br
+  Ctrl+Alt+P      Change to previous console window
+.br
+  Ctrl+Alt+N      Change to next console window
+.br
+  Ctrl+Alt+R      Redraw current console window
+ 
+.SH AUTHORS
+yact:  Nicholas Pearl <Nicholas.bbs@bbs.csie.nctu.edu.tw>
+.PP
+bcs16: Server <cnoize.bbs@bbs.cis.nctu.edu.tw>
+.PP
+chdrv: Wang Youzhong <wycc@iis.sinica.edu.tw> 
+.PP
+cce:   He Rui <herui@info.cs.tsinghua.edu.cn>
+.PP
+jmce:  JauMing Tseng <jauming@yahoo.com> 
+                     <kevin@gv.com.tw>
+.PP
+jmcce: Taiwan Linux Co. LTD. (http://www.t-linux.com.tw)
+       JMCCE Team (http://jmcce.slat.org/)
+	
+.SH BUGS
+
+Bug reports and comments/suggestions about jmcce could
+be send to JMCCE team. (jmcce-bug@linux.org.tw)
+
+.SH DISCLAIMER
+This software is provided "as is" without warranty of any kind,
+either expressed or implied, including, but not limited to,
+the implied warranty of fitness for a particular purpose.
+The authors disclaim all warranties with regard to this program.

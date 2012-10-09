@@ -1,0 +1,80 @@
+1. How to install JMCE ?
+--------------------------
+
+ make 
+ make install
+
+ type jmce to start & enjoy jmce!
+
+ Binary(suid root):       /usr/local/bin/jmce
+ Manual:                  /usr/local/man/man1/jmce.1
+ Font & Input Methods:    /usr/local/lib/jmce/*
+
+
+2. How to use JMCE ?
+----------------------
+ 
+ Ctrl+Space    Toggle Chinese/English
+ Shift+Space   Toggle Full/Half English Char
+
+ Ctrl+Alt+0    		Internal Code Input Method(included in jmce)
+ Ctrl+Alt+1  		CJ Input Methods
+ Ctrl+Alt+2  		Boshiamy Input Methods
+ Ctrl+Alt+3    		Phone Input Method
+ Ctrl+Alt+4  		Array30 Input Methods
+ Ctrl+Alt+5-Ctrl+Alt+9  Other Input Methods
+
+ (you can use the options -in1...-in9 to indicate the input methods,
+  they should exist in the directory /usr/local/lib/jmce)
+
+ ScrollLock    Enter/Leave History Mode
+ Ctrl+Alt+A    Add a new console window
+ Ctrl+Alt+X    Exit current console window
+ Ctrl+Alt+P    Change to previous console window
+ Ctrl+Alt+N    Change to next console window
+ Ctrl+Alt+R    Redraw current console window
+
+ Please man jmce for more information, but I haven't enough time
+ to write the documentation, I think the best method is to read
+ the source of JMCE to find out how it works and how to use it :-))
+
+ If you want to input Chinese under bash, please put the following lines 
+ into your $HOME/.inputrc file:
+
+      set meta-flag on
+      set convert-meta off
+      set output-meta on
+ 
+ Then bash won't consider Chinese characters as Escape Chars.
+ Or you can just copy the sample inputrc to your $HOME/.inputrc
+
+3. How I develop JMCE?
+---------------------
+
+ The kernel code is from cce 0.11, but it use vgalib. So 
+ I change it to frame buffer mode(640x480x256 color) 
+ (VESA mode number=0x0101, linux_kernel_mode_number=0x0301)
+
+ I rewrite the input module of cce and make it work like xcin. I include
+ two input methods in this releae(IntCode, Phone) and
+ by default JMCE loads IntCode and Phone. 
+
+ The display module of JMCE is mainly from cce and I have written some new 
+ c functions. I put all the c draw functions int the file c_draw.c.
+
+ Chinese fonts used by JMCE is from KC chinese fonts.
+
+ If you have time to develop JMCE, please do it! Fix bugs and add new
+ features.... Let's work together to program a good console Chinese software...
+
+4. About bugs & suggestion
+--------------------------
+
+ This release is only in alpha/beta state, if you find
+ any bugs or you have any suggestions please send email
+ to me(jauming@yahoo.com). Thank you for your
+ support.
+
+                                 kevin
+                               Apr 06,2k
+

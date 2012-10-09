@@ -1,0 +1,12 @@
+2002-05-16  Gian-Yain Xu  <kids@cle.linux.org.tw>
+
+       * Fix some chewing input-method problems.
+       * Add some documents 
+
+
+2002-05-09  Cd Chen  <cdchen@cdchen.idv.tw>
+
+	* Create new action in the Makefile.am of $(top_srcdir)/ for 
+	generating RPM's spec file. 
+
+	* Adjust all Makefile.am and configure.in files for RC2 preparing.

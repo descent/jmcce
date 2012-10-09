@@ -1,0 +1,4 @@
+#undef JMCCE_FONTDIR
+#undef JMCCE_ETCDIR
+#undef JMCCE_LIBDIR
+
