@@ -103,12 +103,15 @@ screen_flipaway (void)
   active_console = 0;
 }
 
+#define DEFAULT_VGA_MODE G640x480x16M
+//#define DEFAULT_VGA_MODE G640x480x16
+
 /* use by signal usr2 (SIGACQ) handler -- acquire terminal */
 void
 screen_return (void)
 {
   if (!use_fb)
-    vga_setmode (G640x480x16);
+    vga_setmode (DEFAULT_VGA_MODE);
 
   active_console = 1;
 }
@@ -120,7 +123,7 @@ screen_init (void)
   if (fb_init ()) {
     use_fb = 0;
     vga_init ();
-    vga_setmode (G640x480x16);
+    vga_setmode(DEFAULT_VGA_MODE);
   }
 
   active_console = 1;
