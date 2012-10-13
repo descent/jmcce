@@ -1,10 +1,6 @@
 #ifndef _JMCCE_GB2BIG_H_
 #define _JMCCE_GB2BIG_H_
 
-#ifdef __GNUC__
-#  define strcmpi(s1, s2) strcasecmp(s1, s2)
-#endif
-
 #define LOBYTE(n)   ((n) & 0xFF)
 #define HIBYTE(n)   ((n) / 256 )
 
