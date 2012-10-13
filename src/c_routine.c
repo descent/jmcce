@@ -40,6 +40,39 @@ clear_cursor ()
  *         bitmap:   18 bytes unsigned char buffer                          *
  *         color:    0-3 bit: ForeGround 8-11 bit: BackGround               *
  ****************************************************************************/
+
+void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
+{
+  int i=0;
+  int cx=0, cy=0;
+  extern unsigned char ascii_font[256][18];
+  unsigned char *ascii = ascii_font['A'];
+
+
+  vga_setcolor(color1);
+  for (i=0 ; i < 18 ; ++i)
+  {
+    char c = ascii[i];
+    int j=0;
+    //printf("%x ", ascii[i]);
+
+    for (j=7 ; j>=0 ; --j)
+    {           
+      if (((c >> j) & 0x1) == 1)
+        vga_drawpixel(col+cx, y+cy);
+        //printf("*");
+      //else
+        //printf("_");
+      ++cx;
+    }
+    cx=0;
+    ++cy;
+
+  }
+  //printf("\n");
+
+}
+
 void
 c_draw_ascii (int col, int y, unsigned char *bitmap, int color1)
 {

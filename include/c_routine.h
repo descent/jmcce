@@ -3,6 +3,7 @@
 
 /* c_routine.h */
 
+void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1);
 void c_draw_hanzi (int col, int y, unsigned char *bitmap, int color);
 void c_draw_ascii (int col, int y, unsigned char *bitmap, int color);
 void c_scroll_up (int sy, int ey, int line, int bgcolor);
