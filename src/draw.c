@@ -26,7 +26,11 @@
 
 extern int gFont_bytes;
 
+#ifdef LINUXFB
 int use_fb = 1;
+#else
+int use_fb = 0;
+#endif
 
 void
 screen_delete_line (int top, int bottom, int n, int bg_color)
@@ -119,12 +123,15 @@ screen_return (void)
 void
 screen_init (void)
 {
+#ifdef LINUXFB
   use_fb = 1;
   if (fb_init ()) {
     use_fb = 0;
-    vga_init ();
-    vga_setmode(DEFAULT_VGA_MODE);
   }
+#endif
+  use_fb = 0;
+  vga_init ();
+  vga_setmode(DEFAULT_VGA_MODE);
 
   active_console = 1;
 }
