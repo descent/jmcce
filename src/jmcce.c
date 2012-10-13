@@ -496,6 +496,7 @@ void
 init (void)
 {
   struct sigaction act;
+  int i=0;
   //int ttyminor;
 
   paste_buffer = NULL;
@@ -509,10 +510,30 @@ init (void)
   }
 
   font_init ();
+  unsigned char *ascii = ascii_font['A'];
+  for (i=0 ; i < 18 ; ++i)
+  {
+    char c = ascii[i];
+    int j=0;
+    //printf("%x ", ascii[i]);
 
-  hz_input_init ();
+    for (j=7 ; j>=0 ; --j)
+    {
+      if (((c >> j) & 0x1) == 1)
+        printf("*");
+      else
+        printf("_");
+    }
+    printf("\n");
+
+  }
+  printf("\n");
+  //hz_input_init ();
 
   screen_init ();
+  vgalib_draw_ascii(10, 10, ascii_font['A'], 5);
+  sleep(10);
+#if 0
 
   /*
      vga_setmousesupport(1);
@@ -565,7 +586,7 @@ init (void)
 
   //asm_set_split ();		/* support split-window */
 
-
+#endif
 }
 
 enum
@@ -878,8 +899,12 @@ main (int argc, char **argv)
   strcpy (home_dir, pw->pw_dir);
 
   init ();
+#if 0
   run ();
   unsetenv ("LC_ALL");
   done ();
+#endif
+  vga_setmode (TEXT);
+
   return 0;
 }
