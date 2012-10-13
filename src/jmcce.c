@@ -122,13 +122,16 @@ is_console (void)
     exit (-1);
   }
   fscanf (fp, "%*d %*s %*s %*d %*d %*d %d", &dev);
+#if 0
   if ((MAJOR (dev) != TTY_MAJOR) || (MINOR (dev) > 64)) {
     fprintf (stderr, "fatal error: cannot open console deveice %s\n",
 	     CONSOLE);
     exit (-1);
   }
+#endif
   fclose (fp);
-  return MINOR (dev);
+  //return MINOR (dev);
+  return 1;
 }
 
 /*
@@ -493,11 +496,11 @@ void
 init (void)
 {
   struct sigaction act;
-  int ttyminor;
+  //int ttyminor;
 
   paste_buffer = NULL;
   error_init ();
-  ttyminor = is_console ();
+  //ttyminor = is_console ();
   console_fd = open (CONSOLE, O_RDWR);
 
   if (console_fd == -1) {
