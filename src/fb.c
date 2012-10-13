@@ -16,8 +16,8 @@
 
 #include "fb.h"
 
-static size_t vsize;
-static int fh;
+size_t vsize;
+int fh;
 
 /*for 256 color*/
 

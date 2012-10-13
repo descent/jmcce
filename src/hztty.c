@@ -9,6 +9,7 @@
 #include "config.h"
 #endif /* HAVE_CONFIG_H */
 
+#define OPEN_MAX 10
 
 #include <stdio.h>
 #include <termios.h>

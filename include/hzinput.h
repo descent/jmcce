@@ -48,7 +48,7 @@
 #define MAX_SEL_COUNT		10
 #define MAX_SEL_LENGTH		55
 
-#define VERSION_STRING	  	(PACKAGE VERSION)	/* "JMCCE 1.4 ª©" */
+//#define VERSION_STRING	  	(PACKAGE VERSION)	/* "JMCCE 1.4 ª©" */
 
 
 /* key of toggle input method */

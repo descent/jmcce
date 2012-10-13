@@ -5,17 +5,14 @@
 /*                    $Id: hbffont.c,v 1.1.1.1 2002/05/03 04:01:07 kids Exp $   */
 /****************************************************************************/
 
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif /* HAVE_CONFIG_H */
-
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
-#include <asm/bitops.h>
+//#include <asm/bitops.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>

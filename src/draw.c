@@ -13,7 +13,7 @@
 #include <vga.h>
 #include <sys/types.h>
 #include <string.h>
-#include <asm/bitops.h>
+//#include <asm/bitops.h>
 #include <signal.h>
 
 #include "jmcce.h"

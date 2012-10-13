@@ -5,9 +5,13 @@
 /*            		$Id: hzinput.c,v 1.1.1.1 2002/05/03 04:01:07 kids Exp $ */
 /****************************************************************************/
 
-#ifdef HAVE_CONFIG_H
+#define POS_OF_VERSIONSTRING 0
+#define VERSION_STRING "descent modify 1.4 rc2 "
+#define INPUT_FGCOLOR 0
+#define INPUT_BGCOLOR 0
+
 #include "config.h"
-#endif /* HAVE_CONFIG_H */
+
 
 #include <stdio.h>
 #include <stdlib.h>
