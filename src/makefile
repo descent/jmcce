@@ -3,7 +3,9 @@ CC=gcc
 
 #jmcce: chewing.o  c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o
 jmcce: c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o
-	$(CC) -o $@ $^  -lvgagl -lvga -lncurses
+	$(CC) -o $@ $^ -lvgagl -lvga -lncurses
+vgatest: vgatest.o
+	$(CC) -o $@ $^ -lvgagl -lvga 
 
 %.d: %.c
 	set -e; rm -f $@ ; gcc -MM $(CFLAGS) $< > $@.$$$$ ; sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@ ; rm -f $@.$$$$
@@ -11,7 +13,7 @@ jmcce: c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o    
 asm_routine.o: asm_routine.S
 	$(CC) -c $<
 
-sources = chewing.c  c_routine.c  error.c  hbffont.c  hzinput.c  jmcce.c console.c  draw.c       fb.c     hist.c     hztty.c    newimp.c
+sources = chewing.c  c_routine.c  error.c  hbffont.c  hzinput.c  jmcce.c console.c  draw.c       fb.c     hist.c     hztty.c    newimp.c vgatest.c
 include $(sources:.c=.d)
 
 clean:
