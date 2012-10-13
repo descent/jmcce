@@ -5,10 +5,10 @@
 /*            		$Id: hzinput.c,v 1.1.1.1 2002/05/03 04:01:07 kids Exp $ */
 /****************************************************************************/
 
-#define POS_OF_VERSIONSTRING 0
+//#define POS_OF_VERSIONSTRING 0
 #define VERSION_STRING "descent modify 1.4 rc2 "
-#define INPUT_FGCOLOR 0
-#define INPUT_BGCOLOR 0
+//#define INPUT_FGCOLOR 0
+//#define INPUT_BGCOLOR 0
 
 #include "config.h"
 
@@ -874,12 +874,16 @@ hz_filter (int tty_fd, unsigned char key)
   if (!IsHanziInput)
     return outchar (tty_fd, key);
 
-
   if (gsCurrent_method == 0) {
     return intcode_hz_filter (tty_fd, key);
-  } else if (gsCurrent_method == 7) {
+  } 
+#ifdef CHEWING
+  else if (gsCurrent_method == 7) 
+  {
     return chewing_hz_filter (tty_fd, key);	/* Chewing */
-  } else {
+  } 
+#endif
+  else {
     return NEW_hz_filter (tty_fd, key, gsCurrent_input_table->CurImmDispAttr);
   }
 }
@@ -1243,7 +1247,9 @@ hz_input_init (void)
       gsInput_table_array[i] = NEW_InputTable_load (i);
     }
 
+#ifdef CHEWING
     gsInput_table_array[7] = Chew_Init ();	/* Chewing */
+#endif
     fclose (gMessage_log_file);
 
 
@@ -1455,7 +1461,11 @@ refresh_input_method_area (void)
   }
   input_print_string (POS_OF_WINDOWNO, 0, str, INPUT_FGCOLOR, INPUT_BGCOLOR);
   if (IsHanziInput > 0 && gsCurrent_method == 7)
+#ifdef CHEWING
     ChewReDrawText ();		/* Chewing */
+#else
+    ;
+#endif
 
 }
 
