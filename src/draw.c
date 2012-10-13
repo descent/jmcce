@@ -107,8 +107,8 @@ screen_flipaway (void)
   active_console = 0;
 }
 
-#define DEFAULT_VGA_MODE G640x480x16M
-//#define DEFAULT_VGA_MODE G640x480x16
+//#define DEFAULT_VGA_MODE G640x480x16M
+#define DEFAULT_VGA_MODE G640x480x256 // in my fujitsu lifebook ati card, it works
 
 /* use by signal usr2 (SIGACQ) handler -- acquire terminal */
 void
