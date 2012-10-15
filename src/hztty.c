@@ -11,6 +11,8 @@
 
 #define OPEN_MAX 10
 
+#include <pty.h>
+
 #include <stdio.h>
 #include <termios.h>
 #include <fcntl.h>
@@ -46,7 +48,11 @@ tty_fork (hz_tty * tty)
   int slave_fd;
   char *ptr1, *ptr2, pt_name[] = "/dev/ptyXX";
   struct winsize ws;
+  char ptsn[PATH_MAX];
+  int amaster, aslave;
 
+
+#if 0
   for (ptr1 = "pqrst"; *ptr1; ptr1++) {
     pt_name[8] = *ptr1;
     for (ptr2 = "0123456789abcdef"; *ptr2; ptr2++) {
@@ -65,6 +71,16 @@ tty_fork (hz_tty * tty)
 found:
   pt_name[5] = 't';
   strcpy (tty->tty_name, pt_name + 5);
+#endif
+  if (openpty( &amaster, &aslave, ptsn, 0, 0))
+  {
+    printf("openpty fail!!\n");
+    return -1;
+  }
+  tty->tty_fd = amaster;
+  strcpy (tty->tty_name, ptsn);
+  slave_fd = aslave;
+
   tty->pid = fork ();
   if (tty->pid == -1) {
     close (tty->tty_fd);
@@ -88,11 +104,13 @@ found:
     /* THE ERROR CONDICTION IS NOT IMPLEMENT */
     setsid ();
     pt_name[5] = 't';
+    #if 0
     slave_fd = open (pt_name, O_RDWR);
     if (slave_fd == -1) {
       close (tty->tty_fd);
       exit (-1);
     }
+    #endif
     ws.ws_row = NUM_OF_ROW;
     ws.ws_col = NUM_OF_COL;
     ioctl (slave_fd, TIOCSCTTY, 0);
@@ -151,7 +169,8 @@ hztty_open (int history_line)
   sigset_t mask;
   int i;
 
-  if (num_hztty < NR_HZTTY) {
+  if (num_hztty < NR_HZTTY) 
+  {
     tty = malloc (sizeof (hz_tty));
     if (tty == NULL)
       out_of_memory (__FILE__, "hztty_open", __LINE__);
@@ -188,9 +207,14 @@ hztty_open (int history_line)
       hztty_list = tty;
       reset_terminal (tty, 1);
       on_off_cursor (tty->cur_x, tty->cur_y);
-    } else
+    } 
+    else
+    {
+      printf("tty_fork fail ## num_hztty: %d\n", num_hztty);
       free (tty);
-  } else
+    }
+  } 
+  else
     error ("Too many tty opened!");
 }
 
