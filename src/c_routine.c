@@ -33,21 +33,13 @@ clear_cursor ()
   fgcolor = fgcolor0;
 }
 
-/****************************************************************************
- *    void c_draw_ascii(int col,int y,unsigned char *bitmap,int color);     *
- *         col:      0-79     column value                                  * 
- *         y:        0-479    y coordinate                                  *
- *         bitmap:   18 bytes unsigned char buffer                          *
- *         color:    0-3 bit: ForeGround 8-11 bit: BackGround               *
- ****************************************************************************/
 
 void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
 {
   int i=0;
   int cx=0, cy=0;
-  extern unsigned char ascii_font[256][18];
-  unsigned char *ascii = ascii_font['A'];
-
+  int startx = col * 8;
+  int starty = y;
 
   vga_setcolor(color1);
   for (i=0 ; i < 18 ; ++i)
@@ -59,7 +51,7 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
     for (j=7 ; j>=0 ; --j)
     {           
       if (((c >> j) & 0x1) == 1)
-        vga_drawpixel(col+cx, y+cy);
+        vga_drawpixel(startx + cx, starty + cy);
         //printf("*");
       //else
         //printf("_");
@@ -72,6 +64,49 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
   //printf("\n");
 
 }
+
+void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
+{
+  int i=0, k=0;
+  int cx=0, cy=0;
+  int fontheight = 18;
+  int startx = col * 8;
+  int starty = y;
+
+  vga_setcolor(color1);
+  for (i=0 ; i < fontheight ; ++i)
+  {
+    int j=0;
+    //printf("%x ", ascii[i]);
+
+    for (k=0 ; k < 2 ; ++k)
+    {
+      char c = *bitmap++;
+
+    for (j=7 ; j>=0 ; --j)
+    {           
+      if (((c >> j) & 0x1) == 1)
+        vga_drawpixel(startx+cx, starty+cy);
+        //printf("*");
+      //else
+        //printf("_");
+      ++cx;
+    }
+
+    }
+    cx=0;
+    ++cy;
+
+  }
+}
+
+/****************************************************************************
+ *    void c_draw_ascii(int col,int y,unsigned char *bitmap,int color);     *
+ *         col:      0-79     column value                                  * 
+ *         y:        0-479    y coordinate                                  *
+ *         bitmap:   18 bytes unsigned char buffer                          *
+ *         color:    0-3 bit: ForeGround 8-11 bit: BackGround               *
+ ****************************************************************************/
 
 void
 c_draw_ascii (int col, int y, unsigned char *bitmap, int color1)
