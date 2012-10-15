@@ -46,7 +46,6 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
   int starty = y;
 
   //vga_setcolor(color1);
-  vga_setcolor(vga_white());
   for (i=0 ; i < 18 ; ++i)
   {
     char c = bitmap[i];
@@ -56,7 +55,15 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
     for (j=7 ; j>=0 ; --j)
     {           
       if (((c >> j) & 0x1) == 1)
+      {
+        vga_setcolor(vga_white());
         vga_drawpixel(startx + cx, starty + cy);
+      }
+      else
+      {
+        vga_setcolor(0); // black
+        vga_drawpixel(startx + cx, starty + cy);
+      }
         //printf("*");
       //else
         //printf("_");
@@ -79,7 +86,6 @@ void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
   int starty = y;
 
   //vga_setcolor(color1);
-  vga_setcolor(vga_white());
   for (i=0 ; i < fontheight ; ++i)
   {
     int j=0;
@@ -92,10 +98,15 @@ void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
     for (j=7 ; j>=0 ; --j)
     {           
       if (((c >> j) & 0x1) == 1)
+      {
+        vga_setcolor(vga_white());
         vga_drawpixel(startx+cx, starty+cy);
-        //printf("*");
-      //else
-        //printf("_");
+      }
+      else
+      {
+        vga_setcolor(0); // black
+        vga_drawpixel(startx+cx, starty+cy);
+      }
       ++cx;
     }
 
