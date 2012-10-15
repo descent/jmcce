@@ -166,7 +166,7 @@ draw_ascii_char (int x, int y, int c,
     buffer = &ascii_font[c][0];
   else
     buffer = ascGetBitmap (c, mode);
-  c_draw_ascii (x, y * LINE_HEIGHT, buffer, fg_color | (bg_color << 8));
+  vgalib_draw_ascii (x, y * LINE_HEIGHT, buffer, fg_color | (bg_color << 8));
 }
 
 inline void
@@ -176,7 +176,7 @@ draw_hanzi_char (int x, int y, unsigned char *bitmap,
 
   if (!active_console)
     return;
-  c_draw_hanzi (x, y * LINE_HEIGHT, bitmap, fg_color | (bg_color << 8));
+  vgalib_draw_hanzi (x, y * LINE_HEIGHT, bitmap, fg_color | (bg_color << 8));
 }
 
 void
