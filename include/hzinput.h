@@ -4,6 +4,8 @@
 #ifndef _JMCCE_HZINPUT_H_
 #define _JMCCE_HZINPUT_H_
 
+#include <stdio.h>
+
 
 #define INPUT_CHOICENUMBERCOLOR   15
 #define INPUT_CHOICENUMBERBGCOLOR 12
