@@ -196,15 +196,16 @@ input_clear_area (int color)
 inline void
 input_draw_ascii (int x, int y, unsigned char c, int fg, int bg)
 {
-  c_draw_ascii (x, INPUT_AREAY + y * LINE_HEIGHT, &ascii_font[c][0],
-		(bg << 8) | fg);
+  //c_draw_ascii (x, INPUT_AREAY + y * LINE_HEIGHT, &ascii_font[c][0], (bg << 8) | fg);
+  vgalib_draw_ascii (x, INPUT_AREAY + y * LINE_HEIGHT, &ascii_font[c][0], (bg << 8) | fg);
 }
 
 
 inline void
 input_draw_hanzi (int x, int y, unsigned char *bitmap, int fg, int bg)
 {
-  c_draw_hanzi (x, INPUT_AREAY + y * LINE_HEIGHT, bitmap, fg | (bg << 8));
+  //c_draw_hanzi (x, INPUT_AREAY + y * LINE_HEIGHT, bitmap, fg | (bg << 8));
+  vgalib_draw_hanzi (x, INPUT_AREAY + y * LINE_HEIGHT, bitmap, fg | (bg << 8));
 }
 
 
