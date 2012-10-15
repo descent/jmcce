@@ -40,7 +40,7 @@ COLOR  =  20
 
 .align 4
 asm_draw_ascii:
-	
+#if 0	
 	# calculate the base address
 	pushl	%ebp
 	movl	%esp,%ebp
@@ -96,6 +96,7 @@ ascii_loop:
 	popl	%edi
 	movl	%ebp,%esp
 	popl	%ebp
+#endif
 	ret
 
 /****************************************************************************
@@ -113,7 +114,7 @@ COLOR  =  20
 
 .align 4
 asm_draw_hanzi:
-	
+#if 0	
 	# calculate the base address
 	pushl	%ebp
 	movl	%esp,%ebp
@@ -177,6 +178,7 @@ hanzi_loop:
 	popl	%edi
 	movl	%ebp,%esp
 	popl	%ebp
+#endif
 	ret
 
 /****************************************************************************
@@ -195,7 +197,7 @@ BGCOLOR = 20
 
 .align 4
 asm_scroll_up:	
-
+#if 0
 	pushl	%ebp
 	movl	%esp,%ebp
 	pushl	%esi
@@ -256,6 +258,7 @@ asm_scroll_up:
 	pop	%esi
 	movl	%ebp,%esp
 	pop	%ebp
+#endif
 	ret
 
 /****************************************************************************
@@ -274,7 +277,7 @@ BGCOLOR = 20
 
 .align 4
 asm_scroll_down:	
-
+#if 0
 	pushl	%ebp
 	movl	%esp,%ebp
 	pushl	%esi
@@ -344,6 +347,7 @@ asm_scroll_down:
 	pop	%esi
 	movl	%ebp,%esp
 	pop	%ebp
+#endif
 	ret
 
 /****************************************************************************
@@ -363,6 +367,7 @@ BGCOLOR = 24
 
 .align 4
 asm_clear_block:
+#if 0
         pushl   %ebp
         movl    %esp,%ebp
         pushl   %esi
@@ -414,6 +419,7 @@ asm_clear_block:
         popl    %esi
         movl    %ebp,%esp
         popl    %ebp
+#endif
         ret
 
 /****************************************************************************
@@ -429,6 +435,7 @@ BGCOLOR = 16
 
 .align 4
 asm_clear_lines:
+#if 0
         pushl   %ebp
         movl    %esp,%ebp
         pushl   %edi
@@ -468,6 +475,7 @@ asm_clear_lines:
         popl    %edi
         movl    %ebp,%esp
         popl    %ebp
+#endif
         ret
 
 
@@ -480,6 +488,7 @@ BUFFER = 8
 
 .align 4
 asm_bold_hanzi:
+#if 0
         pushl   %ebp
         movl    %esp,%ebp
         pushl   %eax
@@ -508,6 +517,7 @@ asm_bold_hanzi:
         popl    %eax
         movl    %ebp,%esp
         popl    %ebp
+#endif
         ret
 
 
@@ -520,6 +530,7 @@ BUFFER = 8
 
 .align 4
 asm_bold_ascii:
+#if 0
         pushl   %ebp
         movl    %esp,%ebp
         pushl   %eax
@@ -548,6 +559,7 @@ asm_bold_ascii:
         popl    %eax
         movl    %ebp,%esp
         popl    %ebp
+#endif
         ret
 
 /***************************************************************************
@@ -561,6 +573,7 @@ Y   = 12
 
 .align 4
 asm_toggle_cursor:
+#if 0
         pushl   %ebp
         movl    %esp,%ebp
         pushl   %ecx
@@ -614,10 +627,12 @@ asm_toggle_cursor:
         popl    %ecx
         movl    %ebp,%esp
         popl    %ebp
+#endif
         ret
 
 .align 4
 asm_set_split:
+#if 0
 	mov	$0,%cx		# get the offset
 	mov	%ch,%ah		# put high part into ah
 	mov	$0x0c,%al	# this is the start at register index
@@ -673,4 +688,5 @@ lp1:
 	in	%dx,%al		# get protect bit
 	or	$0x80,%al	# turn it on
 	out	%al,%dx		# protect
+#endif
 	ret
