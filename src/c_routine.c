@@ -10,6 +10,7 @@
 #endif /* HAVE_CONFIG_H */
 
 #include "asm_routine.h"	/* vga */
+
 #include <string.h>		/* memmove */
 
 #include "fb.h"
@@ -20,6 +21,9 @@ unsigned char fgcolor = 15;
 unsigned char bgcolor = 0;
 int cursor_x0 = 0;		/* col */
 int cursor_y0 = 16;		/* y */
+
+// svgalib 256 color mode default color
+// http://www.svgalib.org/jay/beginners_guide/beginners_guide.html
 
 void
 clear_cursor ()
@@ -282,6 +286,16 @@ c_clear_block (int col, int y, int width, int height, int bgcolor1)
   fb_clearblock (col * 8, y, col * 8 + width * 8, y + height);
 }
 
+void vgalib_clear_lines(int sx, int sy, int ex, int ey, int color)
+{
+  int i;
+  vga_setcolor(color); // blue
+
+  for (i = sy ; i < ey ; ++i)
+    vga_drawline (sx, i, 639, i);
+}
+
+
 /****************************************************************************
  *           void c_clear_lines(int sy,int height,int bgcolor);             *
  *              sy:       0-479 upper y coordinate                          *
@@ -294,7 +308,8 @@ c_clear_lines (int sy, int height, int bgcolor1)
   int bgcolor0 = bgcolor;
 
   if (!use_fb) {
-    asm_clear_lines (sy, height, bgcolor1);
+    //asm_clear_lines (sy, height, bgcolor1);
+    vgalib_clear_lines (0, sy, 639, sy + height, 1);
     return;
   }
 
@@ -342,3 +357,4 @@ c_toggle_cursor (int col, int y)
   cursor_x0 = col;
   cursor_y0 = y;
 }
+

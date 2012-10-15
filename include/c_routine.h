@@ -5,6 +5,7 @@
 
 void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1);
 void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1);
+void vgalib_clear_lines(int sx, int sy, int ex, int ey, int color);
 
 void c_draw_hanzi (int col, int y, unsigned char *bitmap, int color);
 void c_draw_ascii (int col, int y, unsigned char *bitmap, int color);
