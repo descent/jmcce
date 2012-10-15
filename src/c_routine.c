@@ -52,7 +52,7 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
   vga_setcolor(color1);
   for (i=0 ; i < 18 ; ++i)
   {
-    char c = ascii[i];
+    char c = bitmap[i];
     int j=0;
     //printf("%x ", ascii[i]);
 
