@@ -497,6 +497,8 @@ init (void)
 {
   struct sigaction act;
   int i=0;
+  unsigned char *bitmap;
+
   //int ttyminor;
 
   paste_buffer = NULL;
@@ -510,6 +512,8 @@ init (void)
   }
 
   font_init ();
+
+#ifdef DRAW_TEST
   unsigned char *ascii = ascii_font['A'];
   for (i=0 ; i < 18 ; ++i)
   {
@@ -528,12 +532,47 @@ init (void)
 
   }
   printf("\n");
-  //hz_input_init ();
+#endif
+  hz_input_init ();
 
   screen_init ();
-  vgalib_draw_ascii(10, 10, ascii_font['A'], 5);
-  sleep(10);
-#if 0
+
+#ifdef DRAW_TEST
+  vgalib_draw_ascii(10, 10, ascii_font['B'], 5);
+  bitmap = hbfGetBitmap (0xa7da, STANDARD, gFont_bytes);
+  if (bitmap != NULL)
+  {
+    int k=0;
+    vgalib_draw_hanzi(10, 30, bitmap, 7);
+    #if 0
+
+  for (i=0 ; i < 18 ; ++i)
+  {
+    for (k=0 ; k < 2 ; ++k)
+    {
+
+    char c = *bitmap++;
+    int j=0;
+    //printf("%x ", ascii[i]);
+
+    for (j=7 ; j>=0 ; --j)
+    {
+      if (((c >> j) & 0x1) == 1)
+        printf("*");
+      else
+        printf("_");
+    }
+    }
+    printf("\n");
+
+  }
+  printf("\n");
+  #endif
+  }
+
+  sleep(8);
+#endif
+#if 1
 
   /*
      vga_setmousesupport(1);
@@ -748,6 +787,8 @@ ProcessHistoryModeKey (unsigned char c)
 void
 run (void)
 {
+  extern FILE *fs;
+
   fd_set rset, rrset;
   static unsigned char buf[BUFSIZE];
   hz_tty *hztty;
@@ -836,13 +877,15 @@ done (void)
     free (paste_buffer);
 }
 
-
+FILE *fs;
 
 int
 main (int argc, char **argv)
 {
   char *_lang;
   struct passwd *pw;
+
+  fs=fopen("./log", "w");
 
   _lang = setlocale (LC_CTYPE, "");
 
@@ -899,7 +942,7 @@ main (int argc, char **argv)
   strcpy (home_dir, pw->pw_dir);
 
   init ();
-#if 0
+#if 1
   run ();
   unsetenv ("LC_ALL");
   done ();
