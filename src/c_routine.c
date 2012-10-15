@@ -41,7 +41,8 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
   int startx = col * 8;
   int starty = y;
 
-  vga_setcolor(color1);
+  //vga_setcolor(color1);
+  vga_setcolor(vga_white());
   for (i=0 ; i < 18 ; ++i)
   {
     char c = bitmap[i];
@@ -73,7 +74,8 @@ void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
   int startx = col * 8;
   int starty = y;
 
-  vga_setcolor(color1);
+  //vga_setcolor(color1);
+  vga_setcolor(vga_white());
   for (i=0 ; i < fontheight ; ++i)
   {
     int j=0;
