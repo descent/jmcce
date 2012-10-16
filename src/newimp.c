@@ -13,6 +13,7 @@
 #include <fcntl.h>
 #include <ncurses.h>
 #include <unistd.h>
+#include <ctype.h>
 
 #include "newimp.h"
 #include "hbffont.h"
@@ -46,25 +47,15 @@ extern int Item_attr[81];
 extern FILE *gMessage_log_file;
 extern int gSelectingMode_flag;
 
-extern void input_print_string (int x, int y, unsigned char *string, int fg, int bg);	/* 繪出中英字串 */
-extern void outchar (int tty_fd, unsigned char c);	/* 將字元送出給應用程式 */
-
-extern int BIG5toGB (unsigned char FirstByte, unsigned char SecondByte);	/* 將 BIG5單字轉GB單字 */
-extern int BIG5RADICALtoGB (unsigned char FirstByte, unsigned char SecondByte);	/* 將 BIG5單字轉GB單字 */
-extern int GBtoBIG5 (unsigned char FirstByte, unsigned char SecondByte);	/* 將 GB單字轉BIG5單字 */
-extern unsigned char *string_BIG5toGB (unsigned char *p_big5_string);	/* 將 BIG5字串轉GB字串 */
-extern unsigned char *string_BIG5RADICALtoGB (unsigned char *p_big5_string);	/* 將 BIG5字串轉GB字串 */
-extern unsigned char *string_GBtoBIG5 (unsigned char *p_gb_string);	/* 將 GB字串轉BIG5字串 */
-
 char gWaitingphrase[600][256];
 char gThispage_waitingphrase[10][256];
 char gDefaultphrase[256];
 static char gSendingphrase[256];
 
 
-unsigned char gRoot_buff[MAX_INPUT_LEN + 1];
-unsigned char gRoot_buff_wild[MAX_INPUT_LEN + 1];
-unsigned char gCompress_gRoot_buff[MAX_INPUT_LEN + 1];
+char gRoot_buff[MAX_INPUT_LEN + 1];
+char gRoot_buff_wild[MAX_INPUT_LEN + 1];
+char gCompress_gRoot_buff[MAX_INPUT_LEN + 1];
 
 
 
@@ -128,11 +119,11 @@ NEWDispRootArea ()
   int ii;
   int vv;
 
-  unsigned char c = ' ';
-  unsigned char c1[MAX_INPUT_LEN + 1];
-  unsigned char c2[MAX_INPUT_LEN + 1];
-  unsigned char tFull_gRoot_buff[MAX_INPUT_LEN * 2 + 1];
-  unsigned char cw[MAX_INPUT_LEN + 1];
+  char c = ' ';
+  char c1[MAX_INPUT_LEN + 1];
+  char c2[MAX_INPUT_LEN + 1];
+  char tFull_gRoot_buff[MAX_INPUT_LEN * 2 + 1];
+  char cw[MAX_INPUT_LEN + 1];
 
   tPOS =
     POS_OF_INPUTNAME + (strlen (gsCurrent_input_table->cname) <
@@ -147,7 +138,7 @@ NEWDispRootArea ()
       c1[i] = 0x20;
       c2[i] = 0x20;
     } else {
-      for (ii = 0; ii <= strlen (gsCurrent_input_table->KeyAscii); ii++) {
+      for (ii = 0; ii <= strlen ((const char*)gsCurrent_input_table->KeyAscii); ii++) {
 	if (c == gsCurrent_input_table->KeyAscii[ii])
 	  break;
       }
@@ -188,7 +179,7 @@ NEWDispRootArea ()
 
   for (i = 0; i < gsCurrent_input_table->MaxPress; i++) {
     if (cw[i] == '?' || cw[i] == '*' || cw[i] == '%') {
-      unsigned char temp[3];
+      char temp[3];
 
       temp[0] = c1[i];
       temp[1] = c2[i];
@@ -226,8 +217,7 @@ NEWInputInit ()
 }
 
 
-void
-repeat_last_phrase (int tty_fd)
+void repeat_last_phrase (int tty_fd)
 {
   write (tty_fd, gSendingphrase, strlen (gSendingphrase));
 
@@ -278,7 +268,7 @@ NEW_InputTable_load (int p_loadno)
 
   int c5;
 
-  temp_table = malloc (sizeof (INPUT_TABLE_STRU));
+  temp_table = (INPUT_TABLE_STRU*)malloc (sizeof (INPUT_TABLE_STRU));
   if (temp_table == NULL) {
     fprintf (stderr, "%c", 0x7);
     exit (0);
@@ -478,8 +468,7 @@ TotalChar=%d\n\
 }
 
 
-void
-NEWtable_unload (int p_table_no)
+void NEWtable_unload (int p_table_no)
 {
   free (gsInput_table_array[p_table_no]);
 }
@@ -1937,9 +1926,7 @@ TUI_Search (char *result_phrase, char *root_buff,
 }
 
 
-int
-NEWIncrePreview (char *szOut, char *root_buff, int tty_fd, int disp_selkey,
-		 int pTUI_file_pointer, int pp)
+int NEWIncrePreview (char *szOut, char *root_buff, int tty_fd, int disp_selkey, int pTUI_file_pointer, int pp)
 {
   int buff_count;
 

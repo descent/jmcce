@@ -20,11 +20,9 @@ extern int fh;
 extern unsigned char fgcolor;
 extern unsigned char bgcolor;
 
-struct fb_fix_screeninfo finfo;
-struct fb_var_screeninfo vinfo;
-void *addr;
-unsigned char *addr2;
-int cursor_x, cursor_y;
+extern struct fb_var_screeninfo vinfo;
+extern void *addr;
+extern unsigned char *addr2;
 
 int fb_init ();
 void fb_clearblock (int sx, int sy, int ex, int ey);

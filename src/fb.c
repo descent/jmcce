@@ -16,8 +16,13 @@
 
 #include "fb.h"
 
+struct fb_var_screeninfo vinfo;
+void *addr;
+unsigned char *addr2;
+struct fb_fix_screeninfo finfo;
 size_t vsize;
 int fh;
+int cursor_x, cursor_y;
 
 /*for 256 color*/
 
@@ -145,7 +150,7 @@ fb_init ()
 
   printf ("fb_init: %ik videoram mapped to 0x%p\r\n", vsize >> 10, addr);
 
-  addr2 = addr;
+  addr2 = (unsigned char *)addr;
   close (fh);
 
   return 0;

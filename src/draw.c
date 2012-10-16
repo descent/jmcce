@@ -21,8 +21,8 @@
 #include "hbffont.h"
 #include "draw.h"
 #include "hztty.h"
-#include "c_routine.h"
 #include "fb.h"
+#include "c_routine.h"
 
 extern int gFont_bytes;
 
@@ -61,7 +61,7 @@ screen_insert_line (int top, int bottom, int n, int bg_color)
 		 n * LINE_HEIGHT, bg_color);
 }
 
-inline void
+void
 screen_scroll_up (int bg_color)
 {
 
@@ -70,7 +70,7 @@ screen_scroll_up (int bg_color)
   c_scroll_up (0, LINE_HEIGHT * NUM_OF_ROW - 1, LINE_HEIGHT, bg_color);
 }
 
-inline void
+void
 screen_scroll_down (int bg_color)
 {
 
@@ -79,8 +79,7 @@ screen_scroll_down (int bg_color)
   c_scroll_down (0, LINE_HEIGHT * NUM_OF_ROW - 1, LINE_HEIGHT, bg_color);
 }
 
-inline void
-screen_clear_block (int x, int y, int w, int h, int color)
+void screen_clear_block (int x, int y, int w, int h, int color)
 {
 
   if (!active_console)
@@ -88,7 +87,7 @@ screen_clear_block (int x, int y, int w, int h, int color)
   c_clear_block (x, y * LINE_HEIGHT, w, h * LINE_HEIGHT, color);
 }
 
-inline void
+void
 clear_line (int line, int color)
 {
 
@@ -143,16 +142,8 @@ screen_done (void)
     vga_setmode (TEXT);
 }
 
-inline void
-on_off_cursor (int x, int y)
-{
 
-  if (!active_console)
-    return;
-  c_toggle_cursor (x, y * LINE_HEIGHT + FONT_HEIGHT);
-}
-
-inline void
+void
 draw_ascii_char (int x, int y, int c,
 		 unsigned char fg_color, unsigned char bg_color,
 		 unsigned char mode)
@@ -169,7 +160,7 @@ draw_ascii_char (int x, int y, int c,
   vgalib_draw_ascii (x, y * LINE_HEIGHT, buffer, fg_color | (bg_color << 8));
 }
 
-inline void
+void
 draw_hanzi_char (int x, int y, unsigned char *bitmap,
 		 unsigned char fg_color, unsigned char bg_color)
 {
@@ -196,4 +187,12 @@ print_string (int x, int y, unsigned char *string, int fg_color, int bg_color)
     } else
       draw_ascii_char (x++, y, *string++, fg_color, bg_color, STANDARD);
   }
+}
+
+void on_off_cursor (int x, int y)
+{
+
+  if (!active_console)
+    return;
+  c_toggle_cursor (x, y * LINE_HEIGHT + FONT_HEIGHT);
 }

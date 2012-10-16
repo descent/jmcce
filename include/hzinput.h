@@ -106,9 +106,9 @@ typedef struct
   int MaxDupSel;		/* how many keys used to select */
   int TotalChar;		/* Defined characters */
 
-  unsigned char KeyMap[128];	/* Map 128 chars to 64(6 bit) key index */
-  unsigned char KeyName[64];	/* Map 64 key to 128 chars */
-  unsigned short KeyIndex[64];	/* 64 key first index of TotalChar */
+  char KeyMap[128];	/* Map 128 chars to 64(6 bit) key index */
+  char KeyName[64];	/* Map 64 key to 128 chars */
+  short KeyIndex[64];	/* 64 key first index of TotalChar */
 
   int PhraseNum;		/* Total Phrase Number */
 
@@ -147,7 +147,7 @@ INI_FILE_STRU;
 
 void input_clear_line (int y, int color);
 void input_draw_ascii (int x, int y, unsigned char c, int fg, int bg);
-void input_print_string (int x, int y, unsigned char *string, int fg, int bg);
+void input_print_string (int x, int y, const char *string, int fg, int bg);
 void ClrRootArea (void);
 void ClrSelArea (void);
 void FindMatchKey (void);
@@ -177,6 +177,18 @@ extern char *tabfname[10];
 void intcode_hz_filter (int tty_fd, unsigned char key);
 void IntCode_FindMatchKey (void);
 void IntCode_FillMatchChars (int index);
+void hz_input_init (void);
+void hz_filter (int tty_fd, unsigned char key);
 
+int BIG5toGB (unsigned char FirstByte, unsigned char SecondByte);
+int GBtoBIG5 (unsigned char FirstByte, unsigned char SecondByte);
+int BIG5RADICALtoGB (unsigned char FirstByte, unsigned char SecondByte);
+
+char * string_BIG5toGB (const char *p_big5_string);
+char * string_BIG5RADICALtoGB (const char *p_big5_string);
+char * string_GBtoBIG5 (const char *p_gb_string);
+void outchar (int tty_fd, unsigned char c);
+
+void FANJIAN_write (int tty_fd, char *pPhrase, int pPhraseLen);
 
 #endif /* _JMCCE_HZINPUT_H_ */

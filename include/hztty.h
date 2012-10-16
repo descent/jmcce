@@ -59,10 +59,10 @@ typedef struct _hz_tty
   int pos;
   int cur_x, cur_y, saved_cur_x, saved_cur_y;
   char *Translate;
-  unsigned char *G0_charset;
-  unsigned char *G1_charset;
-  unsigned char *saved_G0;
-  unsigned char *saved_G1;
+  char *G0_charset;
+  char *G1_charset;
+  char *saved_G0;
+  char *saved_G1;
   int top, bottom;
   int foreground_color, saved_fg_color, fg_color;
   int background_color, saved_bg_color, bg_color;

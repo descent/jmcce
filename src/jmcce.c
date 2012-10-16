@@ -5,9 +5,7 @@
 /*            	$Id: jmcce.c,v 1.3 2002/05/17 18:09:14 kids Exp $   */
 /****************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif /* HAVE_CONFIG_H */
+#include "newimp.h"
 
 #include <vga.h>
 #include <pwd.h>
@@ -24,14 +22,6 @@
 #include <ncurses.h>
 #include <vgakeyboard.h>
 
-#include <sys/types.h>
-#include <sys/ioctl.h>
-
-#include <linux/fs.h>
-#include <linux/kd.h>
-#include <linux/vt.h>
-#include <linux/major.h>
-#include <linux/keyboard.h>
 
 #include "jmcce.h"
 #include "draw.h"
@@ -479,18 +469,6 @@ get_key (int wait)
   return c;
 }
 
-/*
- * beep:
-        generate beep sound.
- * input: none
- * output: none
- * side effect: none
- */
-inline void
-beep1 (void)
-{
-  ioctl (console_fd, KDMKTONE, 0x100637);
-}
 
 void
 init (void)

@@ -7,7 +7,9 @@ typedef unsigned char CHAR;
 
 
 #define MAX_INPUT_LEN 20
-
+void NEWtable_unload (int p_table_no);
+void repeat_last_phrase (int tty_fd);
+int NEWIncrePreview (char *szOut, char *root_buff, int tty_fd, int disp_selkey, int pTUI_file_pointer, int pp);
 
 typedef struct
 {

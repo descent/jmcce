@@ -42,7 +42,7 @@ debug (char *fmt, ...)
 void
 error (char *fmt, ...)
 {
-  unsigned char buf[NUM_OF_COL];
+  char buf[NUM_OF_COL];
   va_list ap;
   va_start (ap, fmt);
   vsprintf (buf, fmt, ap);

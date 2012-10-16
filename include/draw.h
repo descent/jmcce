@@ -1,6 +1,7 @@
 #ifndef _JMCCE_DRAW_H_
 #define _JMCCE_DRAW_H_
 
+
 #define SCREEN_HEIGHT		(480)
 #define SCREEN_WIDTH		(640)
 #define LINE_SPACE		(2)
@@ -49,6 +50,7 @@ void print_string (int x, int y, unsigned char *string, int fg_color,
 void screen_clear_block (int x, int y, int w, int h, int color);
 void screen_insert_line (int top, int bottom, int n, int bg_color);
 void screen_delete_line (int top, int bottom, int n, int bg_color);
+
 void on_off_cursor (int x, int y);
 
 #endif /* _JMCCE_DRAW_H_ */

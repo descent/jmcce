@@ -11,6 +11,7 @@
 #define GRA_I   0x3CE   /* Graphics Controller Index */
 #define GRA_D   0x3CF   /* Graphics Controller Data Register */
 
+.code32
 .text	
 .globl asm_draw_hanzi
 .globl asm_draw_ascii

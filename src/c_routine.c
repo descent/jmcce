@@ -10,10 +10,10 @@
 #endif /* HAVE_CONFIG_H */
 
 #include "asm_routine.h"	/* vga */
+#include "fb.h"
 
 #include <string.h>		/* memmove */
-
-#include "fb.h"
+#include <vga.h>
 
 extern int use_fb;
 
@@ -134,7 +134,7 @@ c_draw_ascii (int col, int y, unsigned char *bitmap, int color1)
   int fontheight = 18;
 
   if (!use_fb) {
-    asm_draw_ascii (col, y, bitmap, color1);
+    vgalib_draw_ascii (col, y, bitmap, color1);
     return;
   }
 
@@ -180,7 +180,7 @@ c_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
   int fontheight = 18;
 
   if (!use_fb) {
-    asm_draw_hanzi (col, y, bitmap, color1);
+    vgalib_draw_hanzi (col, y, bitmap, color1);
     return;
   }
 

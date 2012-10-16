@@ -14,6 +14,7 @@
 #include <pty.h>
 
 #include <stdio.h>
+#include <string.h>
 #include <termios.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -171,14 +172,14 @@ hztty_open (int history_line)
 
   if (num_hztty < NR_HZTTY) 
   {
-    tty = malloc (sizeof (hz_tty));
+    tty = (hz_tty*)malloc (sizeof (hz_tty));
     if (tty == NULL)
       out_of_memory (__FILE__, "hztty_open", __LINE__);
     if (tty_fork (tty)) {
       tty->terminate = 0;
       tty->buf_size = NUM_OF_COL * history_line;
-      tty->text_buf = calloc (tty->buf_size, 1);
-      tty->attr_buf = calloc (tty->buf_size, 1);
+      tty->text_buf = (unsigned char *)calloc (tty->buf_size, 1);
+      tty->attr_buf = (unsigned char *)calloc (tty->buf_size, 1);
       tty->pos = tty->origin = 0;
       if (!tty->text_buf || !tty->attr_buf)
 	out_of_memory (__FILE__, "hztty_open", __LINE__);

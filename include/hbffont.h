@@ -16,10 +16,10 @@ extern unsigned char ascii_font[256][18];
 
 void font_init (void);
 void font_done (void);
-int hbfOpen (char *filename);
+int hbfOpen (const char *filename);
 void hbfClose ();
-int open_ascii_font (unsigned char *ascfont_name);
-int open_hanzi_font (unsigned char *);
+int open_ascii_font (const char *ascfont_name);
+int open_hanzi_font (const char *);
 unsigned char *ascGetBitmap (unsigned char c, unsigned char mode);
 unsigned char *hbfGetBitmap (unsigned int ch, unsigned char mode,
 			     int p_font_bytes);

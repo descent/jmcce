@@ -11,7 +11,7 @@
 //#define INPUT_BGCOLOR 0
 
 #include "config.h"
-
+#include "newimp.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -106,10 +106,10 @@ int intcode = 0;
  *			     ㄇゅ盽计				   *
  ***************************************************************************/
 
-unsigned char *half_full_strBIG5[] = { "", "" };
-unsigned char *half_full_strGB[] = { "【半角】", "【全角】" };
-unsigned char *history_normal_strBIG5[] = { "块", "菌" };
-unsigned char *history_normal_strGB[] = { "【输入】", "【历史】" };
+const char *half_full_strBIG5[] = { "", "" };
+const char *half_full_strGB[] = { "【半角】", "【全角】" };
+const char *history_normal_strBIG5[] = { "块", "菌" };
+const char *history_normal_strGB[] = { "【输入】", "【历史】" };
 
 unsigned char fullcharBIG5[] =
   "〃…‘ˇ’∠⌒〓⒈⒉⒊⒋⒌⒍⒎⒏≌∽≈"
@@ -211,7 +211,7 @@ input_draw_hanzi (int x, int y, unsigned char *bitmap, int fg, int bg)
 
 
 void
-input_print_string (int x, int y, unsigned char *string, int fg, int bg)
+input_print_string (int x, int y, const char *string, int fg, int bg)
 {
 
   unsigned char *bitmap;
@@ -246,8 +246,7 @@ input_print_string (int x, int y, unsigned char *string, int fg, int bg)
  *				public function 			   *
  ***************************************************************************/
 
-int
-GBtoBIG5 (unsigned char FirstByte, unsigned char SecondByte)
+int GBtoBIG5 (unsigned char FirstByte, unsigned char SecondByte)
 {
   int rOutChar;
   int index;
@@ -266,8 +265,7 @@ GBtoBIG5 (unsigned char FirstByte, unsigned char SecondByte)
   return rOutChar;
 }
 
-int
-BIG5toGB (unsigned char FirstByte, unsigned char SecondByte)
+int BIG5toGB (unsigned char FirstByte, unsigned char SecondByte)
 {
   int rOutChar;
   int index;
@@ -293,8 +291,7 @@ BIG5toGB (unsigned char FirstByte, unsigned char SecondByte)
 }
 
 
-int
-BIG5RADICALtoGB (unsigned char FirstByte, unsigned char SecondByte)
+int BIG5RADICALtoGB (unsigned char FirstByte, unsigned char SecondByte)
 {
   int rOutChar;
   int index;
@@ -410,13 +407,12 @@ BIG5RADICALtoGB (unsigned char FirstByte, unsigned char SecondByte)
 }
 
 
-unsigned char *
-string_BIG5toGB (unsigned char *p_big5_string)
+char * string_BIG5toGB (const char *p_big5_string)
 {
 
   int i;
   int r_gb_widechar;
-  static unsigned char r_gb_string[256];
+  static char r_gb_string[256];
 
   for (i = 0; i <= strlen (p_big5_string); i++) {
 
@@ -440,13 +436,12 @@ string_BIG5toGB (unsigned char *p_big5_string)
 }
 
 
-unsigned char *
-string_GBtoBIG5 (unsigned char *p_gb_string)
+char * string_GBtoBIG5 (const char *p_gb_string)
 {
 
   int i;
   int r_big5_widechar;
-  static unsigned char r_big5_string[256];
+  static char r_big5_string[256];
 
   for (i = 0; i <= strlen (p_gb_string); i++) {
 
@@ -469,13 +464,12 @@ string_GBtoBIG5 (unsigned char *p_gb_string)
 }
 
 
-unsigned char *
-string_BIG5RADICALtoGB (unsigned char *p_big5_string)
+char * string_BIG5RADICALtoGB (const char *p_big5_string)
 {
 
   int i;
   int r_gb_widechar;
-  static unsigned char r_gb_string[256];
+  static char r_gb_string[256];
 
   for (i = 0; i <= strlen (p_big5_string); i++) {
 
@@ -504,14 +498,14 @@ string_BIG5RADICALtoGB (unsigned char *p_big5_string)
 
 
 INPUT_TABLE_STRU *
-load_input_method (char *filename)
+load_input_method (const char *filename)
 {
   int nread;
   FILE *fd;
   char phrase_filename[100], assoc_filename[100];
   INPUT_TABLE_STRU *table;
 
-  table = malloc (sizeof (INPUT_TABLE_STRU));
+  table = (INPUT_TABLE_STRU*)malloc (sizeof (INPUT_TABLE_STRU));
 
   if (table == NULL) {
     fprintf (stderr, "%c", 0x7);
@@ -669,8 +663,7 @@ load_phrase (int phrno, char *tt)
   tt[len] = 0;
 }
 
-void
-FANJIAN_write (int tty_fd, char *pPhrase, int pPhraseLen)
+void FANJIAN_write (int tty_fd, char *pPhrase, int pPhraseLen)
 {
 
   if (gEncode == BIG5) {
@@ -697,7 +690,7 @@ FANJIAN_write (int tty_fd, char *pPhrase, int pPhraseLen)
 
 
 void
-putstr (int tty_fd, unsigned char *p)
+putstr (int tty_fd, const char *p)
 {
   int len = strlen (p);
 
@@ -713,8 +706,7 @@ putstr (int tty_fd, unsigned char *p)
 
 
 
-void
-outchar (int tty_fd, unsigned char c)
+void outchar (int tty_fd, unsigned char c)
 {
 
   int key;
@@ -791,7 +783,7 @@ void
 FillAssociateChars (int index)
 {
 
-  unsigned char str[25];
+  char str[25];
   int PhraseNo, CurLen = 0;
 
   CurSelNum = 0;
@@ -869,8 +861,7 @@ FillMatchChars (int j)
 
 
 
-void
-hz_filter (int tty_fd, unsigned char key)
+void hz_filter (int tty_fd, unsigned char key)
 {
   if (!IsHanziInput)
     return outchar (tty_fd, key);
@@ -1069,7 +1060,7 @@ DispSelection ()
 
 
 void
-load_gsInput_table_array (int i, unsigned char *filename)
+load_gsInput_table_array (int i, const char *filename)
 {
   gsInput_table_array[i] = load_input_method (filename);
 }
@@ -1213,8 +1204,7 @@ INIfile_load (char *pINI_file_name)
 
 
 
-void
-hz_input_init (void)
+void hz_input_init (void)
 {
   int i, len;
   char fn[128];
@@ -1610,7 +1600,7 @@ BarRight (int xmax, int ymax, int leftmar, int stepwidth)
 	if (gEncode == GB) {
 	  strcat (Item_str[jj][ii],
 		  ((jj + gItem_disp_off) ==
-		   10) ? string_BIG5toGB ("ず絏") : (unsigned char
+		   10) ? string_BIG5toGB ("ず絏") : (const char
 						     *) (gsRow_of_INI_file[jj
 									   +
 									   gItem_disp_off].
@@ -1683,7 +1673,7 @@ BarLeft (int xmax, int ymax, int leftmar, int stepwidth)
 	if (gEncode == GB) {
 	  strcat (Item_str[jj][ii],
 		  ((jj + gItem_disp_off) ==
-		   10) ? string_BIG5toGB ("ず絏") : (unsigned char
+		   10) ? string_BIG5toGB ("ず絏") : (const char
 						     *) (gsRow_of_INI_file[jj
 									   +
 									   gItem_disp_off].
@@ -1938,7 +1928,7 @@ IntCode_Init (void)
 
   UseAssociateMode = 1;		/* force to no associate */
 
-  table = malloc (sizeof (INPUT_TABLE_STRU));
+  table = (INPUT_TABLE_STRU*)malloc (sizeof (INPUT_TABLE_STRU));
   if (table == NULL)
     out_of_memory (__FILE__, "load_input_method", __LINE__);
 

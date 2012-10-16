@@ -44,13 +44,13 @@ unsigned char ascii_font[256][18];
 unsigned char *ascii_buffer_normal;
 unsigned char *ascii_buffer_underline;
 
-inline void
+void
 font_done (void)
 {
   hbfClose ();
 }
 
-inline void
+void
 font_init (void)
 {
   open_ascii_font (DEFAULT_ASCFONT);
@@ -64,7 +64,7 @@ font_init (void)
 }
 
 int
-open_ascii_font (unsigned char *ascii_font_name)
+open_ascii_font (const char *ascii_font_name)
 {
   int fd, nread, i, j;
   unsigned char tmpfont[256][16];
@@ -104,7 +104,7 @@ open_ascii_font (unsigned char *ascii_font_name)
 }
 
 int
-open_hanzi_font (unsigned char *fn)
+open_hanzi_font (const char *fn)
 {
   /*  initialize Underline & normal font support (16+2)*2=36 */
 
@@ -121,7 +121,7 @@ open_hanzi_font (unsigned char *fn)
 }
 
 int
-hbfOpen (char *hbffile)
+hbfOpen (const char *hbffile)
 {
   FILE *HBFfp;
   int i, j, m, mx, my, nb2;

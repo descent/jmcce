@@ -1,6 +1,15 @@
 #ifndef _JMCCE_JMCCE_H_
 #define _JMCCE_JMCCE_H_
 
+#include <sys/types.h>
+#include <sys/ioctl.h>
+
+#include <linux/fs.h>
+#include <linux/kd.h>
+#include <linux/vt.h>
+#include <linux/major.h>
+#include <linux/keyboard.h>
+
 extern int console_fd;
 
 #define NORMAL_MODE	(0)
@@ -16,7 +25,17 @@ extern int console_mode;
 extern int active_console;
 
 int get_key (int wait);
-inline void beep1 (void);
+/*
+ * beep:
+        generate beep sound.
+ * input: none
+ * output: none
+ * side effect: none
+ */
+inline void beep1 (void)
+{
+  ioctl (console_fd, KDMKTONE, 0x100637);
+}
 
 /* special function key use to active input method */
 #define NR_SPEC_KEY	(20)
