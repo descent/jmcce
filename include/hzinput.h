@@ -147,7 +147,7 @@ INI_FILE_STRU;
 
 void input_clear_line (int y, int color);
 void input_draw_ascii (int x, int y, unsigned char c, int fg, int bg);
-void input_print_string (int x, int y, const char *string, int fg, int bg);
+void input_print_string (int x, int y, const unsigned char *string, int fg, int bg);
 void ClrRootArea (void);
 void ClrSelArea (void);
 void FindMatchKey (void);
