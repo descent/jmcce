@@ -1,5 +1,5 @@
-CFLAGS =-g -Iinclude -I../include -I../extras/chewing/include
-CC=gcc
+CFLAGS =-g -Iinclude -I../include -I../extras/chewing/include -fpermissive
+CC=g++
 
 #jmcce: chewing.o  c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o
 jmcce: c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o
