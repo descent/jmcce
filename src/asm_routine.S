@@ -198,7 +198,7 @@ BGCOLOR = 20
 
 .align 4
 asm_scroll_up:	
-#if 0
+#if 1
 	pushl	%ebp
 	movl	%esp,%ebp
 	pushl	%esi
@@ -278,7 +278,7 @@ BGCOLOR = 20
 
 .align 4
 asm_scroll_down:	
-#if 0
+#if 1
 	pushl	%ebp
 	movl	%esp,%ebp
 	pushl	%esi
