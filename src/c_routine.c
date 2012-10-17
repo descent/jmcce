@@ -304,6 +304,12 @@ c_scroll_down (int sy, int ey, int line, int bgcolor1)
   memset (dest2, bgcolor1, line * (vinfo.xres * vinfo.bits_per_pixel / 8));
 }
 
+void vgalib_clear_block(int col,int y,int width,int height,int bgcolor)
+{
+  for (int i=0 ; i < height ; ++i)
+    gl_hline(col, y+i, col+width-1, 1);
+}
+
 /****************************************************************************
  *  void c_clear_block(int col,int y,int width,int height,int bgcolor);     *
  *         col:      0-79  left column value                                *
@@ -316,7 +322,7 @@ void
 c_clear_block (int col, int y, int width, int height, int bgcolor1)
 {
   if (!use_fb) {
-    asm_clear_block (col, y, width, height, bgcolor1);
+    vgalib_clear_block (col*8, y, width, height, bgcolor1);
     return;
   }
 
