@@ -255,9 +255,9 @@ NEW_InputTable_load (int p_loadno)
 
   TUI_Header tui_header;
 
-  char tTUI_filename[6][50];
+  char tTUI_filename[6][100];
 
-  char ikt_filename[50];
+  char ikt_filename[100];
   FILE *ikt_file_pointer;
 
   int ikt_line_count;
