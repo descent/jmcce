@@ -10,12 +10,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 #include <stdio.h>
 //#include <asm/bitops.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+
+#include <string>
 
 #include "jmcce.h"
 #include "c_routine.h"
@@ -53,14 +55,18 @@ font_done (void)
 void
 font_init (void)
 {
-  open_ascii_font (DEFAULT_ASCFONT);
+  std::string jmcce_conf_path(jmcce_path);
+
+  open_ascii_font( (std::string(jmcce_conf_path + "/../fonts/8x16")).c_str() );
 
   if (gEncode == BIG5) {
-    open_hanzi_font (DEFAULT_HZFONT_BIG5);
+    open_hanzi_font ( (std::string(jmcce_conf_path + "/../fonts/han15.hbf")).c_str() );
   }
+  #if 0
   if (gEncode == GB) {
     open_hanzi_font (DEFAULT_HZFONT_GB);
   }
+  #endif
 }
 
 int

@@ -13,9 +13,11 @@
 #include "config.h"
 #include "newimp.h"
 
+#include <string>
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <cstring>
 #include <ctype.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -1214,14 +1216,18 @@ void hz_input_init (void)
   IsFullChar = 0;
   gsCurrent_method = 1;
 
+  std::string jmcce_conf_path(jmcce_path);
+
   if (gDontLoadInputMethod != 1) {
 
     if (gEncode == BIG5) {
-      INIfile_load (JMCCE_CONFDIR"/jmcceb5.ini");
+      INIfile_load((std::string(jmcce_conf_path + "/../conf/jmcceb5.ini")).c_str());
     }
+    #if 0
     if (gEncode == GB) {
       INIfile_load (JMCCE_CONFDIR"/jmccegb.ini");
     }
+    #endif
 
     sprintf (fn, "%s/%s", home_dir, JMCCE_LOG);
 
@@ -1238,6 +1244,7 @@ void hz_input_init (void)
     for (i = 1; i <= gItem_count; i++) {
       gsInput_table_array[i] = NEW_InputTable_load (i);
     }
+    //exit(0);
 
 #ifdef CHEWING
     gsInput_table_array[7] = Chew_Init ();	/* Chewing */

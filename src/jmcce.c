@@ -17,13 +17,14 @@
 #include <unistd.h>
 #include <signal.h>
 #include <stdlib.h>
-#include <string.h>
+#include <cstring>
 #include <termios.h>
 #include <ncurses.h>
 #include <vga.h>
 #include <vgagl.h>
 #include <vgakeyboard.h>
 
+#include <string>
 
 #include "jmcce.h"
 #include "draw.h"
@@ -862,6 +863,8 @@ done (void)
 
 FILE *fs;
 
+char jmcce_path[256];
+
 int
 main (int argc, char **argv)
 {
@@ -869,6 +872,9 @@ main (int argc, char **argv)
   struct passwd *pw;
 
   fs=fopen("./log", "w");
+
+  getcwd(jmcce_path, 256-1);
+
 
   _lang = setlocale (LC_CTYPE, "");
 

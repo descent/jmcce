@@ -9,11 +9,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <cstring>
 #include <fcntl.h>
 #include <ncurses.h>
 #include <unistd.h>
 #include <ctype.h>
+
+#include <string>
 
 #include "newimp.h"
 #include "hbffont.h"
@@ -284,13 +286,21 @@ NEW_InputTable_load (int p_loadno)
     return temp_table;
   }
 
+  std::string jmcce_conf_path(jmcce_path);
 
   for (c5 = 1; c5 <= 5; c5++) {
-    strcpy (tTUI_filename[c5], JMCCE_DATADIR"/");
+    strcpy (tTUI_filename[c5], (std::string(jmcce_conf_path + "/../inputref/")).c_str() );
+    //strcpy (tTUI_filename[c5], JMCCE_DATADIR"/");
     strcat (tTUI_filename[c5], gsRow_of_INI_file[p_loadno].szTuiFile[c5]);
   }
 
-  strcpy (ikt_filename, JMCCE_DATADIR"/");
+
+
+  printf("jmcce_path: %s\n", jmcce_path);
+  strcpy (ikt_filename, (std::string(jmcce_conf_path + "/../inputref/")).c_str() );
+  printf("ikt_filename: %s\n", ikt_filename);
+  //strcpy (ikt_filename, JMCCE_DATADIR"/");
+
   strcat (ikt_filename, gsRow_of_INI_file[p_loadno].szIktFile);
 
   if (strcmp (gsRow_of_INI_file[p_loadno].szEncode, "BIG5") == 0) {
@@ -304,6 +314,7 @@ NEW_InputTable_load (int p_loadno)
   temp_table->IsExtInpMethod = 1;
   temp_table->EnableAttr = 1;
   Item_attr[p_loadno] = 1;
+
 
   ikt_file_pointer = fopen (ikt_filename, "r");
 
