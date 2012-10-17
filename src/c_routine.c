@@ -393,7 +393,7 @@ c_scroll_down (int sy, int ey, int line, int bgcolor1)
 void vgalib_clear_block(int col,int y,int width,int height,int bgcolor)
 {
   for (int i=0 ; i < height ; ++i)
-    gl_hline(col, y+i, col+width-1, 1);
+    gl_hline(col, y+i, col+width-1, bgcolor);
 }
 
 /****************************************************************************
@@ -408,7 +408,7 @@ void
 c_clear_block (int col, int y, int width, int height, int bgcolor1)
 {
   if (!use_fb) {
-    vgalib_clear_block (col*8, y, width, height, bgcolor1);
+    vgalib_clear_block (col*8, y, width*8, height, bgcolor1);
     return;
   }
 
