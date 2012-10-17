@@ -157,9 +157,10 @@ screen_init (void)
 
   gl_setcontext(virtual_screen);
 
-  gl_setpalettecolor(1, 0, 0, 63); // blue
-  gl_setpalettecolor(0, 0, 0, 0); // black
-  gl_setpalettecolor(63, 63, 63, 63); // white
+  gl_setpalettecolor(BLUE, 0, 0, 63); // blue
+  gl_setpalettecolor(BLACK, 0, 0, 0); // black
+  gl_setpalettecolor(GREEN, 0, 63, 0); 
+  gl_setpalettecolor(RED, 63, 0, 0); 
 
 
   active_console = 1;
