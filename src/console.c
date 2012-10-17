@@ -811,7 +811,6 @@ reset_terminal (hz_tty * tty, int do_clear)
 void
 hztty_write (hz_tty * tty, unsigned char *buf, int num)
 {
-  extern GraphicsContext *physical_screen;
   unsigned char *bitmap;
 
   if (tty == hztty_list)
@@ -1142,7 +1141,6 @@ hztty_write (hz_tty * tty, unsigned char *buf, int num)
 /* screen_flush();*/
 
   }
-  gl_copyscreen(physical_screen);
 }
 
 void

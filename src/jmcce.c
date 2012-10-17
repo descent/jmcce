@@ -20,6 +20,8 @@
 #include <string.h>
 #include <termios.h>
 #include <ncurses.h>
+#include <vga.h>
+#include <vgagl.h>
 #include <vgakeyboard.h>
 
 
@@ -771,6 +773,7 @@ run (void)
   static unsigned char buf[BUFSIZE];
   hz_tty *hztty;
   int nread, i;
+  extern GraphicsContext *physical_screen;
 
   hztty_open (NUM_OF_ROW * HISTORY_PAGE);
 
@@ -800,6 +803,7 @@ run (void)
 	}
       }
     }
+    gl_copyscreen(physical_screen);
 
     for (i = num_hztty, hztty = hztty_list; i > 0; i--) {
       if (FD_ISSET (hztty->tty_fd, &rset)) {
@@ -807,6 +811,7 @@ run (void)
 	if (nread > 0)
 	  hztty_write (hztty, buf, nread);
       }
+      gl_copyscreen(physical_screen);
       hztty = hztty->next_hztty;
       if (hztty->prev_hztty->terminate) {
 	FD_CLR (hztty->prev_hztty->tty_fd, &rrset);
