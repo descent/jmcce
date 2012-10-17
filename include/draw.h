@@ -1,6 +1,7 @@
 #ifndef _JMCCE_DRAW_H_
 #define _JMCCE_DRAW_H_
 
+#include <vga.h>
 
 #define SCREEN_HEIGHT		(480)
 #define SCREEN_WIDTH		(640)
@@ -18,7 +19,7 @@
 #define RED			(4)
 #define MAGENTA			(5)
 #define BROWN			(6)
-#define WHITE			(7)
+#define WHITE		        (vga_white())
 #define LIGHTBLACK      	(8)
 #define LIGHTBLUE       	(9)
 #define LIGHTGREEN      	(10)
