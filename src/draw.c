@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <vga.h>
+#include <vgagl.h>
 #include <sys/types.h>
 #include <string.h>
 //#include <asm/bitops.h>
@@ -25,6 +26,9 @@
 #include "c_routine.h"
 
 extern int gFont_bytes;
+
+GraphicsContext *physical_screen;
+GraphicsContext *virtual_screen;
 
 #ifdef LINUXFB
 int use_fb = 1;
@@ -107,7 +111,7 @@ screen_flipaway (void)
 }
 
 //#define DEFAULT_VGA_MODE G640x480x16M
-#define DEFAULT_VGA_MODE G640x480x16 // in my fujitsu lifebook ati card, it works
+#define DEFAULT_VGA_MODE G640x480x256 // in my fujitsu lifebook ati card, it works
 
 /* use by signal usr2 (SIGACQ) handler -- acquire terminal */
 void
@@ -131,6 +135,20 @@ screen_init (void)
   use_fb = 0;
   vga_init ();
   vga_setmode(DEFAULT_VGA_MODE);
+  gl_setcontextvga(DEFAULT_VGA_MODE);
+  physical_screen = gl_allocatecontext();
+  gl_getcontext(physical_screen);
+
+  gl_setcontextvgavirtual(DEFAULT_VGA_MODE);
+  virtual_screen = gl_allocatecontext();
+  gl_getcontext(virtual_screen);
+
+  gl_setcontext(virtual_screen);
+
+  gl_setpalettecolor(1, 0, 0, 63); // blue
+  gl_setpalettecolor(0, 0, 0, 0); // black
+  gl_setpalettecolor(63, 63, 63, 63); // white
+
 
   active_console = 1;
 }

@@ -9,12 +9,14 @@
 #include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include "asm_routine.h"	/* vga */
+#include "asm_routine.h"	
 #include "fb.h"
 
 #include <string.h>		/* memmove */
 #include <vga.h>
+#include <vgagl.h>
 
+extern GraphicsContext *physical_screen;
 extern int use_fb;
 
 unsigned char fgcolor = 15;
@@ -56,13 +58,16 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
     {           
       if (((c >> j) & 0x1) == 1)
       {
-        vga_setcolor(vga_white());
-        vga_drawpixel(startx + cx, starty + cy);
+        //vga_setcolor(vga_white());
+        //vga_drawpixel(startx + cx, starty + cy);
+        //gl_setpixelrgb(startx+cx, starty+cy, 63, 63, 63);
+        gl_setpixel(startx+cx, starty+cy, vga_white());
       }
       else
       {
-        vga_setcolor(0); // black
-        vga_drawpixel(startx + cx, starty + cy);
+        //vga_setcolor(0); // black
+        //vga_drawpixel(startx + cx, starty + cy);
+        gl_setpixelrgb(startx+cx, starty+cy, 0, 0, 0);
       }
         //printf("*");
       //else
@@ -73,6 +78,7 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
     ++cy;
 
   }
+  gl_copyscreen(physical_screen);
   //printf("\n");
 
 }
@@ -99,13 +105,15 @@ void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
     {           
       if (((c >> j) & 0x1) == 1)
       {
-        vga_setcolor(vga_white());
-        vga_drawpixel(startx+cx, starty+cy);
+        //vga_setcolor(vga_white());
+        //vga_drawpixel(startx+cx, starty+cy);
+        gl_setpixelrgb(startx+cx, starty+cy, 63, 63, 63);
       }
       else
       {
-        vga_setcolor(0); // black
-        vga_drawpixel(startx+cx, starty+cy);
+        //vga_setcolor(0); // black
+        //vga_drawpixel(startx+cx, starty+cy);
+        gl_setpixelrgb(startx+cx, starty+cy, 0, 0, 0);
       }
       ++cx;
     }
@@ -115,6 +123,7 @@ void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
     ++cy;
 
   }
+  gl_copyscreen(physical_screen);
 }
 
 /****************************************************************************
@@ -300,10 +309,15 @@ c_clear_block (int col, int y, int width, int height, int bgcolor1)
 void vgalib_clear_lines(int sx, int sy, int ex, int ey, int color)
 {
   int i;
-  vga_setcolor(color); // blue
+  //int c=1;
+  //vga_setcolor(color); // blue
+  //gl_setpalettecolor(c, 0, 0, 63);
 
   for (i = sy ; i < ey ; ++i)
-    vga_drawline (sx, i, 639, i);
+    //vga_drawline (sx, i, 639, i);
+    gl_hline(sx, i, 639, 1);
+
+  gl_copyscreen(physical_screen);
 }
 
 
