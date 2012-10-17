@@ -5,18 +5,18 @@
 /*                      $Id: c_routine.c,v 1.1.1.1 2002/05/03 04:01:07 kids Exp $                                              */
 /****************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif /* HAVE_CONFIG_H */
-
+#include "draw.h"
 #include "asm_routine.h"	
 #include "fb.h"
+#include "hztty.h"
 
 #include <string.h>		/* memmove */
 #include <vga.h>
 #include <vgagl.h>
 
 extern GraphicsContext *physical_screen;
+extern GraphicsContext *virtual_screen;
+
 extern int use_fb;
 
 unsigned char fgcolor = 15;
@@ -220,6 +220,23 @@ c_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
   fgcolor = fgcolor0;
 }
 
+void vgalib_scroll_up(int sy,int ey,int line,int bgcolor)
+{
+#if 0
+  extern FILE *fs;
+
+  fprintf(fs, "sy: %d\n", sy);
+  fprintf(fs, "ey: %d\n", ey);
+  fprintf(fs, "line: %d\n", line);
+#endif
+  gl_copyboxfromcontext(virtual_screen, 0, LINE_HEIGHT*line, WIDTH, LINE_HEIGHT*ey,0, 0);
+
+  // clean tty bottom line
+  for (int i=0 ; i < LINE_HEIGHT ; ++i)
+    gl_hline(0, LINE_HEIGHT * (NUM_OF_ROW-1)+i, WIDTH-1, 0);
+}
+
+
 /****************************************************************************
  *        void c_scroll_up(int sy,int ey,int line,int bgcolor);             *
  *             sy:       0-479    start y coordinate                        *
@@ -239,7 +256,8 @@ c_scroll_up (int sy, int ey, int line, int bgcolor1)
 #endif
 
   if (!use_fb) {
-    asm_scroll_up (sy, ey, line, bgcolor1);
+    vgalib_scroll_up (sy, ey, line, bgcolor1);
+    //asm_scroll_up (sy, ey, line, bgcolor1);
     return;
   }
 
