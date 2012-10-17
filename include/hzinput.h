@@ -5,13 +5,15 @@
 #define _JMCCE_HZINPUT_H_
 
 #include <stdio.h>
+#include <vga.h>
 
+#include "draw.h"
 
 #define INPUT_CHOICENUMBERCOLOR   15
 #define INPUT_CHOICENUMBERBGCOLOR 12
 #define INPUT_DEFAULTCOLOR	  13
-#define INPUT_FGCOLOR		  15
-#define INPUT_BGCOLOR		   1
+#define INPUT_FGCOLOR		  (vga_white())
+#define INPUT_BGCOLOR		  BLUE
 #define INPUT_WILD_COLOR          12
 
 #define HINT_CASEHICOLOR	  14
