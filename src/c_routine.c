@@ -107,13 +107,13 @@ void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
       {
         //vga_setcolor(vga_white());
         //vga_drawpixel(startx+cx, starty+cy);
-        gl_setpixelrgb(startx+cx, starty+cy, 63, 63, 63);
+        gl_setpixel(startx+cx, starty+cy, vga_white());
       }
       else
       {
         //vga_setcolor(0); // black
         //vga_drawpixel(startx+cx, starty+cy);
-        gl_setpixelrgb(startx+cx, starty+cy, 0, 0, 0);
+        gl_setpixel(startx+cx, starty+cy, BLACK);
       }
       ++cx;
     }
@@ -339,7 +339,7 @@ void vgalib_clear_lines(int sx, int sy, int ex, int ey, int color)
 
   for (i = sy ; i < ey ; ++i)
     //vga_drawline (sx, i, 639, i);
-    gl_hline(sx, i, 639, 1);
+    gl_hline(sx, i, 639, BLUE);
 
   gl_copyscreen(physical_screen);
 }
@@ -358,7 +358,7 @@ c_clear_lines (int sy, int height, int bgcolor1)
 
   if (!use_fb) {
     //asm_clear_lines (sy, height, bgcolor1);
-    vgalib_clear_lines (0, sy, 639, sy + height, 1);
+    vgalib_clear_lines (0, sy, 639, sy + height, bgcolor1);
     return;
   }
 
