@@ -78,7 +78,7 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
     ++cy;
 
   }
-  gl_copyscreen(physical_screen);
+  //gl_copyscreen(physical_screen);
   //printf("\n");
 
 }
@@ -123,7 +123,7 @@ void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
     ++cy;
 
   }
-  gl_copyscreen(physical_screen);
+  //gl_copyscreen(physical_screen);
 }
 
 /****************************************************************************

@@ -5,10 +5,7 @@
 /*                   $Id: console.c,v 1.1.1.1 2002/05/03 04:01:07 kids Exp $    */
 /****************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif /* HAVE_CONFIG_H */
-
+#include <vgagl.h>
 
 /*
  * The following code is derived from linux console.c
@@ -814,6 +811,7 @@ reset_terminal (hz_tty * tty, int do_clear)
 void
 hztty_write (hz_tty * tty, unsigned char *buf, int num)
 {
+  extern GraphicsContext *physical_screen;
   unsigned char *bitmap;
 
   if (tty == hztty_list)
@@ -1144,6 +1142,7 @@ hztty_write (hz_tty * tty, unsigned char *buf, int num)
 /* screen_flush();*/
 
   }
+  gl_copyscreen(physical_screen);
 }
 
 void
