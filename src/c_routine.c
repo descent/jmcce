@@ -83,6 +83,92 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
 
 }
 
+void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int fg, int bg)
+{
+  int i=0;
+  int cx=0, cy=0;
+  int startx = col * 8;
+  int starty = y;
+
+  //vga_setcolor(color1);
+  for (i=0 ; i < 18 ; ++i)
+  {
+    char c = bitmap[i];
+    int j=0;
+    //printf("%x ", ascii[i]);
+
+    for (j=7 ; j>=0 ; --j)
+    {           
+      if (((c >> j) & 0x1) == 1)
+      {
+        //vga_setcolor(vga_white());
+        //vga_drawpixel(startx + cx, starty + cy);
+        //gl_setpixelrgb(startx+cx, starty+cy, 63, 63, 63);
+        gl_setpixel(startx+cx, starty+cy, fg);
+      }
+      else
+      {
+        //vga_setcolor(0); // black
+        //vga_drawpixel(startx + cx, starty + cy);
+        gl_setpixel(startx+cx, starty+cy, bg);
+      }
+        //printf("*");
+      //else
+        //printf("_");
+      ++cx;
+    }
+    cx=0;
+    ++cy;
+
+  }
+  //gl_copyscreen(physical_screen);
+  //printf("\n");
+
+}
+
+void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int fg, int bg)
+{
+  int i=0, k=0;
+  int cx=0, cy=0;
+  int fontheight = 18;
+  int startx = col * 8;
+  int starty = y;
+
+  //vga_setcolor(color1);
+  for (i=0 ; i < fontheight ; ++i)
+  {
+    int j=0;
+    //printf("%x ", ascii[i]);
+
+    for (k=0 ; k < 2 ; ++k)
+    {
+      char c = *bitmap++;
+
+    for (j=7 ; j>=0 ; --j)
+    {           
+      if (((c >> j) & 0x1) == 1)
+      {
+        //vga_setcolor(vga_white());
+        //vga_drawpixel(startx+cx, starty+cy);
+        gl_setpixel(startx+cx, starty+cy, fg);
+      }
+      else
+      {
+        //vga_setcolor(0); // black
+        //vga_drawpixel(startx+cx, starty+cy);
+        gl_setpixel(startx+cx, starty+cy, bg);
+      }
+      ++cx;
+    }
+
+    }
+    cx=0;
+    ++cy;
+
+  }
+  //gl_copyscreen(physical_screen);
+}
+
 void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
 {
   int i=0, k=0;
@@ -358,7 +444,7 @@ c_clear_lines (int sy, int height, int bgcolor1)
 
   if (!use_fb) {
     //asm_clear_lines (sy, height, bgcolor1);
-    vgalib_clear_lines (0, sy, 639, sy + height, bgcolor1);
+    vgalib_clear_lines (0, sy, 639, sy + height, RED);
     return;
   }
 
