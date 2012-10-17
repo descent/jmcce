@@ -19,9 +19,10 @@
 #include <ctype.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <vga.h>
 #include <ncurses.h>
 #include <ctype.h>
+#include <vga.h>
+#include <vgagl.h>
 
 #include "jmcce.h"
 #include "hzinput.h"
@@ -189,7 +190,7 @@ input_clear_line (int y, int color)
 inline void
 input_clear_area (int color)
 {
-  c_clear_lines (INPUT_AREAY - 6, 480 - INPUT_AREAY + 6, INPUT_BGCOLOR);
+  c_clear_lines (INPUT_AREAY - 6, 480 - INPUT_AREAY + 6, color);
 }
 
 
@@ -1337,7 +1338,6 @@ refresh_input_method_area (void)
   tTopY = 458;
   tLeftX = 540;
 
-
   NEWRootEmpty ();
 //NEWDispRootArea();
   input_clear_line (2, INPUT_BGCOLOR);
@@ -1355,12 +1355,17 @@ refresh_input_method_area (void)
     for (ii = 0; ii < 100; ii++)
       fb_setfgcolor (12);
   } else {
+
+    gl_hline(0, INPUT_AREAY - 7, WIDTH-1, vga_white());
+    gl_hline(0, INPUT_AREAY - 4, WIDTH-1, vga_white());
+
+#ifdef VGA__
     vga_setcolor (15);
     vga_drawline (0, INPUT_AREAY - 7, 639, INPUT_AREAY - 7);
     vga_drawline (0, INPUT_AREAY - 4, 639, INPUT_AREAY - 4);
-
     for (ii = 0; ii < 100; ii++)
       vga_setcolor (12);
+#endif
   }
 
 
