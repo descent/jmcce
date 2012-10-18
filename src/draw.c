@@ -157,10 +157,26 @@ screen_init (void)
 
   gl_setcontext(virtual_screen);
 
+// color table:
+// http://en.wikipedia.org/wiki/ANSI_escape_code#Colors 
+
   gl_setpalettecolor(BLUE, 0, 0, 63); // blue
   gl_setpalettecolor(BLACK, 0, 0, 0); // black
   gl_setpalettecolor(GREEN, 0, 63, 0); 
   gl_setpalettecolor(RED, 63, 0, 0); 
+  gl_setpalettecolor(YELLOW, 255, 255, 85); 
+  gl_setpalettecolor(MAGENTA, 255, 85, 255); 
+  gl_setpalettecolor(CYAN, 85, 255, 255); 
+  gl_setpalettecolor(BROWN, 170, 85, 0); 
+
+  gl_setpalettecolor(LIGHTBLACK, 85, 85, 85); 
+  gl_setpalettecolor(LIGHTBLUE, 85, 85, 255); 
+  gl_setpalettecolor(LIGHTGREEN, 85, 255, 85); 
+  gl_setpalettecolor(LIGHTCYAN, 85, 255, 255); 
+  gl_setpalettecolor(LIGHTRED, 255, 85, 85); 
+  gl_setpalettecolor(LIGHTMAGENTA, 255, 85, 255); 
+  gl_setpalettecolor(LIGHTBROWN, 170, 85, 0); 
+  gl_setpalettecolor(LIGHTWHITE, 255, 255, 255); 
 
 
   active_console = 1;
@@ -188,7 +204,7 @@ draw_ascii_char (int x, int y, int c,
     buffer = &ascii_font[c][0];
   else
     buffer = ascGetBitmap (c, mode);
-  vgalib_draw_ascii (x, y * LINE_HEIGHT, buffer, fg_color | (bg_color << 8));
+  vgalib_draw_ascii (x, y * LINE_HEIGHT, buffer, fg_color, (bg_color));
 }
 
 void
@@ -198,7 +214,7 @@ draw_hanzi_char (int x, int y, unsigned char *bitmap,
 
   if (!active_console)
     return;
-  vgalib_draw_hanzi (x, y * LINE_HEIGHT, bitmap, fg_color | (bg_color << 8));
+  vgalib_draw_hanzi (x, y * LINE_HEIGHT, bitmap, fg_color, bg_color);
 }
 
 void

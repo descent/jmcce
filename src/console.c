@@ -28,8 +28,10 @@
 
 extern int gFont_bytes;
 
-static unsigned char color_table[] = { 0, 4, 2, 6, 1, 5, 3, 7,
-  8, 12, 10, 14, 9, 13, 11, 15
+static unsigned char color_table[] = 
+{ 
+  BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE,
+  WHITE, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE
 };
 
 static char *translations[] = {
@@ -538,6 +540,40 @@ update_attr (hz_tty * tty)
   else
     tty->video_erase_color = tty->background_color;
 }
+
+#if 0
+ref: http://www.termsys.demon.co.uk/vtansi.htm
+ref: http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+
+Set Display Attributes
+0       Reset all attributes
+1       Bright
+2       Dim
+4       Underscore      
+5       Blink
+7       Reverse
+8       Hidden
+
+        Foreground Colours
+30      Black
+31      Red
+32      Green
+33      Yellow
+34      Blue
+35      Magenta
+36      Cyan
+37      White
+
+        Background Colours
+40      Black
+41      Red
+42      Green
+43      Yellow
+44      Blue
+45      Magenta
+46      Cyan
+47      White
+#endif
 
 static void
 csi_m (hz_tty * tty)

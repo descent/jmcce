@@ -28,6 +28,7 @@
 #define LIGHTMAGENTA    	(13)
 #define LIGHTBROWN      	(14)
 #define LIGHTWHITE      	(15)
+#define YELLOW                  (16)
 
 /*************** public functions *****************/
 
