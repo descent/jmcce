@@ -482,7 +482,16 @@ void
 c_toggle_cursor (int col, int y)
 {
   if (!use_fb) {
-    asm_toggle_cursor (col, y);
+    //asm_toggle_cursor (col, y);
+    
+    // clear cursor
+    gl_hline (cursor_x0 * 8, cursor_y0 + 1, ((cursor_x0 + 1) * 8) - 1, BLACK);
+    gl_hline (cursor_x0 * 8, cursor_y0, ((cursor_x0 + 1) * 8) - 1, BLACK);
+
+    gl_hline (col * 8, y + 1, ((col + 1) * 8) - 1, WHITE);
+    gl_hline (col * 8, y, ((col + 1) * 8) - 1, WHITE);
+    cursor_x0 = col;
+    cursor_y0 = y;
     return;
   }
 
