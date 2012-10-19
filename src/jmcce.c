@@ -103,9 +103,25 @@ void BarMenu (int xmax, int ymax, int leftmar, int stepwidth);
  * side effect: none
 */
 
-static int
+static bool
 is_console (void)
 {
+  // ref : fbterm/input.cpp # TtyInput::createInstance()
+  char buf[64];
+  if (ttyname_r(STDIN_FILENO, buf, sizeof(buf))) 
+  {
+    fprintf(stderr, "%s: stdin isn't a tty!\n", buf);
+    return false;
+  }       
+        
+  if (!strstr(buf, "/dev/tty") && !strstr(buf, "/dev/vc")) 
+  {
+    fprintf(stderr, "%s: stdin isn't a interactive tty!\n", buf);
+    return false;
+  }
+  return true;
+
+#if 0
   int dev;
   FILE *fp;
 
@@ -125,6 +141,7 @@ is_console (void)
   fclose (fp);
   //return MINOR (dev);
   return 1;
+#endif
 }
 
 /*
@@ -484,7 +501,10 @@ init (void)
 
   paste_buffer = NULL;
   error_init ();
-  //ttyminor = is_console ();
+  if (is_console() == false)
+  {
+    exit(0);
+  }
   console_fd = open (CONSOLE, O_RDWR);
 
   if (console_fd == -1) {
