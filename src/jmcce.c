@@ -19,7 +19,6 @@
 #include <stdlib.h>
 #include <cstring>
 #include <termios.h>
-#include <ncurses.h>
 #include <vga.h>
 #include <vgagl.h>
 #include <vgakeyboard.h>
@@ -33,7 +32,6 @@
 #include "error.h"
 #include "hzinput.h"
 //#include <vgamouse.h>
-//#include <vgagl.h>
 
 #define STAT_FILE       "/proc/self/stat"
 #define CONSOLE         "/dev/console"
