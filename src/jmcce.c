@@ -438,7 +438,7 @@ process_screen_event (void)
   switch (screen_request) {
   case LEAVE_JMCCE:
     screen_flipaway ();
-    restore_keymap ();
+    //restore_keymap ();
     ioctl (console_fd, VT_RELDISP, 1);
     screen_request = NONE;
     break;
@@ -865,18 +865,18 @@ done (void)
     error ("Can't not reset console termios\n");
 
   hztty_done ();
-  screen_done ();
+  //screen_done ();
 
   hz_input_done ();
 
   font_done ();
   error_done ();
 
-  write (console_fd, "\033c", 2);
-
 
   if (paste_buffer)
     free (paste_buffer);
+
+  write (console_fd, "\033c", 2); // reset terminal
 }
 
 FILE *fs;
@@ -954,7 +954,7 @@ main (int argc, char **argv)
   unsetenv ("LC_ALL");
   done ();
 #endif
-  vga_setmode (TEXT);
+  //vga_setmode (TEXT);
 
   return 0;
 }

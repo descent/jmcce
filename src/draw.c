@@ -116,9 +116,11 @@ clear_line (int line, int color)
 void
 screen_flipaway (void)
 {
+#if 0
   if (!use_fb)
     vga_setmode (TEXT);
-
+#endif
+  screen_done ();
   active_console = 0;
 }
 
