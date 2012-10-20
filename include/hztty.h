@@ -73,7 +73,7 @@ typedef struct _hz_tty
   union
   {
     unsigned int par[NPAR];
-    unsigned char filename[MAX_PATH];
+    //unsigned char filename[MAX_PATH];
   }
   param;
   /* set when it is active tty & active console */
