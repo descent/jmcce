@@ -44,6 +44,7 @@
  *		 extern      variable defines				   *
  ***************************************************************************/
 
+extern GraphicsContext *physical_screen;
 extern int use_fb;
 extern int gFont_bytes;
 extern int gEncode;
@@ -1486,7 +1487,7 @@ chinese_bar (int x, int y, int leftmar, int stepwidth, int disp_type,
     tBackGroundColor = INPUT_BGCOLOR;
     break;
   case NORMALDISABLE:
-    tFontColor = 8;
+    tFontColor = MAGENTA;
     tBackGroundColor = INPUT_BGCOLOR;
     break;
   case REVERSE:
@@ -1818,6 +1819,7 @@ BarMenu (int xmax, int ymax, int leftmar, int stepwidth)
 	       Item_attr[mx] == 1 ? REVERSE : REVERSEDISABLE,
 	       Item_str[mx][my]);
 
+  gl_copyscreen(physical_screen);
 
   initscr ();
   noecho ();
@@ -1914,6 +1916,7 @@ BarMenu (int xmax, int ymax, int leftmar, int stepwidth)
 		   Item_attr[lastx] == 1 ? NORMAL : NORMALDISABLE,
 		   Item_str[lastx][lasty]);
     }
+    gl_copyscreen(physical_screen);
 
 
   }
