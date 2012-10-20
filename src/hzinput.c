@@ -11,6 +11,7 @@
 //#define INPUT_BGCOLOR 0
 
 #include "config.h"
+#include "jmcce.h"
 #include "newimp.h"
 
 #include <string>
@@ -69,9 +70,6 @@ INPUT_TABLE_STRU *Chew_Init (void);
 
 
 
-
-#define BIG5 886
-#define GB   86
 
 #define Big5ToGBTblSize (sizeof(Big5ToGBTbl)/sizeof(int))
 #define GBToBig5TblSize (sizeof(GBToBig5Tbl)/sizeof(int))

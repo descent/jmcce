@@ -17,6 +17,7 @@
 
 #include <string>
 
+#include "jmcce.h"
 #include "newimp.h"
 #include "hbffont.h"
 #include "hzinput.h"
@@ -27,10 +28,6 @@
 #define _lread	read		// for DOS compatible
 #define _lwrite write		// for DOS compatible
 #define _lclose close		// for DOS compatible
-
-#define BIG5	(886)
-#define GB	(86)
-
 
 extern INI_FILE_STRU gsRow_of_INI_file[99];
 extern INPUT_TABLE_STRU *gsInput_table_array[80];
