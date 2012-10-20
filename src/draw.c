@@ -156,6 +156,7 @@ screen_init (void)
   gl_getcontext(virtual_screen);
 
   gl_setcontext(virtual_screen);
+  //vga_ext_set(VGA_EXT_SET,  VGA_CLUT8);
 
 // color table:
 // http://en.wikipedia.org/wiki/ANSI_escape_code#Colors 
@@ -164,19 +165,18 @@ screen_init (void)
   gl_setpalettecolor(BLACK, 0, 0, 0); // black
   gl_setpalettecolor(GREEN, 0, 63, 0); 
   gl_setpalettecolor(RED, 63, 0, 0); 
-  gl_setpalettecolor(YELLOW, 255, 255, 85); 
-  gl_setpalettecolor(MAGENTA, 255, 85, 255); 
-  gl_setpalettecolor(CYAN, 85, 255, 255); 
-  gl_setpalettecolor(BROWN, 170, 85, 0); 
+  gl_setpalettecolor(BROWN, 170/4, 85/4, 0);
+  gl_setpalettecolor(MAGENTA, 170/4, 0, 170/4);
+  gl_setpalettecolor(CYAN, 0, 170/4, 170/4); 
+  gl_setpalettecolor(GRAY, 48, 48, 48);
 
-  gl_setpalettecolor(LIGHTBLACK, 85, 85, 85); 
-  gl_setpalettecolor(LIGHTBLUE, 85, 85, 255); 
-  gl_setpalettecolor(LIGHTGREEN, 85, 255, 85); 
-  gl_setpalettecolor(LIGHTCYAN, 85, 255, 255); 
-  gl_setpalettecolor(LIGHTRED, 255, 85, 85); 
-  gl_setpalettecolor(LIGHTMAGENTA, 255, 85, 255); 
-  gl_setpalettecolor(LIGHTBROWN, 170, 85, 0); 
-  gl_setpalettecolor(LIGHTWHITE, 255, 255, 255); 
+  gl_setpalettecolor(LIGHTBLACK, 85/4, 85/4, 85/4); 
+  gl_setpalettecolor(LIGHTBLUE, 85/4, 85/4, 255/4); 
+  gl_setpalettecolor(LIGHTGREEN, 85/4, 255/4, 85/4); 
+  gl_setpalettecolor(LIGHTCYAN, 85/4, 255/4, 255/4); 
+  gl_setpalettecolor(LIGHTRED, 25/45/4, 85/4, 85/4); 
+  gl_setpalettecolor(LIGHTMAGENTA, 255/4, 85/4, 255/4); 
+  gl_setpalettecolor(LIGHTBROWN, 255/4, 255/4, 85/4); 
 
 
   active_console = 1;

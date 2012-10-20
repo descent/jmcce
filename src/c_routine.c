@@ -61,7 +61,7 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
         //vga_setcolor(vga_white());
         //vga_drawpixel(startx + cx, starty + cy);
         //gl_setpixelrgb(startx+cx, starty+cy, 63, 63, 63);
-        gl_setpixel(startx+cx, starty+cy, vga_white());
+        gl_setpixel(startx+cx, starty+cy, GRAY);
       }
       else
       {
@@ -488,8 +488,8 @@ c_toggle_cursor (int col, int y)
     gl_hline (cursor_x0 * 8, cursor_y0 + 1, ((cursor_x0 + 1) * 8) - 1, BLACK);
     gl_hline (cursor_x0 * 8, cursor_y0, ((cursor_x0 + 1) * 8) - 1, BLACK);
 
-    gl_hline (col * 8, y + 1, ((col + 1) * 8) - 1, WHITE);
-    gl_hline (col * 8, y, ((col + 1) * 8) - 1, WHITE);
+    gl_hline (col * 8, y + 1, ((col + 1) * 8) - 1, GRAY);
+    gl_hline (col * 8, y, ((col + 1) * 8) - 1, GRAY);
     cursor_x0 = col;
     cursor_y0 = y;
     return;

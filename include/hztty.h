@@ -1,8 +1,10 @@
 #ifndef _JMCCE_HZTTY_H_
 #define _JMCCE__HZTTY_H_
 
-#define DEFAULT_BACKGROUND_COLOR	(0)
-#define DEFAULT_FOREGROUND_COLOR	(7)
+#include "draw.h"
+
+#define DEFAULT_BACKGROUND_COLOR	BLACK
+#define DEFAULT_FOREGROUND_COLOR	GRAY
 
 #define NUM_OF_ROW		(24)
 #define NUM_OF_COL		(80)

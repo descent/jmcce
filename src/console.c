@@ -30,8 +30,8 @@ extern int gFont_bytes;
 
 static unsigned char color_table[] = 
 { 
-  BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE,
-  WHITE, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE
+  BLACK, RED, GREEN, BROWN, BLUE, MAGENTA, CYAN, GRAY,
+  LIGHTBLACK, LIGHTRED, LIGHTGREEN, LIGHTBROWN, LIGHTBLUE, LIGHTMAGENTA, LIGHTCYAN, LIGHTWHITE
 };
 
 static char *translations[] = {
@@ -539,6 +539,12 @@ update_attr (hz_tty * tty)
     tty->video_erase_color = tty->foreground_color;
   else
     tty->video_erase_color = tty->background_color;
+#if 0
+  if (tty->bg_color==255)
+    tty->bg_color = LIGHTWHITE;
+  if (tty->fg_color==255)
+    tty->fg_color = LIGHTWHITE;
+#endif
 }
 
 #if 0

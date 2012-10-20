@@ -1363,8 +1363,8 @@ refresh_input_method_area (void)
       fb_setfgcolor (12);
   } else {
 
-    gl_hline(0, INPUT_AREAY - 7, WIDTH-1, vga_white());
-    gl_hline(0, INPUT_AREAY - 4, WIDTH-1, vga_white());
+    gl_hline(0, INPUT_AREAY - 7, WIDTH-1, GRAY);
+    gl_hline(0, INPUT_AREAY - 4, WIDTH-1, GRAY);
 
 #ifdef VGA__
     vga_setcolor (15);

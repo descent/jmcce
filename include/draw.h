@@ -18,8 +18,9 @@
 #define CYAN			(3)
 #define RED			(4)
 #define MAGENTA			(5)
-#define BROWN			(6)
-#define WHITE		        (vga_white())
+#define BROWN			(6) // or YELLOW
+#define GRAY		        (7)
+
 #define LIGHTBLACK      	(8)
 #define LIGHTBLUE       	(9)
 #define LIGHTGREEN      	(10)
@@ -27,8 +28,7 @@
 #define LIGHTRED        	(12)
 #define LIGHTMAGENTA    	(13)
 #define LIGHTBROWN      	(14)
-#define LIGHTWHITE      	(15)
-#define YELLOW                  (16)
+#define LIGHTWHITE      	(vga_white())
 
 /*************** public functions *****************/
 
