@@ -13,6 +13,7 @@
 #include "config.h"
 #include "jmcce.h"
 #include "newimp.h"
+#include "new_chewing.h"
 
 #include <string>
 
@@ -871,10 +872,11 @@ void hz_filter (int tty_fd, unsigned char key)
   if (gsCurrent_method == 0) {
     return intcode_hz_filter (tty_fd, key);
   } 
-#ifdef CHEWING
+#ifdef NEW_CHEWING
   else if (gsCurrent_method == 7) 
   {
-    return chewing_hz_filter (tty_fd, key);	/* Chewing */
+    //return chewing_hz_filter (tty_fd, key);	/* Chewing */
+    return new_chewing_hz_filter (tty_fd, key);	/* Chewing */
   } 
 #endif
   else {
@@ -1245,8 +1247,9 @@ void hz_input_init (void)
     }
     //exit(0);
 
-#ifdef CHEWING
-    gsInput_table_array[7] = Chew_Init ();	/* Chewing */
+#ifdef NEW_CHEWING
+    //gsInput_table_array[7] = Chew_Init ();	/* Chewing */
+    new_chew_init();
 #endif
     fclose (gMessage_log_file);
 
@@ -1405,8 +1408,13 @@ refresh_input_method_area (void)
     } else {
       fprintf (stderr, "%c", 0x7);
       if (gEncode == BIG5) {
+        #ifdef NEW_CHEWING
+        if (gsCurrent_method == 7) 
+	  input_print_string (POS_OF_INPUTNAME, 0, "酷音", INPUT_FGCOLOR, INPUT_BGCOLOR);
+        #else
 	input_print_string (POS_OF_INPUTNAME, 0, "!無輸入法!", INPUT_FGCOLOR,
 			    INPUT_BGCOLOR);
+        #endif
       }
       if (gEncode == GB) {
 	input_print_string (POS_OF_INPUTNAME, 0,
