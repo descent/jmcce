@@ -26,6 +26,7 @@
 #include "c_routine.h"
 
 extern int gFont_bytes;
+extern FILE *fs;
 
 GraphicsContext *physical_screen;
 GraphicsContext *virtual_screen;
@@ -47,27 +48,29 @@ screen_delete_line (int top, int bottom, int n, int bg_color)
   if (n > (bottom - top))
     n = bottom - top;
 
-  extern FILE *fs;
-
+#ifdef DEBUG_
   fprintf(fs, "top: %d\n", top);
   fprintf(fs, "bottom: %d\n", bottom);
   fprintf(fs, "n: %d\n", n);
+#endif
 
 #if 1
   if (!use_fb) 
   {
     void vgalib_scroll_up(int sy,int ey,int line,int bgcolor);
 
-    vgalib_scroll_up (top, bottom - 1, n, bg_color);
+    vgalib_scroll_up (top, bottom-1, n, bg_color);
   }
   else
 #endif
     c_scroll_up (top * LINE_HEIGHT, bottom * LINE_HEIGHT - 1, n * LINE_HEIGHT, bg_color);
 }
 
-void
-screen_insert_line (int top, int bottom, int n, int bg_color)
+void screen_insert_line (int top, int bottom, int n, int bg_color)
 {
+  fprintf(fs, "xx top: %d\n", top);
+  fprintf(fs, "xx bottom: %d\n", bottom);
+  fprintf(fs, "xx n: %d\n", n);
 
   if (!active_console)
     return;
@@ -75,12 +78,15 @@ screen_insert_line (int top, int bottom, int n, int bg_color)
     return;
   if (n > (bottom - top))
     n = bottom - top;
-  c_scroll_down (top * LINE_HEIGHT, bottom * LINE_HEIGHT - 1,
-		 n * LINE_HEIGHT, bg_color);
+  void vgalib_scroll_down(int sy,int ey,int line,int bgcolor);
+
+  if (!use_fb) 
+    vgalib_scroll_down(top, bottom - 1, n, bg_color);
+  else
+    c_scroll_down (top * LINE_HEIGHT, bottom * LINE_HEIGHT - 1, n * LINE_HEIGHT, bg_color); 
 }
 
-void
-screen_scroll_up (int bg_color)
+void screen_scroll_up (int bg_color)
 {
 
   if (!active_console)
@@ -98,10 +104,17 @@ screen_scroll_up (int bg_color)
 void
 screen_scroll_down (int bg_color)
 {
+  void vgalib_scroll_down(int sy,int ey,int line,int bgcolor);
 
   if (!active_console)
     return;
-  c_scroll_down (0, LINE_HEIGHT * NUM_OF_ROW - 1, LINE_HEIGHT, bg_color);
+  fprintf(fs, "yy top: %d\n", 0);
+  fprintf(fs, "yy bottom: %d\n", NUM_OF_ROW);
+  fprintf(fs, "yy n: %d\n", LINE_HEIGHT);
+  if (!use_fb) 
+    vgalib_scroll_down(0, NUM_OF_ROW - 1, 1, bg_color);
+  else
+    c_scroll_down (0, LINE_HEIGHT * NUM_OF_ROW - 1, LINE_HEIGHT, bg_color);
 }
 
 void screen_clear_block (int x, int y, int w, int h, int color)
