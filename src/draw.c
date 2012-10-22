@@ -52,8 +52,17 @@ screen_delete_line (int top, int bottom, int n, int bg_color)
   fprintf(fs, "top: %d\n", top);
   fprintf(fs, "bottom: %d\n", bottom);
   fprintf(fs, "n: %d\n", n);
-  c_scroll_up (top * LINE_HEIGHT, bottom * LINE_HEIGHT - 1,
-	       n * LINE_HEIGHT, bg_color);
+
+#if 1
+  if (!use_fb) 
+  {
+    void vgalib_scroll_up(int sy,int ey,int line,int bgcolor);
+
+    vgalib_scroll_up (top, bottom - 1, n, bg_color);
+  }
+  else
+#endif
+    c_scroll_up (top * LINE_HEIGHT, bottom * LINE_HEIGHT - 1, n * LINE_HEIGHT, bg_color);
 }
 
 void
