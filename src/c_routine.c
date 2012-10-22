@@ -360,6 +360,25 @@ c_scroll_up (int sy, int ey, int line, int bgcolor1)
   memset (dest2, bgcolor1, line * (vinfo.xres * vinfo.bits_per_pixel / 8));
 }
 
+void vgalib_scroll_down(int sy,int ey,int line,int bgcolor)
+{
+
+  //gl_copyboxfromcontext(virtual_screen, 0, 0, WIDTH, LINE_HEIGHT*(ey - line + 1), 0, LINE_HEIGHT*line);
+  #if 1
+  for (int i = ey-1 ; i >= 0 ; --i)
+  {
+    gl_copyboxfromcontext(virtual_screen, 0, i*LINE_HEIGHT, WIDTH, LINE_HEIGHT-2, 0, LINE_HEIGHT*(i+1));
+  }
+  #endif
+
+  // clean tty top line
+  for (int l = 0 ; l < line; ++l)
+  {
+    for (int i=0 ; i < LINE_HEIGHT ; ++i)
+      gl_hline(0, LINE_HEIGHT * l+i, WIDTH-1, bgcolor);
+  }
+}
+
 /****************************************************************************
  *       void c_scroll_down(int sy,int ey,int line,int bgcolor);            *
  *             sy:       0-479    start y coordinate                        *
