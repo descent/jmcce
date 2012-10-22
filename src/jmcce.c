@@ -22,6 +22,7 @@
 #include <vga.h>
 #include <vgagl.h>
 #include <vgakeyboard.h>
+#include <linux/input.h>
 
 #include <string>
 
@@ -178,6 +179,19 @@ set_keymap (void)
 
   spec.kb_table = (1 << KG_CTRL) + (1 << KG_ALT);
 
+    spec.kb_index = KEY_3;
+    ioctl (console_fd, KDGKBENT, &spec);
+    old_keymap[0] = spec.kb_value;
+    spec.kb_value = CTRL_ALT_3;
+    ioctl (console_fd, KDSKBENT, &spec);
+
+    spec.kb_index = KEY_7;
+    ioctl (console_fd, KDGKBENT, &spec);
+    old_keymap[1] = spec.kb_value;
+    spec.kb_value = CTRL_ALT_7;
+    ioctl (console_fd, KDSKBENT, &spec);
+
+#if 0
   /*  setup ctrl-alt-1 ~ ctrl-alt-9 */
   for (i = 1; i < 10; i++) {
     spec.kb_index = SCANCODE_1 + i - 1;	/* 2-10 */
@@ -186,6 +200,7 @@ set_keymap (void)
     spec.kb_value = K (KT_LATIN, CTRL_ALT_0 + i);
     ioctl (console_fd, KDSKBENT, &spec);
   }
+#endif
   /* setup ctrl-alt-0 */
   spec.kb_index = SCANCODE_0 /* 11 */ ;
   ioctl (console_fd, KDGKBENT, &spec);
@@ -195,10 +210,10 @@ set_keymap (void)
 
   /* setup ctrl-space */
   spec.kb_table = (1 << KG_CTRL);
-  spec.kb_index = SCANCODE_SPACE /* 57 */ ;
+  spec.kb_index = KEY_SPACE;
   ioctl (console_fd, KDGKBENT, &spec);
   old_keymap[10] = spec.kb_value;
-  spec.kb_value = K (KT_LATIN, CTRL_SPACE);
+  spec.kb_value = CTRL_SPACE;
   ioctl (console_fd, KDSKBENT, &spec);
 
   /* setup ctrl-alt-a */
