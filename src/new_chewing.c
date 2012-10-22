@@ -42,7 +42,7 @@ extern FILE *fs;
 
 bool new_chew_init()
 {
-  chewing_Init("/usr/local/share/libchewing/", ".");
+  chewing_Init("/usr/lib/i386-linux-gnu/libchewing3/chewing", ".");
   ct_ = chewing_new();
 
   /* Set keyboard type */
@@ -293,10 +293,15 @@ void new_chewing_hz_filter (int tty_fd, unsigned int key)
   static unsigned char last_key = 0;
 
   //Live ();
+  int zuin_count=0;
 
-  if (h_state == H_NORMAL && key == KEY_ESC) {
+  if (h_state == H_NORMAL && key == KEY_ESC) 
+  {
     h_state = H_ESCAPE;
 
+    chewing_zuin_String( ct_, &zuin_count );
+    if (zuin_count == 0)
+      write (tty_fd, &key, sizeof (key));
     //if (gOut.chiSymbolBufLen == 0)
       //write (tty_fd, &key, sizeof (key));
 
@@ -307,6 +312,9 @@ void new_chewing_hz_filter (int tty_fd, unsigned int key)
 
     //if (gOut.chiSymbolBufLen == 0)
       //write (tty_fd, &key, sizeof (key));
+    chewing_zuin_String( ct_, &zuin_count );
+    if (zuin_count == 0)
+      write (tty_fd, &key, sizeof (key));
   
     if (last_key == KEY_ESC && key == '[') {
       h_state = H_FUNC_KEY;      
@@ -324,7 +332,16 @@ void new_chewing_hz_filter (int tty_fd, unsigned int key)
     return;
   }
 
-  if (h_state == H_FUNC_KEY) {
+  if (h_state == H_FUNC_KEY) 
+  {
+
+    chewing_zuin_String( ct_, &zuin_count );
+    if (zuin_count == 0)
+    {
+      write (tty_fd, &key, sizeof (key));
+      h_state = H_NORMAL;
+      return;
+    }
 
 #if 0
     if (gOut.chiSymbolBufLen == 0)  {
@@ -396,6 +413,20 @@ void new_chewing_hz_filter (int tty_fd, unsigned int key)
     case '\010':                  /* BackSpace Ctrl+H */
     case '\177':                  /* BackSpace */
     {
+#if 0
+    if (gOut.chiSymbolBufLen == 0 && 
+       (!*gOut.zuinBuf[0].s && !*gOut.zuinBuf[1].s && !*gOut.zuinBuf[2].s)) {
+      write (tty_fd, &key, sizeof (key));
+      return;
+    }
+#endif
+      chewing_zuin_String( ct_, &zuin_count );
+      if (zuin_count == 0)
+      {
+        write (tty_fd, &key, sizeof (key));
+        return;
+      }
+
       chewing_handle_Backspace(ct_);
       break;
     }
@@ -404,6 +435,12 @@ void new_chewing_hz_filter (int tty_fd, unsigned int key)
     // ref: windows-chewing/ChewingServer/chewing.cpp
     //unsigned short *old_seq = chewing_get_phoneSeq(ct_);
     //int phon_seq_len = chewing_get_phoneSeqLen(ct_);
+
+    chewing_zuin_String( ct_, &zuin_count );
+    if (zuin_count == 0)
+    {
+      write (tty_fd, &key, sizeof (key));
+    }
       chewing_handle_Enter(ct_);
       commit_action = true;
 
@@ -449,8 +486,8 @@ void new_chewing_hz_filter (int tty_fd, unsigned int key)
   {
 
    
-    //if (key < KEY_CTRL_Z)	/* ¦pªG¬O CTRL+A ~ CTRL+Z «hª½±µ¿é¥X */
-      //write (tty_fd, &key, sizeof (key));
+    if (key < KEY_CTRL_Z)	/* ¦pªG¬O CTRL+A ~ CTRL+Z «hª½±µ¿é¥X */
+      write (tty_fd, &key, sizeof (key));
  
     //OnKeyDefault (pgdata, key, &gOut);
       chewing_handle_Default( ct_, (char)key );
