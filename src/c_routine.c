@@ -315,11 +315,17 @@ void vgalib_scroll_up(int sy,int ey,int line,int bgcolor)
   fprintf(fs, "ey: %d\n", ey);
   fprintf(fs, "line: %d\n", line);
 #endif
-  gl_copyboxfromcontext(virtual_screen, 0, LINE_HEIGHT*line, WIDTH, LINE_HEIGHT*ey,0, 0);
+  if (line == 1)
+    gl_copyboxfromcontext(virtual_screen, 0, LINE_HEIGHT*line, WIDTH, LINE_HEIGHT*(ey),0, 0);
+  else
+    gl_copyboxfromcontext(virtual_screen, 0, LINE_HEIGHT*line, WIDTH, LINE_HEIGHT*(ey - line + 1),0, 0);
 
   // clean tty bottom line
-  for (int i=0 ; i < LINE_HEIGHT ; ++i)
-    gl_hline(0, LINE_HEIGHT * (NUM_OF_ROW-1)+i, WIDTH-1, 0);
+  for (int l = 0 ; l < line+1 ; ++l)
+  {
+    for (int i=0 ; i < LINE_HEIGHT ; ++i)
+      gl_hline(0, LINE_HEIGHT * (NUM_OF_ROW-1-l)+i, WIDTH-1, bgcolor);
+  }
 }
 
 
