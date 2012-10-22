@@ -1,6 +1,11 @@
-CFLAGS =-DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive
+CFLAGS =-DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing
 CC=g++
 CXX=g++
+
+#pkg-config --variable=datadir chewing
+#pkg-config chewing --cflags --libs
+
+
 
 #-I/usr/local/include/chewing  -L/usr/local/lib -lchewing  
 
@@ -20,7 +25,7 @@ vgatest: vgatest.o
 asm_routine.o: asm_routine.S
 	$(CC) $(CFLAGS) -c $<
 
-sources = chewing.c  c_routine.c  error.c  hbffont.c  hzinput.c  jmcce.c console.c  draw.c       fb.c     hist.c     hztty.c    newimp.c vgatest.c new_chewing.c
+sources = c_routine.c  error.c  hbffont.c  hzinput.c  jmcce.c console.c  draw.c       fb.c     hist.c     hztty.c    newimp.c vgatest.c new_chewing.c
 include $(sources:.c=.d)
 #include $(sources:.cpp=.dpp)
 
