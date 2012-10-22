@@ -24,7 +24,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <ncurses.h>
-#include <ctype.h>
 #include <vga.h>
 #include <vgagl.h>
 
