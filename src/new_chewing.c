@@ -34,10 +34,12 @@ namespace
 {
 const int ZUIN_POS_X=16;
 const int ZUIN_POS_Y=0;
-const int CHOOSE_BUFFER_POS_X=5;
+const int CHOOSE_BUFFER_POS_X=1;
 const int CHOOSE_BUFFER_POS_Y=1;
-const int EDIT_BUFFER_POS_X=1;
-const int EDIT_BUFFER_POS_Y=1;
+const int EDIT_BUFFER_POS_X=24;
+const int EDIT_BUFFER_POS_Y=0;
+const int KEYBOARD_LAYOUT_POS_X=60;
+const int KEYBOARD_LAYOUT_POS_Y=1;
 
 enum { H_NORMAL, H_ESCAPE, H_FUNC_KEY, H_XXX } h_state;
 }
@@ -156,6 +158,7 @@ void show_choose_buffer(ChewingContext *ctx )
   if (list_num > INPUT_SELECT_DISPLAY_MAX)
     list_num = INPUT_SELECT_DISPLAY_MAX;
 
+  input_print_string (input_pos+1, CHOOSE_BUFFER_POS_Y, "                                   ", INPUT_FGCOLOR, INPUT_BGCOLOR);
   int index=1;
   for (int i=0 ; i < list_num ; ++i)
   {
@@ -265,21 +268,21 @@ void show_userphrase(ChewingContext *ctx )
 
 void show_edit_buffer(ChewingContext *ctx )
 {
-#if 1
-	int i, cursor, count;
-	char *buffer_string;
-	char *p;
-	//move( x, y );
-	//addstr( FILL_BLANK );
-	if ( ! chewing_buffer_Check( ctx ) ) {
+  int i, cursor, count;
+  char *buffer_string;
+  char *p;
+  if ( ! chewing_buffer_Check( ctx ) ) 
+  {
 		//move( x, y );
-		return;
-	}
-	buffer_string = chewing_buffer_String( ctx );
+    return;
+  }
+  buffer_string = chewing_buffer_String( ctx );
 
-    std::string big5_str;
-    if (utf8_to_big5(buffer_string, big5_str) == 0)
-      input_print_string (EDIT_BUFFER_POS_X, EDIT_BUFFER_POS_Y, big5_str.c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
+  input_print_string (EDIT_BUFFER_POS_X, EDIT_BUFFER_POS_Y, "                ", INPUT_FGCOLOR, INPUT_BGCOLOR);
+
+  std::string big5_str;
+  if (utf8_to_big5(buffer_string, big5_str) == 0)
+    input_print_string (EDIT_BUFFER_POS_X, EDIT_BUFFER_POS_Y, big5_str.c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
 
         #if 0
 	mvaddstr( x, y, buffer_string );
@@ -292,14 +295,14 @@ void show_edit_buffer(ChewingContext *ctx )
 	}
 	move( x, count );
         #endif
-	free( buffer_string );
-#endif
+  free( buffer_string );
 }
 
 
 void new_chewing_hz_filter (int tty_fd, unsigned int key)
 {
   static unsigned char last_key = 0;
+  input_print_string (KEYBOARD_LAYOUT_POS_X, KEYBOARD_LAYOUT_POS_Y, "KB_ET26", INPUT_FGCOLOR, INPUT_BGCOLOR);
 
   //Live ();
   int zuin_count=0;
