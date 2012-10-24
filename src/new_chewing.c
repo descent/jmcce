@@ -237,10 +237,16 @@ void show_commit_string(ChewingContext *ctx, bool commit_action, int tty_fd)
     std::string big5_str;
     if (utf8_to_big5(buf, big5_str) == 0)
     {
-      input_print_string (16, 0, "        ", INPUT_FGCOLOR, INPUT_BGCOLOR);
-      input_print_string (16, 0, big5_str.c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
+      //input_print_string (16, 0, "        ", INPUT_FGCOLOR, INPUT_BGCOLOR);
+      //input_print_string (16, 0, big5_str.c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
       if (commit_action)
+      {
         write (tty_fd, big5_str.c_str(), strlen(big5_str.c_str()));
+        // clear zuin buf, choose buf, edit buf
+        input_print_string (ZUIN_POS_X, ZUIN_POS_Y, "          ", INPUT_FGCOLOR, INPUT_BGCOLOR);
+        input_print_string (CHOOSE_BUFFER_POS_X, CHOOSE_BUFFER_POS_Y, "                                        ", INPUT_FGCOLOR, INPUT_BGCOLOR);
+        input_print_string (EDIT_BUFFER_POS_X, EDIT_BUFFER_POS_Y, "                ", INPUT_FGCOLOR, INPUT_BGCOLOR);
+      }
     }
 
     free(buf);
@@ -453,11 +459,8 @@ void new_chewing_hz_filter (int tty_fd, unsigned int key)
     //unsigned short *old_seq = chewing_get_phoneSeq(ct_);
     //int phon_seq_len = chewing_get_phoneSeqLen(ct_);
 
-    chewing_zuin_String( ct_, &zuin_count );
-    if (zuin_count == 0)
-    {
-      write (tty_fd, &key, sizeof (key));
-    }
+      if ( ! chewing_buffer_Check( ct_ ) ) 
+        write (tty_fd, &key, sizeof (key));
       chewing_handle_Enter(ct_);
       commit_action = true;
 
