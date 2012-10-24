@@ -309,11 +309,17 @@ void new_chewing_hz_filter (int tty_fd, unsigned int key)
 
   if (h_state == H_NORMAL && key == KEY_ESC) 
   {
-    h_state = H_ESCAPE;
-
-    chewing_zuin_String( ct_, &zuin_count );
-    if (zuin_count == 0)
+    chewing_handle_Esc(ct_);
+    if (!chewing_buffer_Check( ct_ ) ) 
+    {
       write (tty_fd, &key, sizeof (key));
+      h_state = H_ESCAPE;
+    }
+    else
+      h_state = H_NORMAL;
+
+    //chewing_zuin_String( ct_, &zuin_count );
+    //if (zuin_count == 0)
     //if (gOut.chiSymbolBufLen == 0)
       //write (tty_fd, &key, sizeof (key));
 
@@ -324,8 +330,7 @@ void new_chewing_hz_filter (int tty_fd, unsigned int key)
 
     //if (gOut.chiSymbolBufLen == 0)
       //write (tty_fd, &key, sizeof (key));
-    chewing_zuin_String( ct_, &zuin_count );
-    if (zuin_count == 0)
+    if (!chewing_buffer_Check( ct_ ) ) 
       write (tty_fd, &key, sizeof (key));
   
     if (last_key == KEY_ESC && key == '[') {
@@ -498,8 +503,8 @@ void new_chewing_hz_filter (int tty_fd, unsigned int key)
   {
 
    
-    if (key < KEY_CTRL_Z)	/* ¦pªG¬O CTRL+A ~ CTRL+Z «hª½±µ¿é¥X */
-      write (tty_fd, &key, sizeof (key));
+    //if (key < KEY_CTRL_Z)	/* ¦pªG¬O CTRL+A ~ CTRL+Z «hª½±µ¿é¥X */
+      //write (tty_fd, &key, sizeof (key));
  
     //OnKeyDefault (pgdata, key, &gOut);
       chewing_handle_Default( ct_, (char)key );
