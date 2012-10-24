@@ -30,9 +30,15 @@ ChewingContext* ct_;
 const int MAX_PHONE_SEQ_LEN = 50;
 unsigned short g_lastPhoneSeq[MAX_PHONE_SEQ_LEN] = {0};
 
-
 namespace
 {
+const int ZUIN_POS_X=16;
+const int ZUIN_POS_Y=0;
+const int CHOOSE_BUFFER_POS_X=5;
+const int CHOOSE_BUFFER_POS_Y=1;
+const int EDIT_BUFFER_POS_X=1;
+const int EDIT_BUFFER_POS_Y=1;
+
 enum { H_NORMAL, H_ESCAPE, H_FUNC_KEY, H_XXX } h_state;
 }
 
@@ -144,7 +150,7 @@ void show_choose_buffer(ChewingContext *ctx )
     i++;
   }
 
-  int input_pos = 5;
+  int input_pos = CHOOSE_BUFFER_POS_X;
   int list_num = select_str.size();
   const int INPUT_SELECT_DISPLAY_MAX = 18;
   if (list_num > INPUT_SELECT_DISPLAY_MAX)
@@ -156,8 +162,8 @@ void show_choose_buffer(ChewingContext *ctx )
     char index_str[4];
 
     sprintf(index_str, "%d", index);
-    input_print_string (input_pos, 1, index_str, INPUT_FGCOLOR, INPUT_BGCOLOR);
-    input_print_string (input_pos+1, 1, select_str[i].c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
+    input_print_string (input_pos, CHOOSE_BUFFER_POS_Y, index_str, INPUT_FGCOLOR, INPUT_BGCOLOR);
+    input_print_string (input_pos+1, CHOOSE_BUFFER_POS_Y, select_str[i].c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
     input_pos+=4;
     ++index;
   }
@@ -193,7 +199,7 @@ void show_zuin_buffer(ChewingContext *ctx )
         std::string big5_str;
         if (utf8_to_big5(zuin_string, big5_str) == 0)
         {
-          input_print_string (16, 0, big5_str.c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
+          input_print_string (ZUIN_POS_X, ZUIN_POS_Y, big5_str.c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
         }
     }
 
@@ -273,7 +279,7 @@ void show_edit_buffer(ChewingContext *ctx )
 
     std::string big5_str;
     if (utf8_to_big5(buffer_string, big5_str) == 0)
-      input_print_string (1, 1, big5_str.c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
+      input_print_string (EDIT_BUFFER_POS_X, EDIT_BUFFER_POS_Y, big5_str.c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
 
         #if 0
 	mvaddstr( x, y, buffer_string );
