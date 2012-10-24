@@ -114,38 +114,35 @@ void show_interval_buffer(ChewingContext *ctx )
 
 void show_choose_buffer(ChewingContext *ctx )
 {
-#if 1
-	int i = 1;
-	int currentPageNo;
-	char str[ 20 ];
-	char *cand_string;
-        std::vector<std::string> select_str;
+  int i = 1;
+  int currentPageNo;
+  char str[ 20 ];
+  char *cand_string;
+  std::vector<std::string> select_str;
 	
-	if ( chewing_cand_TotalPage( ctx ) == 0 )
-		return;
+  if ( chewing_cand_TotalPage( ctx ) == 0 )
+    return;
 	
-	chewing_cand_Enumerate( ctx );
-	while ( chewing_cand_hasNext( ctx ) ) {
-		if ( i > chewing_cand_ChoicePerPage( ctx ) )
-			break;
-		sprintf( str, "%d.", i );
-		//addstr( str );
+  chewing_cand_Enumerate( ctx );
+  while ( chewing_cand_hasNext( ctx ) ) 
+  {
+    if ( i > chewing_cand_ChoicePerPage( ctx ) )
+      break;
+    sprintf( str, "%d.", i );
 
-		cand_string = chewing_cand_String( ctx );
-		sprintf( str, " %s ", cand_string );
-		//addstr( str );
-		fprintf( fs, "%s", cand_string );
-               
+    cand_string = chewing_cand_String( ctx );
+    sprintf( str, " %s ", cand_string );
 
     std::string big5_str;
     if (utf8_to_big5(cand_string, big5_str) == 0)
       select_str.push_back(big5_str); 
+    else
+      select_str.push_back("??");
 
 
-		free( cand_string );
-		i++;
-	}
-
+    free( cand_string );
+    i++;
+  }
 
   int input_pos = 5;
   int list_num = select_str.size();
@@ -153,22 +150,28 @@ void show_choose_buffer(ChewingContext *ctx )
   if (list_num > INPUT_SELECT_DISPLAY_MAX)
     list_num = INPUT_SELECT_DISPLAY_MAX;
 
+  int index=1;
   for (int i=0 ; i < list_num ; ++i)
   {
-    input_print_string (input_pos, 1, select_str[i].c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
+    char index_str[4];
+
+    sprintf(index_str, "%d", index);
+    input_print_string (input_pos, 1, index_str, INPUT_FGCOLOR, INPUT_BGCOLOR);
+    input_print_string (input_pos+1, 1, select_str[i].c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
     input_pos+=4;
+    ++index;
   }
 
-	currentPageNo = chewing_cand_CurrentPage( ctx );
-	if ( chewing_cand_TotalPage( ctx ) != 1 ) {
-		if ( currentPageNo == 0 )
+  currentPageNo = chewing_cand_CurrentPage( ctx );
+  if ( chewing_cand_TotalPage( ctx ) != 1 ) 
+  {
+    if ( currentPageNo == 0 )
 			;//addstr( "  >" );
-		else if ( currentPageNo == ( chewing_cand_TotalPage( ctx ) - 1 ) )
+    else if ( currentPageNo == ( chewing_cand_TotalPage( ctx ) - 1 ) )
 			;//addstr( "<  " );
-		else
+    else
 			;//addstr( "< >" );
-	}
-#endif
+  }
 }
 
 void show_zuin_buffer(ChewingContext *ctx )
