@@ -5,7 +5,6 @@
 #define _JMCCE_HZINPUT_H_
 
 #include <stdio.h>
-#include <vga.h>
 
 #include "draw.h"
 

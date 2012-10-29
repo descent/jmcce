@@ -1,7 +1,14 @@
 #ifndef _JMCCE_DRAW_H_
 #define _JMCCE_DRAW_H_
 
+#include "config.h"
+
+#ifdef VGALIB
 #include <vga.h>
+#include <vgagl.h>
+extern GraphicsContext *physical_screen;
+extern GraphicsContext *virtual_screen;
+#endif
 
 #define SCREEN_HEIGHT		(480)
 #define SCREEN_WIDTH		(640)
@@ -28,7 +35,12 @@
 #define LIGHTRED        	(12)
 #define LIGHTMAGENTA    	(13)
 #define LIGHTBROWN      	(14)
+
+#ifdef VGALIB
 #define LIGHTWHITE      	(vga_white())
+#else
+#define LIGHTWHITE      	(255)
+#endif
 
 /*************** public functions *****************/
 

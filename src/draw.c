@@ -5,13 +5,7 @@
 /*                      $Id: draw.c,v 1.1.1.1 2002/05/03 04:01:07 kids Exp $    */
 /****************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif /* HAVE_CONFIG_H */
-
 #include <stdio.h>
-#include <vga.h>
-#include <vgagl.h>
 #include <sys/types.h>
 #include <string.h>
 //#include <asm/bitops.h>
@@ -28,8 +22,10 @@
 extern int gFont_bytes;
 extern FILE *fs;
 
+#ifdef VGALIB
 GraphicsContext *physical_screen;
 GraphicsContext *virtual_screen;
+#endif
 
 #ifdef LINUXFB
 int use_fb = 1;
@@ -153,9 +149,10 @@ screen_flipaway (void)
 void
 screen_return (void)
 {
+#ifdef VGALIB
   if (!use_fb)
     vga_setmode (DEFAULT_VGA_MODE);
-
+#endif
   active_console = 1;
 }
 
@@ -168,6 +165,8 @@ screen_init (void)
     use_fb = 0;
   }
 #endif
+
+#ifdef VGALIB
   use_fb = 0;
   vga_init ();
   vga_setmode(DEFAULT_VGA_MODE);
@@ -202,6 +201,7 @@ screen_init (void)
   gl_setpalettecolor(LIGHTMAGENTA, 255/4, 85/4, 255/4); 
   gl_setpalettecolor(LIGHTBROWN, 255/4, 255/4, 85/4); 
 
+#endif
 
   active_console = 1;
 }
@@ -209,8 +209,10 @@ screen_init (void)
 void
 screen_done (void)
 {
+#ifdef VGALIB
   if (!use_fb)
     vga_setmode (TEXT);
+#endif
 }
 
 
@@ -228,7 +230,11 @@ draw_ascii_char (int x, int y, int c,
     buffer = &ascii_font[c][0];
   else
     buffer = ascGetBitmap (c, mode);
-  vgalib_draw_ascii (x, y * LINE_HEIGHT, buffer, fg_color, (bg_color));
+
+  if (!use_fb)
+    vgalib_draw_ascii (x, y * LINE_HEIGHT, buffer, fg_color, (bg_color));
+  else
+    c_draw_ascii (x, y * LINE_HEIGHT, buffer, fg_color | (bg_color << 8));
 }
 
 void
@@ -238,7 +244,10 @@ draw_hanzi_char (int x, int y, unsigned char *bitmap,
 
   if (!active_console)
     return;
-  vgalib_draw_hanzi (x, y * LINE_HEIGHT, bitmap, fg_color, bg_color);
+  if (!use_fb)
+    vgalib_draw_hanzi (x, y * LINE_HEIGHT, bitmap, fg_color, bg_color);
+  else
+    c_draw_hanzi (x, y * LINE_HEIGHT, bitmap, fg_color | (bg_color << 8));
 }
 
 void

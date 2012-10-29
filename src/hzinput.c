@@ -24,8 +24,11 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <ncurses.h>
+
+#ifdef VGALIB
 #include <vga.h>
 #include <vgagl.h>
+#endif
 
 #include "jmcce.h"
 #include "hzinput.h"
@@ -45,7 +48,10 @@
  *		 extern      variable defines				   *
  ***************************************************************************/
 
+#ifdef VGALIB
 extern GraphicsContext *physical_screen;
+#endif
+
 extern int use_fb;
 extern int gFont_bytes;
 extern int gEncode;
@@ -199,15 +205,20 @@ inline void
 input_draw_ascii (int x, int y, unsigned char c, int fg, int bg)
 {
   //c_draw_ascii (x, INPUT_AREAY + y * LINE_HEIGHT, &ascii_font[c][0], (bg << 8) | fg);
-  vgalib_draw_ascii (x, INPUT_AREAY + y * LINE_HEIGHT, &ascii_font[c][0], fg, bg);
+  if (!use_fb)
+    vgalib_draw_ascii (x, INPUT_AREAY + y * LINE_HEIGHT, &ascii_font[c][0], fg, bg);
+  else
+    c_draw_ascii (x, INPUT_AREAY + y * LINE_HEIGHT, &ascii_font[c][0], (bg << 8) | fg);
 }
 
 
 inline void
 input_draw_hanzi (int x, int y, unsigned char *bitmap, int fg, int bg)
 {
-  //c_draw_hanzi (x, INPUT_AREAY + y * LINE_HEIGHT, bitmap, fg | (bg << 8));
-  vgalib_draw_hanzi (x, INPUT_AREAY + y * LINE_HEIGHT, bitmap, fg, bg);
+  if (!use_fb)
+    vgalib_draw_hanzi (x, INPUT_AREAY + y * LINE_HEIGHT, bitmap, fg, bg);
+  else
+    c_draw_hanzi (x, INPUT_AREAY + y * LINE_HEIGHT, bitmap, fg | (bg << 8));
 }
 
 
@@ -1365,8 +1376,10 @@ refresh_input_method_area (void)
       fb_setfgcolor (12);
   } else {
 
+  #ifdef VGALIB
     gl_hline(0, INPUT_AREAY - 7, WIDTH-1, GRAY);
     gl_hline(0, INPUT_AREAY - 4, WIDTH-1, GRAY);
+  #endif
 
 #ifdef VGA__
     vga_setcolor (15);
@@ -1826,7 +1839,9 @@ BarMenu (int xmax, int ymax, int leftmar, int stepwidth)
 	       Item_attr[mx] == 1 ? REVERSE : REVERSEDISABLE,
 	       Item_str[mx][my]);
 
+  #ifdef VGALIB
   gl_copyscreen(physical_screen);
+  #endif
 
   initscr ();
   noecho ();
@@ -1923,7 +1938,9 @@ BarMenu (int xmax, int ymax, int leftmar, int stepwidth)
 		   Item_attr[lastx] == 1 ? NORMAL : NORMALDISABLE,
 		   Item_str[lastx][lasty]);
     }
+    #ifdef VGALIB
     gl_copyscreen(physical_screen);
+    #endif
 
 
   }

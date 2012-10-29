@@ -12,6 +12,7 @@ CXX=g++
 
 #jmcce: chewing.o  c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o
 jmcce: c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o new_chewing.o convertencode.o
+	#$(CC) -o $@ $^ -lncurses -lutil -L/usr/local/lib -lchewing
 	$(CC) -o $@ $^ -lvgagl -lvga -lncurses -lutil -L/usr/local/lib -lchewing
 vgatest: vgatest.o
 	$(CC) -o $@ $^ -lvgagl -lvga 

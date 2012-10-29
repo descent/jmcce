@@ -5,8 +5,6 @@
 /*                   $Id: console.c,v 1.1.1.1 2002/05/03 04:01:07 kids Exp $    */
 /****************************************************************************/
 
-#include <vgagl.h>
-
 /*
  * The following code is derived from linux console.c
  * Copyright by Linus.

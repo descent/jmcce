@@ -7,8 +7,8 @@
 
 #include "newimp.h"
 #include "encoding.h"
+#include "config.h"
 
-#include <vga.h>
 #include <pwd.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -20,8 +20,6 @@
 #include <stdlib.h>
 #include <cstring>
 #include <termios.h>
-#include <vga.h>
-#include <vgagl.h>
 #include <vgakeyboard.h>
 #include <linux/input.h>
 
@@ -561,8 +559,25 @@ init (void)
   hz_input_init ();
 
   screen_init ();
+#ifdef FB_TEST
+  void c_draw_ascii (int col, int y, unsigned char *bitmap, int color1);
+  void c_draw_hanzi (int col, int y, unsigned char *bitmap, int color1);
+
+  c_draw_ascii(10, 10, ascii_font['B'], 5);
+  #if 1
+  bitmap = hbfGetBitmap (0xa7da, STANDARD, gFont_bytes);
+  if (bitmap != NULL)
+  {
+    int k=0;
+    c_draw_hanzi(10, 30, bitmap, 7);
+  }
+  #endif
+  sleep(8);
+  exit(0);
+#endif
 
 #ifdef DRAW_TEST
+
   vgalib_draw_ascii(10, 10, ascii_font['B'], 5);
   bitmap = hbfGetBitmap (0xa7da, STANDARD, gFont_bytes);
   if (bitmap != NULL)
@@ -595,7 +610,6 @@ init (void)
   #endif
   }
 
-  sleep(8);
 #endif
 #if 1
 
@@ -842,7 +856,6 @@ run (void)
   static unsigned char buf[BUFSIZE];
   hz_tty *hztty;
   int nread, i;
-  extern GraphicsContext *physical_screen;
 
   hztty_open (NUM_OF_ROW * HISTORY_PAGE);
 
@@ -872,7 +885,9 @@ run (void)
 	}
       }
     }
+    #ifdef VGALIB
     gl_copyscreen(physical_screen);
+    #endif
 
     for (i = num_hztty, hztty = hztty_list; i > 0; i--) {
       if (FD_ISSET (hztty->tty_fd, &rset)) {
@@ -908,7 +923,9 @@ run (void)
 
         }
       }
+      #ifdef VGALIB
       gl_copyscreen(physical_screen);
+      #endif
       hztty = hztty->next_hztty;
       if (hztty->prev_hztty->terminate) {
 	FD_CLR (hztty->prev_hztty->tty_fd, &rrset);

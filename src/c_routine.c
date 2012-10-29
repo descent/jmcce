@@ -5,17 +5,18 @@
 /*                      $Id: c_routine.c,v 1.1.1.1 2002/05/03 04:01:07 kids Exp $                                              */
 /****************************************************************************/
 
+#include "config.h"
 #include "draw.h"
 #include "asm_routine.h"	
 #include "fb.h"
 #include "hztty.h"
 
 #include <string.h>		/* memmove */
-#include <vga.h>
-#include <vgagl.h>
 
+#ifdef VGALIB
 extern GraphicsContext *physical_screen;
 extern GraphicsContext *virtual_screen;
+#endif
 
 extern int use_fb;
 
@@ -42,6 +43,7 @@ clear_cursor ()
 
 void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
 {
+#ifdef VGALIB
   int i=0;
   int cx=0, cy=0;
   int startx = col * 8;
@@ -80,11 +82,12 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int color1)
   }
   //gl_copyscreen(physical_screen);
   //printf("\n");
-
+#endif
 }
 
 void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int fg, int bg)
 {
+#ifdef VGALIB
   int i=0;
   int cx=0, cy=0;
   int startx = col * 8;
@@ -123,11 +126,12 @@ void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int fg, int bg)
   }
   //gl_copyscreen(physical_screen);
   //printf("\n");
-
+#endif
 }
 
 void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int fg, int bg)
 {
+#ifdef VGALIB
   int i=0, k=0;
   int cx=0, cy=0;
   int fontheight = 18;
@@ -167,10 +171,12 @@ void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int fg, int bg)
 
   }
   //gl_copyscreen(physical_screen);
+#endif
 }
 
 void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
 {
+#ifdef VGALIB
   int i=0, k=0;
   int cx=0, cy=0;
   int fontheight = 18;
@@ -210,6 +216,7 @@ void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
 
   }
   //gl_copyscreen(physical_screen);
+#endif
 }
 
 /****************************************************************************
@@ -220,8 +227,7 @@ void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
  *         color:    0-3 bit: ForeGround 8-11 bit: BackGround               *
  ****************************************************************************/
 
-void
-c_draw_ascii (int col, int y, unsigned char *bitmap, int color1)
+void c_draw_ascii (int col, int y, unsigned char *bitmap, int color1)
 {
   BYTE temp0, temp1;
   int j = 0;
@@ -266,8 +272,7 @@ c_draw_ascii (int col, int y, unsigned char *bitmap, int color1)
  *         bitmap:   36 bytes unsigned char buffer                          *
  *         color:    0-3 bit: ForeGround 8-11 bit: BackGround               *
  ****************************************************************************/
-void
-c_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
+void c_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
 {
   BYTE temp0, temp1;
   int j = 0;
@@ -308,6 +313,7 @@ c_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
 
 void vgalib_scroll_up(int sy,int ey,int line,int bgcolor)
 {
+#ifdef VGALIB
 #if 0
   extern FILE *fs;
 
@@ -323,6 +329,7 @@ void vgalib_scroll_up(int sy,int ey,int line,int bgcolor)
     for (int i=0 ; i < LINE_HEIGHT ; ++i)
       gl_hline(0, LINE_HEIGHT * (NUM_OF_ROW-1-l)+i, WIDTH-1, bgcolor);
   }
+#endif
 }
 
 
@@ -361,8 +368,9 @@ c_scroll_up (int sy, int ey, int line, int bgcolor1)
 }
 
 void vgalib_scroll_down(int sy,int ey,int line,int bgcolor)
-{
+{  
 
+#ifdef VGALIB
   //gl_copyboxfromcontext(virtual_screen, 0, 0, WIDTH, LINE_HEIGHT*(ey - line + 1), 0, LINE_HEIGHT*line);
   #if 1
   for (int i = ey-1 ; i >= 0 ; --i)
@@ -377,6 +385,7 @@ void vgalib_scroll_down(int sy,int ey,int line,int bgcolor)
     for (int i=0 ; i < LINE_HEIGHT ; ++i)
       gl_hline(0, LINE_HEIGHT * l+i, WIDTH-1, bgcolor);
   }
+#endif
 }
 
 /****************************************************************************
@@ -414,8 +423,10 @@ c_scroll_down (int sy, int ey, int line, int bgcolor1)
 
 void vgalib_clear_block(int col,int y,int width,int height,int bgcolor)
 {
+#ifdef VGALIB
   for (int i=0 ; i < height ; ++i)
     gl_hline(col, y+i, col+width-1, bgcolor);
+#endif
 }
 
 /****************************************************************************
@@ -440,6 +451,7 @@ c_clear_block (int col, int y, int width, int height, int bgcolor1)
 
 void vgalib_clear_lines(int sx, int sy, int ex, int ey, int color)
 {
+#ifdef VGALIB
   int i;
   //int c=1;
   //vga_setcolor(color); // blue
@@ -450,6 +462,7 @@ void vgalib_clear_lines(int sx, int sy, int ex, int ey, int color)
     gl_hline(sx, i, 639, BLUE);
 
   gl_copyscreen(physical_screen);
+#endif
 }
 
 
@@ -504,6 +517,7 @@ void
 c_toggle_cursor (int col, int y)
 {
   if (!use_fb) {
+#ifdef VGALIB
     //asm_toggle_cursor (col, y);
     
     // clear cursor
@@ -514,6 +528,7 @@ c_toggle_cursor (int col, int y)
     gl_hline (col * 8, y, ((col + 1) * 8) - 1, GRAY);
     cursor_x0 = col;
     cursor_y0 = y;
+#endif
     return;
   }
 
