@@ -42,7 +42,7 @@ inline void beep1 (void)
 
 #define CTRL_ALT_0	(0x10)
 #define CTRL_ALT_1	(0x11)
-#define CTRL_ALT_2	(0x12)
+#define CTRL_ALT_2	(0x110)
 #define CTRL_ALT_3	(0x13)
 #define CTRL_ALT_4	(0x14)
 #define CTRL_ALT_5	(0x15)
@@ -68,6 +68,7 @@ inline void beep1 (void)
 
 #define BIG5		(886)
 #define GB		(86)
+#define UTF8		(887)
 
 
 #endif /* _JMCCE_JMCCE_H_ */
