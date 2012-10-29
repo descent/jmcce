@@ -6,6 +6,7 @@
 /****************************************************************************/
 
 #include "newimp.h"
+#include "encoding.h"
 
 #include <vga.h>
 #include <pwd.h>
@@ -58,6 +59,8 @@ char copyright101[] = {
 };
 
 int console_fd;
+
+int encode_mode = BIG5;
 
 static enum
 {
@@ -190,6 +193,13 @@ set_keymap (void)
     old_keymap[1] = spec.kb_value;
     spec.kb_value = CTRL_ALT_7;
     ioctl (console_fd, KDSKBENT, &spec);
+
+    spec.kb_index = KEY_8;
+    ioctl (console_fd, KDGKBENT, &spec);
+    old_keymap[1] = spec.kb_value;
+    spec.kb_value = CTRL_ALT_8;
+    ioctl (console_fd, KDSKBENT, &spec);
+
 
 #if 0
   /*  setup ctrl-alt-1 ~ ctrl-alt-9 */
@@ -661,7 +671,6 @@ ProcessNormalModeKey (unsigned char c, fd_set * p_rrset)
   case CTRL_ALT_5:
   case CTRL_ALT_6:
   case CTRL_ALT_7:
-  case CTRL_ALT_8:
   case CTRL_ALT_9:
     if ((c - CTRL_ALT_0) == 0) {
       mx = 10;
@@ -710,6 +719,32 @@ ProcessNormalModeKey (unsigned char c, fd_set * p_rrset)
     enter_history_mode ();
     refresh_input_method_area();
     break;
+  case CTRL_ALT_8:
+  {
+    char encode_name[10];
+    switch (encode_mode)
+    {
+      case BIG5:
+      {
+        encode_mode = UTF8;
+        setenv ("LC_ALL", "en_US.UTF-8", 1);
+        setlocale(LC_ALL, "en_US.UTF-8");
+        sprintf(encode_name, "utf8");
+        break;
+      }
+      case UTF8:
+      {
+        encode_mode = BIG5;
+        setenv ("LC_ALL", "zh_TW.Big5", 1);
+        setlocale(LC_ALL, "zh_TW.Big5");
+        sprintf(encode_name, "big5");
+        break;
+      }
+    }
+    input_print_string (76, 1, encode_name, RED, INPUT_BGCOLOR); 
+
+    break;
+  }
   default:
     hz_filter (hztty_list->tty_fd, c);
     break;
@@ -842,8 +877,36 @@ run (void)
     for (i = num_hztty, hztty = hztty_list; i > 0; i--) {
       if (FD_ISSET (hztty->tty_fd, &rset)) {
 	nread = read (hztty->tty_fd, buf, BUFSIZE);
+
 	if (nread > 0)
-	  hztty_write (hztty, buf, nread);
+        {
+
+    switch (encode_mode)
+    {
+      case BIG5:
+      {
+          hztty_write (hztty, buf, nread);
+        break;
+      }
+      case UTF8:
+      {
+          std::string big5_str;
+
+          if (utf8_to_big5(buf, nread, big5_str) == 0)
+          {
+          }
+          else
+          {
+            hztty_write (hztty, "???", 3);
+          }
+
+
+	  hztty_write (hztty, big5_str.c_str(), strlen(big5_str.c_str()));
+        break;
+      }
+    }
+
+        }
       }
       gl_copyscreen(physical_screen);
       hztty = hztty->next_hztty;
