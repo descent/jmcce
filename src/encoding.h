@@ -13,4 +13,10 @@ inline int utf8_to_big5(const char *utf8_str, std::string &str)
   return convert_encode.convert(utf8_str, strlen(utf8_str), str);
 }    
 
+inline int utf8_to_big5(const char *utf8_str, int len, std::string &str)
+{
+  DS::ConvertEncode convert_encode("big5","utf8");
+  return convert_encode.convert(utf8_str, len, str);
+}    
+
 #endif
