@@ -1333,6 +1333,7 @@ set_active_input_method (int active)
 
 
 
+extern char encode_name[];
 /* before call this function, must lock the console */
 void
 refresh_input_method_area (void)
@@ -1475,6 +1476,7 @@ refresh_input_method_area (void)
 #else
     ;
 #endif
+  input_print_string (76, 1, encode_name, RED, INPUT_BGCOLOR); 
 
 }
 

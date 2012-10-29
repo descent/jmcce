@@ -61,6 +61,7 @@ char copyright101[] = {
 int console_fd;
 
 int encode_mode = BIG5;
+char encode_name[10]="big5";
 
 static enum
 {
@@ -721,7 +722,6 @@ ProcessNormalModeKey (unsigned char c, fd_set * p_rrset)
     break;
   case CTRL_ALT_8:
   {
-    char encode_name[10];
     switch (encode_mode)
     {
       case BIG5:
