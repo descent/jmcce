@@ -10,7 +10,7 @@ CXX=g++
 #-I/usr/local/include/chewing  -L/usr/local/lib -lchewing  
 
 
-OBJS = c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o new_chewing.o convertencode.o
+OBJS = c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o new_chewing.o convertencode.o
 
 #jmcce: chewing.o  c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o
 jmcce.fb: $(OBJS)
