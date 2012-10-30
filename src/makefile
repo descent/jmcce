@@ -1,19 +1,24 @@
-CFLAGS =-DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing
+#CFLAGS =-DVGALIB -DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing
+
+CFLAGS =-DLINUXFB -DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing
 CC=g++
 CXX=g++
 
 #pkg-config --variable=datadir chewing
 #pkg-config chewing --cflags --libs
 
-
-
 #-I/usr/local/include/chewing  -L/usr/local/lib -lchewing  
 
 
+OBJS = c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o new_chewing.o convertencode.o
+
 #jmcce: chewing.o  c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o
-jmcce: c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o new_chewing.o convertencode.o
-	#$(CC) -o $@ $^ -lncurses -lutil -L/usr/local/lib -lchewing
+jmcce.fb: $(OBJS)
+	$(CC) -o $@ $^ -lncurses -lutil -L/usr/local/lib -lchewing
+
+jmcce: $(OBJS)
 	$(CC) -o $@ $^ -lvgagl -lvga -lncurses -lutil -L/usr/local/lib -lchewing
+
 vgatest: vgatest.o
 	$(CC) -o $@ $^ -lvgagl -lvga 
 
