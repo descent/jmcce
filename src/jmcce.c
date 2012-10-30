@@ -20,7 +20,6 @@
 #include <stdlib.h>
 #include <cstring>
 #include <termios.h>
-#include <vgakeyboard.h>
 #include <linux/input.h>
 
 #include <string>
@@ -210,12 +209,15 @@ set_keymap (void)
     ioctl (console_fd, KDSKBENT, &spec);
   }
 #endif
+
+#if 0
   /* setup ctrl-alt-0 */
   spec.kb_index = SCANCODE_0 /* 11 */ ;
   ioctl (console_fd, KDGKBENT, &spec);
   old_keymap[0] = spec.kb_value;
   spec.kb_value = K (KT_LATIN, CTRL_ALT_0);
   ioctl (console_fd, KDSKBENT, &spec);
+#endif
 
   /* setup ctrl-space */
   spec.kb_table = (1 << KG_CTRL);
@@ -227,7 +229,7 @@ set_keymap (void)
 
   /* setup ctrl-alt-a */
   spec.kb_table = (1 << KG_CTRL) + (1 << KG_ALT);
-  spec.kb_index = SCANCODE_A /*30 */ ;
+  spec.kb_index = KEY_A;
   ioctl (console_fd, KDGKBENT, &spec);
   old_keymap[11] = spec.kb_value;
   spec.kb_value = K (KT_LATIN, CTRL_ALT_A);
@@ -235,28 +237,28 @@ set_keymap (void)
 
   /* setup ctrl-alt-x */
   spec.kb_table = (1 << KG_CTRL) + (1 << KG_ALT);
-  spec.kb_index = SCANCODE_X /* 45 */ ;
+  spec.kb_index = KEY_X /* 45 */ ;
   ioctl (console_fd, KDGKBENT, &spec);
   old_keymap[12] = spec.kb_value;
   spec.kb_value = K (KT_LATIN, CTRL_ALT_X);
   ioctl (console_fd, KDSKBENT, &spec);
 
   /* setup ctrl-alt-n */
-  spec.kb_index = SCANCODE_N /* 49 */ ;
+  spec.kb_index = KEY_N /* 49 */ ;
   ioctl (console_fd, KDGKBENT, &spec);
   old_keymap[13] = spec.kb_value;
   spec.kb_value = K (KT_LATIN, CTRL_ALT_N);
   ioctl (console_fd, KDSKBENT, &spec);
 
   /* setup ctrl-alt-p */
-  spec.kb_index = SCANCODE_P /* 25 */ ;
+  spec.kb_index = KEY_P /* 25 */ ;
   ioctl (console_fd, KDGKBENT, &spec);
   old_keymap[14] = spec.kb_value;
   spec.kb_value = K (KT_LATIN, CTRL_ALT_P);
   ioctl (console_fd, KDSKBENT, &spec);
 
   /* setup ctrl-alt-r */
-  spec.kb_index = SCANCODE_R /* 19 */ ;
+  spec.kb_index = KEY_R /* 19 */ ;
   ioctl (console_fd, KDGKBENT, &spec);
   old_keymap[15] = spec.kb_value;
   spec.kb_value = K (KT_LATIN, CTRL_ALT_R);
@@ -266,7 +268,7 @@ set_keymap (void)
 
   /* setup scroll lock key */
   spec.kb_table = 0;
-  spec.kb_index = SCANCODE_SCROLLLOCK /* 70 */ ;
+  spec.kb_index = KEY_SCROLLLOCK /* 70 */ ;
   ioctl (console_fd, KDGKBENT, &spec);
   old_keymap[16] = spec.kb_value;
   spec.kb_value = K (KT_LATIN, SCROLL_LOCK);
@@ -274,7 +276,7 @@ set_keymap (void)
 
   /* setup shift-space */
   spec.kb_table = (1 << KG_SHIFT);
-  spec.kb_index = SCANCODE_SPACE /* 57 */ ;
+  spec.kb_index = KEY_SPACE /* 57 */ ;
   ioctl (console_fd, KDGKBENT, &spec);
   old_keymap[17] = spec.kb_value;
   spec.kb_value = K (KT_LATIN, SHIFT_SPACE);
@@ -284,7 +286,7 @@ set_keymap (void)
   /* repeat input, append by Jack Gao */
   spec.kb_table = (1 << KG_CTRL) + (1 << KG_ALT);
 
-  spec.kb_index = SCANCODE_G /* 34 */ ;
+  spec.kb_index = KEY_G /* 34 */ ;
   ioctl (console_fd, KDGKBENT, &spec);
   old_keymap[18] = spec.kb_value;
   spec.kb_value = K (KT_LATIN, CTRL_ALT_G);
@@ -299,10 +301,10 @@ restore_keymap (void)
   int i;
 
 
-
+#if 0
   spec.kb_table = (1 << KG_CTRL) + (1 << KG_ALT);
   for (i = 1; i < 10; i++) {
-    spec.kb_index = SCANCODE_1 + i;
+    spec.kb_index = KEY_1 + i;
     spec.kb_value = old_keymap[i];
     ioctl (console_fd, KDSKBENT, &spec);
   }
@@ -311,49 +313,50 @@ restore_keymap (void)
   spec.kb_index = SCANCODE_0 /* 11 */ ;
   spec.kb_value = old_keymap[0];
   ioctl (console_fd, KDSKBENT, &spec);
+#endif
 
   /* restore ctrl-space */
   spec.kb_table = (1 << KG_CTRL);
-  spec.kb_index = SCANCODE_SPACE /* 57 */ ;
+  spec.kb_index = KEY_SPACE /* 57 */ ;
   spec.kb_value = old_keymap[10];
   ioctl (console_fd, KDSKBENT, &spec);
 
   /* restore ctrl-alt-a */
   spec.kb_table = (1 << KG_CTRL) + (1 << KG_ALT);
-  spec.kb_index = SCANCODE_A /* 30 */ ;
+  spec.kb_index = KEY_A /* 30 */ ;
   spec.kb_value = old_keymap[11];
   ioctl (console_fd, KDSKBENT, &spec);
 
   /* restore ctrl-alt-x */
   spec.kb_table = (1 << KG_CTRL) + (1 << KG_ALT);
-  spec.kb_index = SCANCODE_X /* 45 */ ;
+  spec.kb_index = KEY_X /* 45 */ ;
   spec.kb_value = old_keymap[12];
   ioctl (console_fd, KDSKBENT, &spec);
 
   /* restore ctrl-alt-n */
-  spec.kb_index = SCANCODE_N /* 49 */ ;
+  spec.kb_index = KEY_N /* 49 */ ;
   spec.kb_value = old_keymap[13];
   ioctl (console_fd, KDSKBENT, &spec);
 
   /* restore ctrl-alt-p */
-  spec.kb_index = SCANCODE_P /* 25 */ ;
+  spec.kb_index = KEY_P /* 25 */ ;
   spec.kb_value = old_keymap[14];
   ioctl (console_fd, KDSKBENT, &spec);
 
   /* restore ctrl-alt-r */
-  spec.kb_index = SCANCODE_R /* 19 */ ;
+  spec.kb_index = KEY_R /* 19 */ ;
   spec.kb_value = old_keymap[15];
   ioctl (console_fd, KDSKBENT, &spec);
 
   /* restore SCROLL_LOCK */
   spec.kb_table = 0;
-  spec.kb_index = SCANCODE_SCROLLLOCK /* 70 */ ;
+  spec.kb_index = KEY_SCROLLLOCK /* 70 */ ;
   spec.kb_value = old_keymap[16];
   ioctl (console_fd, KDSKBENT, &spec);
 
   /* restore SHIFT_SPACE */
   spec.kb_table = (1 << KG_SHIFT);
-  spec.kb_index = SCANCODE_SPACE /* 57 */ ;
+  spec.kb_index = KEY_SPACE /* 57 */ ;
   spec.kb_value = old_keymap[17];
   ioctl (console_fd, KDSKBENT, &spec);
 
@@ -361,7 +364,7 @@ restore_keymap (void)
   /* append by Jack Gao */
   spec.kb_table = (1 << KG_CTRL) + (1 << KG_ALT);
 
-  spec.kb_index = SCANCODE_G /* 34 */ ;
+  spec.kb_index = KEY_G /* 34 */ ;
   spec.kb_value = old_keymap[18];
   ioctl (console_fd, KDSKBENT, &spec);
 
