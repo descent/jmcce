@@ -205,6 +205,7 @@ bool screen_init (void)
 #endif
 
   active_console = 1;
+  return true;
 }
 
 void
