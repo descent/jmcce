@@ -156,13 +156,14 @@ screen_return (void)
   active_console = 1;
 }
 
-void
-screen_init (void)
+bool screen_init (void)
 {
 #ifdef LINUXFB
   use_fb = 1;
-  if (fb_init ()) {
+  if (fb_init ()) 
+  {
     use_fb = 0;
+    return false;
   }
 #endif
 

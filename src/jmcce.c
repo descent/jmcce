@@ -558,7 +558,11 @@ init (void)
 #endif
   hz_input_init ();
 
-  screen_init ();
+  if (screen_init() == false)
+  {
+    printf("screen_init() fail!!\n");
+    exit(-1);
+  }
 #ifdef FB_TEST
   void c_draw_ascii (int col, int y, unsigned char *bitmap, int color1);
   void c_draw_hanzi (int col, int y, unsigned char *bitmap, int color1);

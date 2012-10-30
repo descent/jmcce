@@ -45,7 +45,7 @@ extern GraphicsContext *virtual_screen;
 /*************** public functions *****************/
 
 void clear_line ();
-void screen_init (void);
+bool screen_init (void);
 void screen_done (void);
 
 void screen_flipaway (void);
