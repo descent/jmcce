@@ -7,7 +7,7 @@
 
 #include "config.h"
 #include "draw.h"
-#include "asm_routine.h"	
+//#include "asm_routine.h"	
 #include "fb.h"
 #include "hztty.h"
 
@@ -407,7 +407,7 @@ c_scroll_down (int sy, int ey, int line, int bgcolor1)
 #endif
 
   if (!use_fb) {
-    asm_scroll_down (sy, ey, line, bgcolor1);
+    //asm_scroll_down (sy, ey, line, bgcolor1);
     return;
   }
 
