@@ -167,7 +167,7 @@ void show_choose_buffer(ChewingContext *ctx )
     sprintf(index_str, "%d", index);
     input_print_string (input_pos, CHOOSE_BUFFER_POS_Y, index_str, INPUT_FGCOLOR, INPUT_BGCOLOR);
     input_print_string (input_pos+1, CHOOSE_BUFFER_POS_Y, select_str[i].c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
-    input_pos+=4;
+    input_pos += strlen(select_str[i].c_str())+2;
     ++index;
   }
 
