@@ -76,6 +76,16 @@ fb_drawline (int x1, int y1, int x2, int y2)
   return 0;
 }
 
+int fb_drawpixel (int x, int y, char r, char g, char b)
+{				/* ok */
+//  addr2[(vinfo.xres * y + x)*2] = color;
+//  addr2[(vinfo.xres * y + x)*2+1] = color;
+  addr2[(vinfo.xres * y + x)*3] = r;
+  addr2[(vinfo.xres * y + x)*3+1] = g;
+  addr2[(vinfo.xres * y + x)*3+2] = b;
+  return 0;
+}
+
 void
 fb_clearblock (int sx, int sy, int ex, int ey)
 {				/* ok */

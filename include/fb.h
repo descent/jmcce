@@ -30,5 +30,7 @@ void fb_setfgcolor (int);
 void fb_setbgcolor (int);
 int fb_drawline (int x1, int y1, int x2, int y2);	/* ok */
 int fb_drawpixel (int x, int y);	/* ok */
+int fb_drawpixel (int x, int y, char r, char g, char b);
+
 
 #endif /* _JMCCE_FB_H_ */
