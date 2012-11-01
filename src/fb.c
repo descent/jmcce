@@ -134,7 +134,34 @@ fb_init ()
   printf ("fb_init: using %ix%i of %ix%i pixels, %i bits per pixel\r\n",
 	  vinfo.xres, vinfo.yres,
 	  vinfo.xres_virtual, vinfo.yres_virtual, vinfo.bits_per_pixel);
-  if (vinfo.bits_per_pixel != 8) {
+
+  switch ( vinfo.bits_per_pixel )
+  {
+    case 16:
+    {
+      printf("16 bit color # 0565\n");
+      break;
+    }
+    case 24:
+    {
+      printf("24 bit color\n");
+      break;
+    }
+    case 32:
+    {
+      printf("32 bit color\n");
+      break;
+    }
+    default:
+      printf ("Framebuffer format not supported\n");
+  }
+
+
+#if 0
+  if (vinfo.bits_per_pixel != 8) 
+  {
+    return -1;
+
     vinfo.bits_per_pixel = 8;
     if (ioctl (fh, FBIOPUT_VSCREENINFO, &vinfo)) {
       perror ("FB change mode for depth 8");
@@ -145,6 +172,7 @@ fb_init ()
       /* exit(1); */
     }
   }
+#endif
 
   addr = mmap (0, vinfo.xres * vinfo.yres * vinfo.bits_per_pixel / 8,
 	       PROT_READ | PROT_WRITE, MAP_SHARED, fh, 0);
