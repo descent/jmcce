@@ -226,14 +226,20 @@ fb_drawline (int x1, int y1, int x2, int y2)
 void
 fb_clearblock (int sx, int sy, int ex, int ey)
 {				/* ok */
-  int i;
-
   if (ey > (vinfo.yres - 1))
     ey = (vinfo.yres - 1);	/* jmt */
+
+#if 0
+  for (int i = sy ; i < ey ; ++i)
+    fb_drawline(sx, i, sy, i);
+
+#else
+  int i;
 
   for (i = sy; i <= ey; i++)
     memset (addr2 + (i * vinfo.xres + sx) * vinfo.bits_per_pixel / 8,
 	    bgcolor, (ex - sx) * vinfo.bits_per_pixel / 8);
+#endif
 }
 
 void
