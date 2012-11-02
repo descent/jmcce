@@ -137,9 +137,15 @@ fb_init ()
 
   switch ( vinfo.bits_per_pixel )
   {
+    case 8:
+    {
+      printf("8 bit color\n");
+      break;
+    }
     case 16:
     {
-      printf("16 bit color # 0565\n");
+      printf("don't support 16 bit color # 0565\n");
+      return -1;
       break;
     }
     case 24:
