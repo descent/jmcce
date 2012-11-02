@@ -13,6 +13,8 @@
 #include <linux/vt.h>
 #include <linux/kd.h>
 
+#include "type.h"
+
 #define FB_DEV  "/dev/fb0"
 typedef unsigned char BYTE;
 extern size_t vsize;
@@ -31,6 +33,6 @@ void fb_setbgcolor (int);
 int fb_drawline (int x1, int y1, int x2, int y2);	/* ok */
 int fb_drawpixel (int x, int y);	/* ok */
 int fb_drawpixel (int x, int y, char r, char g, char b);
-
+void color2rgb(u8 color, u8 &r, u8 &g, u8 &b);
 
 #endif /* _JMCCE_FB_H_ */

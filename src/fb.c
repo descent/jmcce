@@ -5,16 +5,12 @@
 /*                      $Id: fb.c,v 1.1.1.1 2002/05/03 04:01:07 kids Exp $      */
 /****************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif /* HAVE_CONFIG_H */
-
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>		/* memmove */
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>		/* memmove */
 
 #include "fb.h"
+#include "draw.h"
 
 struct fb_var_screeninfo vinfo;
 void *addr;
@@ -24,12 +20,162 @@ size_t vsize;
 int fh;
 int cursor_x, cursor_y;
 
+void color2rgb(u8 color, u8 &r, u8 &g, u8 &b)
+{
+  switch (color)
+  {
+    case BLACK:
+    {
+      r = 0;
+      g = 0;
+      b = 0;
+      break;
+    }
+    case BLUE:
+    {
+      r = 0;
+      g = 0;
+      b = 170;
+      break;
+    }
+    case GREEN:
+    {
+      r = 0;
+      g = 170;
+      b = 0;
+      break;
+    }
+    case CYAN:
+    {
+      r = 0;
+      g = 170;
+      b = 170;
+      break;
+    }
+    case RED:
+    {
+      r = 170;
+      g = 0;
+      b = 0;
+      break;
+    }
+    case MAGENTA:
+    {
+      r = 170;
+      g = 0;
+      b = 170;
+      break;
+    }
+    case BROWN:
+    {
+      r = 170;
+      g = 85;
+      b = 0;
+      break;
+    }
+    case GRAY:
+    {
+      r = 170;
+      g = 170;
+      b = 170;
+      break;
+    }
+    case LIGHTBLACK:
+    {
+      r = 85;
+      g = 85;
+      b = 85;
+      break;
+    }
+    case LIGHTBLUE:
+    {
+      r = 85;
+      g = 85;
+      b = 255;
+      break;
+    }
+    case LIGHTGREEN:
+    {
+      r = 85;
+      g = 255;
+      b = 85;
+      break;
+    }
+    case LIGHTCYAN:
+    {
+      r = 85;
+      g = 255;
+      b = 255;
+      break;
+    }
+    case LIGHTRED:
+    {
+      r = 255;
+      g = 85;
+      b = 85;
+      break;
+    }
+    case LIGHTMAGENTA:
+    {
+      r = 255;
+      g = 85;
+      b = 255;
+      break;
+    }
+    case LIGHTBROWN:
+    {
+      r = 255;
+      g = 255;
+      b = 85;
+      break;
+    }
+    case LIGHTWHITE:
+    {
+      r = 255;
+      g = 255;
+      b = 255;
+      break;
+    }
+  }
+
+}
+
 /*for 256 color*/
 
-int
-fb_drawpixel (int x, int y)
+int fb_drawpixel (int x, int y)
 {				/* ok */
   addr2[vinfo.xres * y + x] = fgcolor;
+  return 0;
+}
+
+int fb_drawpixel (int x, int y, char r, char g, char b)
+{				/* ok */
+//  addr2[(vinfo.xres * y + x)*2] = color;
+//  addr2[(vinfo.xres * y + x)*2+1] = color;
+
+  switch (vinfo.bits_per_pixel)
+  {
+    case 8:
+    {
+      addr2[vinfo.xres * y + x] = fgcolor;
+      break;
+    }
+    case 16:
+    {
+      //fb_drawpixel (k + startx, m + starty, 0xff);
+      break;
+    }
+    case 24:
+    {
+      u8 r_, g_, b_;
+
+      color2rgb(fgcolor, r_, g_, b_);
+      addr2[(vinfo.xres * y + x)*3] = b_;
+      addr2[(vinfo.xres * y + x)*3+1] = g_;
+      addr2[(vinfo.xres * y + x)*3+2] = r_;
+      break;
+    }
+  }
   return 0;
 }
 
@@ -76,15 +222,6 @@ fb_drawline (int x1, int y1, int x2, int y2)
   return 0;
 }
 
-int fb_drawpixel (int x, int y, char r, char g, char b)
-{				/* ok */
-//  addr2[(vinfo.xres * y + x)*2] = color;
-//  addr2[(vinfo.xres * y + x)*2+1] = color;
-  addr2[(vinfo.xres * y + x)*3] = r;
-  addr2[(vinfo.xres * y + x)*3+1] = g;
-  addr2[(vinfo.xres * y + x)*3+2] = b;
-  return 0;
-}
 
 void
 fb_clearblock (int sx, int sy, int ex, int ey)
