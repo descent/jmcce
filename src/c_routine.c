@@ -250,12 +250,17 @@ void c_draw_ascii (int col, int y, unsigned char *bitmap, int color1)
     temp0 = bitmap[j];
     for (k = 0; k < 8; k++) {
       temp1 = temp0 & 128;
-      if (temp1 != 0) {
+      if (temp1 != 0) 
+      {
 	fgcolor = fgcolor1;
-	fb_drawpixel (k + startx, m + starty);
-      } else {
+	fb_drawpixel (k + startx, m + starty, 0xff, 0xff, 0xff);
+      } 
+      else 
+      {
 	fgcolor = bgcolor1;
-	fb_drawpixel (k + startx, m + starty);
+	//fb_drawpixel (k + startx, m + starty);
+	//fb_drawpixel (k + startx, m + starty, 0x00);
+	fb_drawpixel (k + startx, m + starty, 0x00, 0x00, 0x00);
       }
 
       temp0 <<= 1;
@@ -298,10 +303,12 @@ void c_draw_hanzi (int col, int y, unsigned char *bitmap, int color1)
 	temp1 = temp0 & 128;
 	if (temp1 != 0) {
 	  fgcolor = fgcolor1;
-	  fb_drawpixel (k + l * 8 + startx, m + starty);
+	  //fb_drawpixel (k + l * 8 + startx, m + starty);
+	  fb_drawpixel (k + l * 8 + startx, m + starty, 0xff, 0xff, 0xff);
 	} else {
 	  fgcolor = bgcolor1;
-	  fb_drawpixel (k + l * 8 + startx, m + starty);
+	  //fb_drawpixel (k + l * 8 + startx, m + starty);
+	  fb_drawpixel (k + l * 8 + startx, m + starty, 0x00, 0x00, 0x00);
 	}
 	temp0 <<= 1;
       }
