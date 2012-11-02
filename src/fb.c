@@ -175,6 +175,17 @@ int fb_drawpixel (int x, int y, char r, char g, char b)
       addr2[(vinfo.xres * y + x)*3+2] = r_;
       break;
     }
+    case 32:
+    {
+      u8 r_, g_, b_;
+
+      color2rgb(fgcolor, r_, g_, b_);
+      addr2[(vinfo.xres * y + x)*4] = b_;
+      addr2[(vinfo.xres * y + x)*4+1] = g_;
+      addr2[(vinfo.xres * y + x)*4+2] = r_;
+      addr2[(vinfo.xres * y + x)*4+3] = 0xff;
+      break;
+    }
   }
   return 0;
 }
