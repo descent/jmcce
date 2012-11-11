@@ -234,8 +234,13 @@ fb_drawline (int x1, int y1, int x2, int y2)
 }
 
 
-void
-fb_clearblock (int sx, int sy, int ex, int ey)
+void fb_clearblock (int sx, int sy, int ex, int ey, u8 bg)
+{
+  for (int i = sy ; i < ey ; ++i)
+    fb_drawline(sx, i, sy, i);
+}
+
+void fb_clearblock (int sx, int sy, int ex, int ey)
 {				/* ok */
   if (ey > (vinfo.yres - 1))
     ey = (vinfo.yres - 1);	/* jmt */

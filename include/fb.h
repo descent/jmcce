@@ -28,6 +28,7 @@ extern unsigned char *addr2;
 
 int fb_init ();
 void fb_clearblock (int sx, int sy, int ex, int ey);
+void fb_clearblock (int sx, int sy, int ex, int ey, u8 bg);
 void fb_setfgcolor (int);
 void fb_setbgcolor (int);
 int fb_drawline (int x1, int y1, int x2, int y2);	/* ok */
