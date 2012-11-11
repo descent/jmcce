@@ -452,8 +452,9 @@ c_clear_block (int col, int y, int width, int height, int bgcolor1)
     return;
   }
 
-  bgcolor = bgcolor1;
-  fb_clearblock (col * 8, y, col * 8 + width * 8, y + height);
+  bgcolor = RED;
+  //fb_clearblock (col * 8, y, col * 8 + width * 8, y + height);
+  fb_clearblock (col*8, y, width*8, height, RED);
 }
 
 void vgalib_clear_lines(int sx, int sy, int ex, int ey, int color)
