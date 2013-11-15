@@ -13,11 +13,13 @@ CXX=g++
 OBJS = c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o new_chewing.o convertencode.o
 
 #jmcce: chewing.o  c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o
-jmcce.fb: $(OBJS)
-	$(CC) -o $@ $^ -lncurses -lutil -L/usr/local/lib -lchewing
+jmcce.fb:
+	make -f makefile.lfb clean
+	make -f makefile.lfb
 
-jmcce: $(OBJS)
-	$(CC) -o $@ $^ -lvgagl -lvga -lncurses -lutil -L/usr/local/lib -lchewing
+jmcce: 
+	make -f makefile.svga clean
+	make -f makefile.svga
 
 vgatest: vgatest.o
 	$(CC) -o $@ $^ -lvgagl -lvga 
@@ -39,4 +41,4 @@ convertencode.o: convertencode.cpp
 	$(CXX) -c $<
 
 clean:
-	rm -rf *.o
+	rm -rf *.o *.d jmcce.fb jmcce
