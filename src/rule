@@ -1,0 +1,5 @@
+FT2_CFLAGS=`freetype-config --cflags`
+FT2_LIBS=`freetype-config --libs`
+QTDIR=/usr/share/qt4/
+
+CFLAGS=-DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing -Wall -W -D_REENTRANT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I$(QTDIR)/include/QtCore -I$(QTDIR)/include
