@@ -22,6 +22,7 @@ int cursor_x, cursor_y;
 
 void color2rgb(u8 color, u8 &r, u8 &g, u8 &b)
 {
+#ifdef LINUXFB
   switch (color)
   {
     case BLACK:
@@ -137,7 +138,7 @@ void color2rgb(u8 color, u8 &r, u8 &g, u8 &b)
       break;
     }
   }
-
+#endif
 }
 
 /*for 256 color*/
