@@ -1,4 +1,5 @@
-CFLAGS =-DVGALIB -DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing
+include rule
+CFLAGS+=-DVGALIB
 
 #CFLAGS =-DLINUXFB -DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing
 CC=g++
@@ -17,7 +18,7 @@ OBJS = c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o    
 #	$(CC) -o $@ $^ -lncurses -lutil -L/usr/local/lib -lchewing
 
 jmcce: $(OBJS)
-	$(CC) -o $@ $^ -lvgagl -lvga -lncurses -lutil -L/usr/local/lib -lchewing
+	$(CC) -o $@ $^ -lvgagl -lvga -lncurses -lutil -L/usr/local/lib -lchewing $(CXXFLAGS) -L$(QTDIR)/lib -lQtCore $(FT2_LIBS) -lvgagl -lvga
 
 vgatest: vgatest.o
 	$(CC) -o $@ $^ -lvgagl -lvga 
