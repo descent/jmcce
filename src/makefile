@@ -1,25 +1,34 @@
-#CFLAGS =-DVGALIB -DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing
-
-CFLAGS =-DLINUXFB -DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing
+#FB=1
+SVGA=1
 CC=g++
 CXX=g++
 
-#pkg-config --variable=datadir chewing
-#pkg-config chewing --cflags --libs
+FT2_CFLAGS=`freetype-config --cflags`
+FT2_LIBS=`freetype-config --libs`
 
-#-I/usr/local/include/chewing  -L/usr/local/lib -lchewing  
+CFLAGS=-DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing -Wall -W ${FT2_CFLAGS}
+LDFLAGS = -lncurses -lutil -L/usr/local/lib -lchewing $(FT2_LIBS)
 
+ifdef FB
+CFLAGS += -DLINUXFB 
+endif
 
-OBJS = c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o new_chewing.o convertencode.o
+ifdef SVGA
+CFLAGS += -DVGALIB 
+LDFLAGS += -lvgagl -lvga
+endif
 
-#jmcce: chewing.o  c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o asm_routine.o
-jmcce.fb:
-	make -f makefile.lfb clean
-	make -f makefile.lfb
+OBJS = c_routine.o  error.o  hbffont.o  hzinput.o  jmcce.o console.o  draw.o       fb.o     hist.o     hztty.o    newimp.o new_chewing.o convertencode.o ft2.o
 
-jmcce: 
-	make -f makefile.svga clean
-	make -f makefile.svga
+ifdef SVGA
+jmcce: $(OBJS)
+	$(CC) -o $@ $^ $(LDFLAGS)
+endif
+
+ifdef FB
+jmcce.fb: $(OBJS)
+	$(CC) -o $@ $^ $(LDFLAGS)
+endif
 
 vgatest: vgatest.o
 	$(CC) -o $@ $^ -lvgagl -lvga 
@@ -39,6 +48,7 @@ include $(sources:.c=.d)
 
 convertencode.o: convertencode.cpp
 	$(CXX) -c $<
-
+ft2.o: ft2.cpp
+	$(CXX) $(CFLAGS) -c $<
 clean:
-	rm -rf *.o *.d jmcce.fb jmcce
+	rm -rf *.o
