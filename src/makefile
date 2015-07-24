@@ -1,12 +1,12 @@
-#FB=1
-SVGA=1
+FB=1
+#SVGA=1
 CC=g++
 CXX=g++
 
 FT2_CFLAGS=`freetype-config --cflags`
 FT2_LIBS=`freetype-config --libs`
 
-CFLAGS=-DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing -Wall -W ${FT2_CFLAGS}
+CFLAGS=-DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing -I/usr/include/x86_64-linux-gnu/chewing/ -Wall -W ${FT2_CFLAGS}
 LDFLAGS = -lncurses -lutil -L/usr/local/lib -lchewing $(FT2_LIBS)
 
 ifdef FB
