@@ -154,6 +154,7 @@ int fb_drawpixel (int x, int y, char r, char g, char b)
 //  addr2[(vinfo.xres * y + x)*2] = color;
 //  addr2[(vinfo.xres * y + x)*2+1] = color;
 
+  // printf("vinfo.bits_per_pixel: %d\n", vinfo.bits_per_pixel);
   switch (vinfo.bits_per_pixel)
   {
     case 8:
@@ -163,6 +164,14 @@ int fb_drawpixel (int x, int y, char r, char g, char b)
     }
     case 16:
     {
+
+#if 0
+                 int b = 10;
+                 int g = (x-100)/6;     // A little green
+                 int r = 31-(y-100)/16;    // A lot of red
+                 unsigned short int t = r<<11 | g << 5 | b;
+                 *((unsigned short int*)(fbp + location)) = t;
+#endif
       //fb_drawpixel (k + startx, m + starty, 0xff);
       break;
     }
@@ -179,12 +188,22 @@ int fb_drawpixel (int x, int y, char r, char g, char b)
     case 32:
     {
       u8 r_, g_, b_;
+      long int location = 0;
+
+       location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
 
       color2rgb(fgcolor, r_, g_, b_);
+  *(addr2 + location) = b;        // Some blue
+  *(addr2 + location + 1) = g;     // A little green
+  *(addr2 + location + 2) = r;    // A lot of red
+  *(addr2 + location + 3) = 0;      // No transparency
+
+#if 0
       addr2[(vinfo.xres * y + x)*4] = b_;
       addr2[(vinfo.xres * y + x)*4+1] = g_;
       addr2[(vinfo.xres * y + x)*4+2] = r_;
-      addr2[(vinfo.xres * y + x)*4+3] = 0xff;
+      addr2[(vinfo.xres * y + x)*4+3] = 0;
+#endif
       break;
     }
   }
