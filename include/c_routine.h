@@ -17,6 +17,9 @@ void c_bold_hanzi (unsigned char *buffer);
 void c_bold_ascii (unsigned char *buffer);
 void c_toggle_cursor (int col, int y);
 
+void clear_cursor();
+
+
 void vgalib_draw_ascii(int col, int y, unsigned char *bitmap, int fg, int bg);
 void vgalib_draw_hanzi (int col, int y, unsigned char *bitmap, int fg, int bg);
 #endif /* _JMCCE_C_ROUTINE_H_ */
