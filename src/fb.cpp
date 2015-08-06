@@ -69,6 +69,9 @@ int Fb::fb_init()
        exit(4);
    }
    printf("The framebuffer device was mapped to memory successfully.\n");
+   addr = fbp;
+   addr2 = (unsigned char *)addr;
+   ::vinfo = vinfo;
    return 0;
 }
 
@@ -87,6 +90,23 @@ void Fb::print_vinfo()
   // printf("vinfo.bits_per_pixel: %d\n", vinfo.bits_per_pixel);
 }
 
+void Fb::scroll_up (int sy, int ey, int line, int bg_c)
+{
+  unsigned char *dest2, *dest, *src;
+  unsigned int bsize;
+
+  printf("sy: %d\n", sy);
+  printf("ey: %d\n", ey);
+  printf("line: %d\n", line);
+
+  dest = fbp + sy * (vinfo.xres * vinfo.bits_per_pixel / 8);
+  src = fbp + (line + sy) * (vinfo.xres * vinfo.bits_per_pixel / 8);
+  bsize = (ey - sy - line) * (vinfo.xres * vinfo.bits_per_pixel / 8);
+  dest2 = dest + bsize;
+
+  memmove (dest, src, bsize);
+  memset (dest2, bg_c, line * (vinfo.xres * vinfo.bits_per_pixel / 8));
+}
 
 void Fb::setpixelrgb(int x, int y, int r, int g, int b)
 {
