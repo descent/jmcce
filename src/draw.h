@@ -2,6 +2,7 @@
 #define _JMCCE_DRAW_H_
 
 #include "config.h"
+#include "ft2.h"
 
 #ifdef VGALIB
 #include <vga.h>
@@ -66,5 +67,8 @@ void screen_insert_line (int top, int bottom, int n, int bg_color);
 void screen_delete_line (int top, int bottom, int n, int bg_color);
 
 void on_off_cursor (int x, int y);
+
+void my_draw_bitmap_mono(FT_Bitmap *bitmap,int pen_x,int pen_y, int fg_c, int bg_c);
+void my_draw_bitmap_256(FT_Bitmap *bitmap,int pen_x,int pen_y);
 
 #endif /* _JMCCE_DRAW_H_ */
