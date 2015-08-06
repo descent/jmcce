@@ -20,6 +20,208 @@ size_t vsize;
 int fh;
 int cursor_x, cursor_y;
 
+Fb::Fb()
+{
+  int ret = fb_init();
+}
+
+Fb::~Fb()
+{
+  munmap(fbp, screensize);
+  close(fbfd);
+  printf("munmap\n");
+}
+
+int Fb::fb_init()
+{
+   int x = 0, y = 0;
+
+   // Open the file for reading and writing
+   fbfd = open("/dev/fb0", O_RDWR);
+   if (fbfd == -1) {
+       perror("Error: cannot open framebuffer device");
+       exit(1);
+   }
+   printf("The framebuffer device was opened successfully.\n");
+
+   // Get fixed screen information
+   if (ioctl(fbfd, FBIOGET_FSCREENINFO, &finfo) == -1) {
+       perror("Error reading fixed information");
+       exit(2);
+   }
+
+   // Get variable screen information
+   if (ioctl(fbfd, FBIOGET_VSCREENINFO, &vinfo) == -1) {
+       perror("Error reading variable information");
+       exit(3);
+   }
+
+   printf("%dx%d, %dbpp\n", vinfo.xres, vinfo.yres, vinfo.bits_per_pixel);
+
+   // Figure out the size of the screen in bytes
+   screensize = vinfo.xres * vinfo.yres * vinfo.bits_per_pixel / 8;
+
+   // Map the device to memory
+   fbp = (char *)mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED,
+                      fbfd, 0);
+   if (fbp == (void *)-1) {
+       perror("Error: failed to map framebuffer device to memory");
+       exit(4);
+   }
+   printf("The framebuffer device was mapped to memory successfully.\n");
+   return 0;
+}
+
+void Fb::setpixelrgb(int x, int y, int r, int g, int b)
+{
+  long int location = 0;
+
+  location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
+  switch (vinfo.bits_per_pixel)
+  {
+    case 16:
+    {
+    #if 0
+      int b = 10;
+      int g = (x-100)/6;     // A little green
+      int r = 31-(y-100)/16;    // A lot of red
+    #endif
+      unsigned short int t = r<<11 | g << 5 | b;
+      *((unsigned short int*)(fbp + location)) = t;
+      break;
+    }
+    case 32:
+    {
+      *(fbp + location) = b;        // Some blue
+      *(fbp + location + 1) = g;     // A little green
+      *(fbp + location + 2) = r;    // A lot of red
+      *(fbp + location + 3) = 0;      // No transparency
+      break;
+    }
+  }
+}
+
+void LFB::color2rgb(uint8_t color, uint8_t &r, uint8_t &g, uint8_t &b)
+{
+#ifdef LINUXFB
+  switch (color)
+  {
+    case BLACK:
+    {
+      r = 0;
+      g = 0;
+      b = 0;
+      break;
+    }
+    case BLUE:
+    {
+      r = 0;
+      g = 0;
+      b = 170;
+      break;
+    }
+    case GREEN:
+    {
+      r = 0;
+      g = 170;
+      b = 0;
+      break;
+    }
+    case CYAN:
+    {
+      r = 0;
+      g = 170;
+      b = 170;
+      break;
+    }
+    case RED:
+    {
+      r = 170;
+      g = 0;
+      b = 0;
+      break;
+    }
+    case MAGENTA:
+    {
+      r = 170;
+      g = 0;
+      b = 170;
+      break;
+    }
+    case BROWN:
+    {
+      r = 170;
+      g = 85;
+      b = 0;
+      break;
+    }
+    case GRAY:
+    {
+      r = 170;
+      g = 170;
+      b = 170;
+      break;
+    }
+    case LIGHTBLACK:
+    {
+      r = 85;
+      g = 85;
+      b = 85;
+      break;
+    }
+    case LIGHTBLUE:
+    {
+      r = 85;
+      g = 85;
+      b = 255;
+      break;
+    }
+    case LIGHTGREEN:
+    {
+      r = 85;
+      g = 255;
+      b = 85;
+      break;
+    }
+    case LIGHTCYAN:
+    {
+      r = 85;
+      g = 255;
+      b = 255;
+      break;
+    }
+    case LIGHTRED:
+    {
+      r = 255;
+      g = 85;
+      b = 85;
+      break;
+    }
+    case LIGHTMAGENTA:
+    {
+      r = 255;
+      g = 85;
+      b = 255;
+      break;
+    }
+    case LIGHTBROWN:
+    {
+      r = 255;
+      g = 255;
+      b = 85;
+      break;
+    }
+    case LIGHTWHITE:
+    {
+      r = 255;
+      g = 255;
+      b = 255;
+      break;
+    }
+  }
+#endif
+}
+
 void color2rgb(u8 color, u8 &r, u8 &g, u8 &b)
 {
 #ifdef LINUXFB
@@ -145,12 +347,20 @@ void color2rgb(u8 color, u8 &r, u8 &g, u8 &b)
 
 int fb_drawpixel (int x, int y)
 {				/* ok */
-  addr2[vinfo.xres * y + x] = fgcolor;
+  u8 r, g, b;
+
+  color2rgb(fgcolor, r, g, b);
+  int fb_drawpixel (x, y, r, g, b);
   return 0;
 }
 
 int fb_drawpixel (int x, int y, char r, char g, char b)
 {				/* ok */
+  static Fb fb;
+
+  fb.setpixelrgb(x, y, r, g, b);
+
+#if 0
 //  addr2[(vinfo.xres * y + x)*2] = color;
 //  addr2[(vinfo.xres * y + x)*2+1] = color;
 
@@ -190,15 +400,16 @@ int fb_drawpixel (int x, int y, char r, char g, char b)
       u8 r_, g_, b_;
       long int location = 0;
 
+#if 1
        location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
 
       color2rgb(fgcolor, r_, g_, b_);
-  *(addr2 + location) = b;        // Some blue
-  *(addr2 + location + 1) = g;     // A little green
-  *(addr2 + location + 2) = r;    // A lot of red
+  *(addr2 + location) = 170;        // Some blue
+  *(addr2 + location + 1) = 0;     // A little green
+  *(addr2 + location + 2) = 0;    // A lot of red
   *(addr2 + location + 3) = 0;      // No transparency
 
-#if 0
+#else
       addr2[(vinfo.xres * y + x)*4] = b_;
       addr2[(vinfo.xres * y + x)*4+1] = g_;
       addr2[(vinfo.xres * y + x)*4+2] = r_;
@@ -207,6 +418,7 @@ int fb_drawpixel (int x, int y, char r, char g, char b)
       break;
     }
   }
+#endif
   return 0;
 }
 
