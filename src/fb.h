@@ -80,6 +80,8 @@ class Fb
     ~Fb();
     int fb_init();
     void setpixelrgb(int x, int y, int r, int g, int b);
+    void print_finfo();
+    void print_vinfo();
   private:
    int fbfd;
    char *fbp;

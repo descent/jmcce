@@ -72,6 +72,22 @@ int Fb::fb_init()
    return 0;
 }
 
+void Fb::print_finfo()
+{
+  printf("finfo.line_length: %d\n", finfo.line_length);
+}
+
+void Fb::print_vinfo()
+{
+  printf("vinfo.bits_per_pixel: %d\n", vinfo.bits_per_pixel);
+  printf("vinfo.xoffset: %d\n", vinfo.xoffset);
+  printf("vinfo.yoffset: %d\n", vinfo.yoffset);
+  printf("vinfo.xres: %d\n", vinfo.xres);
+  printf("vinfo.yres: %d\n", vinfo.yres);
+  // printf("vinfo.bits_per_pixel: %d\n", vinfo.bits_per_pixel);
+}
+
+
 void Fb::setpixelrgb(int x, int y, int r, int g, int b)
 {
   long int location = 0;
