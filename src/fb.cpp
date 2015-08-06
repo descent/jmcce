@@ -350,8 +350,7 @@ int fb_drawpixel (int x, int y)
   u8 r, g, b;
 
   color2rgb(fgcolor, r, g, b);
-  int fb_drawpixel (x, y, r, g, b);
-  return 0;
+  return fb_drawpixel (x, y, r, g, b);
 }
 
 int fb_drawpixel (int x, int y, char r, char g, char b)
@@ -502,9 +501,9 @@ fb_setbgcolor (int c)
   bgcolor = c;
 }
 
-int
-fb_init ()
+int fb_init ()
 {
+#if 0
   int bits;
 
   cursor_x = cursor_y = 0;
@@ -587,6 +586,6 @@ fb_init ()
 
   addr2 = (unsigned char *)addr;
   close (fh);
-
+#endif
   return 0;
 }
