@@ -82,6 +82,7 @@ class Fb
     void setpixelrgb(int x, int y, int r, int g, int b);
     void print_finfo();
     void print_vinfo();
+    void scroll_up (int sy, int ey, int line, int bg_c);
   private:
    int fbfd;
    char *fbp;
