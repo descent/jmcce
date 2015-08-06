@@ -23,6 +23,11 @@
 #include "jmcce.h"
 #include "hzinput.h"
 
+#include "wstring2utf8.h"
+#include "ft2.h"
+
+#include <string>
+
 
 extern int gFont_bytes;
 
@@ -848,8 +853,373 @@ reset_terminal (hz_tty * tty, int do_clear)
   }
 }
 
-void
-hztty_write (hz_tty * tty, unsigned char *buf, int num)
+void hztty_write(hz_tty * tty, unsigned char *buf, int num)
+{
+  static Ft2 ft2("../fonts/unifont.pcf.gz");
+  unsigned char *bitmap;
+
+  std::string utf8_str((char *)buf, num);
+  std::wstring utf32_str = utf8_to_wstring(utf8_str);
+  //std::wstring utf32_str = utf8_to_wstring("a中文bc");
+
+
+  if (tty == hztty_list)
+    on_off_cursor (tty->cur_x, tty->cur_y);
+  for (int i=0 ; i < utf32_str.size() ; ++i)
+  {
+   printf("utf32_str[i]: %d\n", utf32_str[i]);
+   if (utf32_str[i] <= 0xff && !(0x20 <= utf32_str[i] && utf32_str[i] <= 0x7e)) // controll char
+   {
+   }
+   else  // printable ascii or ucs4 glyph
+   {
+    if (tty->terminal_state == STATE_NORMAL) 
+    {
+      FT_GlyphSlot slot;
+
+      ft2.get_slot(slot, utf32_str[i]);
+      my_draw_bitmap_mono(&slot->bitmap, tty->cur_x, tty->cur_y, tty->fg_color, tty->bg_color);
+      tty->cur_x += slot->bitmap.width;
+      if (tty->cur_x > 640)
+      {
+        tty->cur_y += 18;
+        tty->cur_x = 0;
+      }
+    }
+   }
+    #if 0
+
+  begin:
+    if ((*buf >= CHAR_SPC) && (tty->terminal_state == STATE_NORMAL)) {
+      if (*buf <= CHAR_DEL)
+	print_ascii_char (tty, *buf);
+      else {
+	tty->terminal_state = STATE_HZCODE;
+	tty->param.par[0] = *buf;
+      }
+      continue;
+    }
+    if (tty->terminal_state == STATE_HZCODE) {
+      tty->terminal_state = STATE_NORMAL;
+      bitmap = hbfGetBitmap ((tty->param.par[0] << 8) + *buf,
+			     tty->underline /*STANDARD*/, gFont_bytes);
+      if (bitmap && (tty->cur_x != NUM_OF_COL - 1)) {
+	int index;
+	if (tty->need_wrap) {
+	  cr (tty);
+	  lf (tty);
+	}
+	if (tty->insert_mode)
+	  insert_char (tty, 2);
+
+	index = (tty->origin + tty->cur_x + tty->cur_y * NUM_OF_COL) %
+	  tty->buf_size;
+	tty->text_buf[index] = tty->param.par[0];
+	tty->text_buf[index + 1] = *buf;
+	tty->attr_buf[index] = tty->attr_buf[index + 1] =
+	  COLOR_COMPOSE (tty->fg_color, tty->bg_color);
+	if (hztty_list == tty)
+	  draw_hanzi_char (tty->cur_x, tty->cur_y,
+			   bitmap, tty->fg_color, tty->bg_color);
+	if (tty->cur_x + 2 == NUM_OF_COL)
+	  tty->need_wrap = tty->autowrap_mode;
+	else
+	  tty->cur_x += 2;
+	continue;
+      } else {
+	print_ascii_char (tty, tty->param.par[0]);
+	goto begin;
+      }
+    }
+
+    switch (utf32_str[i])
+    {
+    case CHAR_BEEP:
+      beep1 ();
+      continue;
+    case CHAR_BS:
+      if (tty->cur_x)
+	tty->cur_x--;
+      tty->need_wrap = 0;
+      continue;
+    case CHAR_VT:
+      while (tty->cur_x < NUM_OF_COL - 1) {
+	tty->cur_x++;
+	if (tty->tab_stop[tty->cur_x >> 5] & (1 << (tty->cur_x & 31)))
+	  break;
+      }
+      continue;
+    case CHAR_CR:
+      cr (tty);
+      continue;
+    case CHAR_LF:
+      lf (tty);
+      continue;
+    case CHAR_S0:
+      tty->charset = 1;
+      tty->Translate = tty->G1_charset;
+      continue;
+    case CHAR_S1:
+      tty->charset = 0;
+      tty->Translate = tty->G0_charset;
+      continue;
+    case CHAR_ESC:
+      tty->terminal_state = STATE_ESCAPE;
+      continue;
+    }
+    switch (tty->terminal_state) {
+    case STATE_ESCAPE:
+      tty->terminal_state = STATE_NORMAL;
+      switch (*buf) {
+      case '[':
+	tty->terminal_state = STATE_SQUARE;
+	continue;
+      case 'E':
+	cr (tty);
+	lf (tty);
+	continue;
+      case 'M':
+	ri (tty);
+	continue;
+      case 'D':
+	lf (tty);
+	continue;
+      case 'H':
+	tty->tab_stop[tty->cur_x >> 5] |= (1 << (tty->cur_x & 31));
+	continue;
+      case 'Z':
+	respond_id (tty);
+	continue;
+      case '7':
+	save_cur (tty);
+	continue;
+      case '8':
+	restore_cur (tty);
+	continue;
+      case '(':
+	tty->terminal_state = STATE_SETG0;
+	continue;
+      case ')':
+	tty->terminal_state = STATE_SETG1;
+	continue;
+      case '#':
+	tty->terminal_state = STATE_HASH;
+	continue;
+      case 'c':
+	reset_terminal (tty, 1);
+	continue;
+      case '>':		/* numberic keyboard */
+	set_applic (tty, 0);
+	continue;
+      case '=':		/* Appl. keyboard */
+	set_applic (tty, 1);
+	continue;
+      }
+    case STATE_FUNCKEY:
+      tty->terminal_state = STATE_NORMAL;
+      continue;
+    case STATE_HASH:
+      tty->terminal_state = STATE_NORMAL;
+      if (*buf == '8') {
+	int i, j;
+	if (hztty_list == tty)
+	  for (i = 0; i < NUM_OF_ROW; i++)
+	    for (j = 0; j < NUM_OF_COL; j++)
+	      draw_ascii_char (j, i, 'E', tty->fg_color,
+			       tty->bg_color, STANDARD);
+      }
+      continue;
+    case STATE_SETG0:
+      if (*buf == '0')
+	tty->G0_charset = GRAF_TRANS;
+      else if (*buf == 'B')
+	tty->G0_charset = NORM_TRANS;
+      else if (*buf == 'U')
+	tty->G0_charset = NULL_TRANS;
+      else if (*buf == 'K')
+	tty->G0_charset = USER_TRANS;
+      if (tty->charset == 0)
+	tty->Translate = tty->G0_charset;
+      tty->terminal_state = STATE_NORMAL;
+      continue;
+    case STATE_SETG1:
+      if (*buf == '0')
+	tty->G1_charset = GRAF_TRANS;
+      else if (*buf == 'B')
+	tty->G1_charset = NORM_TRANS;
+      else if (*buf == 'U')
+	tty->G1_charset = NULL_TRANS;
+      else if (*buf == 'K')
+	tty->G1_charset = USER_TRANS;
+      if (tty->charset == 1)
+	tty->Translate = tty->G1_charset;
+      tty->terminal_state = STATE_NORMAL;
+      continue;
+    case STATE_SQUARE:
+      for (tty->npar = 0; tty->npar < NPAR; tty->npar++)
+	tty->param.par[tty->npar] = 0;
+      tty->npar = 0;
+      tty->terminal_state = STATE_GETPARS;
+      if (*buf == '[') {	/* Function key */
+	tty->terminal_state = STATE_FUNCKEY;
+	continue;
+      }
+      tty->ques = (*buf == '?');
+      if (tty->ques)
+	continue;
+    case STATE_GETPARS:
+      if (*buf == ';' && tty->npar < NPAR - 1) {
+	tty->npar++;
+	continue;
+      } else if (*buf >= '0' && *buf <= '9') {
+	tty->param.par[tty->npar] *= 10;
+	tty->param.par[tty->npar] += *buf - '0';
+	continue;
+      }
+      tty->terminal_state = STATE_NORMAL;
+      switch (*buf) {
+      case 'h':
+	set_mode (tty, 1);
+	continue;
+      case 'l':
+	set_mode (tty, 0);
+	continue;
+      case 'n':
+	if (!tty->ques) {
+	  if (tty->param.par[0] == 5)
+	    status_report (tty);
+	  else if (tty->param.par[0] == 6)
+	    cursor_report (tty);
+	}
+	continue;
+      }
+      if (tty->ques) {
+	tty->ques = 0;
+	continue;
+      }
+      switch (*buf) {
+      case 'G':
+      case '`':
+	if (tty->param.par[0])
+	  tty->param.par[0]--;
+	gotoxy (tty, tty->param.par[0], tty->cur_y);
+	continue;
+      case 'A':
+	if (!tty->param.par[0])
+	  tty->param.par[0]++;
+	gotoxy (tty, tty->cur_x, tty->cur_y - tty->param.par[0]);
+	continue;
+      case 'B':
+      case 'e':
+	if (!tty->param.par[0])
+	  tty->param.par[0]++;
+	gotoxy (tty, tty->cur_x, tty->cur_y + tty->param.par[0]);
+	continue;
+      case 'C':
+      case 'a':
+	if (!tty->param.par[0])
+	  tty->param.par[0]++;
+	gotoxy (tty, tty->cur_x + tty->param.par[0], tty->cur_y);
+	continue;
+      case 'D':
+	if (!tty->param.par[0])
+	  tty->param.par[0]++;
+	gotoxy (tty, tty->cur_x - tty->param.par[0], tty->cur_y);
+	continue;
+      case 'E':
+	if (!tty->param.par[0])
+	  tty->param.par[0]++;
+	gotoxy (tty, 0, tty->cur_y + tty->param.par[0]);
+	continue;
+      case 'F':
+	if (!tty->param.par[0])
+	  tty->param.par[0]++;
+	gotoxy (tty, 0, tty->cur_y - tty->param.par[0]);
+	continue;
+      case 'd':
+	if (tty->param.par[0])
+	  tty->param.par[0]--;
+	gotoxy (tty, tty->cur_x, tty->param.par[0]);
+	continue;
+      case 'H':
+      case 'f':
+	if (tty->param.par[0])
+	  tty->param.par[0]--;
+	if (tty->param.par[1])
+	  tty->param.par[1]--;
+	gotoxy (tty, tty->param.par[1], tty->param.par[0]);
+	continue;
+      case 'J':
+	csi_J (tty, tty->param.par[0]);
+	continue;
+      case 'K':
+	csi_K (tty, tty->param.par[0]);
+	continue;
+      case 'L':
+	csi_L (tty, tty->param.par[0]);
+	continue;
+      case 'M':
+	csi_M (tty, tty->param.par[0]);
+	continue;
+      case 'P':
+	csi_P (tty, tty->param.par[0]);
+	continue;
+      case 'c':
+	if (!tty->param.par[0])
+	  respond_id (tty);
+	continue;
+      case 'g':
+	if (!tty->param.par[0])
+	  tty->tab_stop[tty->cur_x >> 5] &= ~(1 << (tty->cur_x & 31));
+	else if (tty->param.par[0] == 3) {
+	  tty->tab_stop[0] = tty->tab_stop[1] = tty->tab_stop[2] =
+	    tty->tab_stop[3] = tty->tab_stop[4] = 0;
+	}
+	continue;
+      case 'm':
+	csi_m (tty);
+	continue;
+      case 'r':
+	if (!tty->param.par[0])
+	  tty->param.par[0]++;
+	if (!tty->param.par[1])
+	  tty->param.par[1] = NUM_OF_ROW;
+	/* Minimum allowed region is 2 lines */
+	if (tty->param.par[0] < tty->param.par[1] &&
+	    tty->param.par[1] <= NUM_OF_ROW) {
+	  tty->top = tty->param.par[0] - 1;
+	  tty->bottom = tty->param.par[1];
+	  gotoxy (tty, 0, 0);
+	}
+	continue;
+      case 's':
+	save_cur (tty);
+	continue;
+      case 'u':
+	restore_cur (tty);
+	continue;
+      case 'X':
+	csi_X (tty, tty->param.par[0]);
+	continue;
+      case '@':
+	csi_at (tty, tty->param.par[0]);
+	continue;
+      case ']':		/* setterm functions */
+	setterm_command (tty);
+	continue;
+      }
+      continue;
+    }
+    #endif
+  }
+  if (tty == hztty_list) {
+    on_off_cursor (tty->cur_x, tty->cur_y);
+/* screen_flush();*/
+
+  }
+}
+
+void org_hztty_write(hz_tty * tty, unsigned char *buf, int num)
 {
   unsigned char *bitmap;
 
