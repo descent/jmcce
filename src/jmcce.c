@@ -58,7 +58,7 @@ char copyright101[] = {
 int console_fd;
 
 int encode_mode = BIG5;
-char encode_name[10]="big5";
+char encode_name[10]="UTF8";
 
 static enum
 {
