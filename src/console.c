@@ -855,7 +855,7 @@ reset_terminal (hz_tty * tty, int do_clear)
 
 void hztty_write(hz_tty * tty, unsigned char *buf, int num)
 {
-  static Ft2 ft2("../fonts/unifont.pcf.gz");
+  Ft2 *ft2 = get_ft2("../fonts/unifont.pcf.gz");
 
   std::string utf8_str((char *)buf, num);
   std::wstring utf32_str = utf8_to_wstring(utf8_str);
@@ -876,7 +876,7 @@ void hztty_write(hz_tty * tty, unsigned char *buf, int num)
       {
         FT_GlyphSlot slot;
 
-        ft2.get_slot(slot, utf32_str[i]);
+        ft2->get_slot(slot, utf32_str[i]);
         my_draw_bitmap_mono(&slot->bitmap, tty->cur_x * 8, tty->cur_y * 18 , tty->fg_color, tty->bg_color);
 
         if (tty->need_wrap) 
