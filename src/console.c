@@ -856,81 +856,55 @@ reset_terminal (hz_tty * tty, int do_clear)
 void hztty_write(hz_tty * tty, unsigned char *buf, int num)
 {
   static Ft2 ft2("../fonts/unifont.pcf.gz");
-  unsigned char *bitmap;
 
   std::string utf8_str((char *)buf, num);
   std::wstring utf32_str = utf8_to_wstring(utf8_str);
   //std::wstring utf32_str = utf8_to_wstring("a中文bc");
 
-
   if (tty == hztty_list)
     on_off_cursor (tty->cur_x, tty->cur_y);
-  for (int i=0 ; i < utf32_str.size() ; ++i)
+  for (size_t i=0 ; i < utf32_str.size() ; ++i)
   {
-   printf("utf32_str[i]: %d\n", utf32_str[i]);
-   if (utf32_str[i] <= 0xff && !(0x20 <= utf32_str[i] && utf32_str[i] <= 0x7e)) // controll char
-   {
-   }
-   else  // printable ascii or ucs4 glyph
-   {
-    if (tty->terminal_state == STATE_NORMAL) 
+   //printf("utf32_str[i]: %d\n", utf32_str[i]);
+
+    if (isascii(utf32_str[i]) && (!isprint(utf32_str[i])) ) // controll char
     {
-      FT_GlyphSlot slot;
-
-      ft2.get_slot(slot, utf32_str[i]);
-      my_draw_bitmap_mono(&slot->bitmap, tty->cur_x, tty->cur_y, tty->fg_color, tty->bg_color);
-      tty->cur_x += slot->bitmap.width;
-      if (tty->cur_x > 640)
+    }
+    else  // printable ascii or ucs4 glyph
+    {
+      if (tty->terminal_state == STATE_NORMAL) 
       {
-        tty->cur_y += 18;
-        tty->cur_x = 0;
-      }
-    }
-   }
-    #if 0
+        FT_GlyphSlot slot;
 
-  begin:
-    if ((*buf >= CHAR_SPC) && (tty->terminal_state == STATE_NORMAL)) {
-      if (*buf <= CHAR_DEL)
-	print_ascii_char (tty, *buf);
-      else {
-	tty->terminal_state = STATE_HZCODE;
-	tty->param.par[0] = *buf;
-      }
-      continue;
-    }
-    if (tty->terminal_state == STATE_HZCODE) {
-      tty->terminal_state = STATE_NORMAL;
-      bitmap = hbfGetBitmap ((tty->param.par[0] << 8) + *buf,
-			     tty->underline /*STANDARD*/, gFont_bytes);
-      if (bitmap && (tty->cur_x != NUM_OF_COL - 1)) {
-	int index;
-	if (tty->need_wrap) {
-	  cr (tty);
-	  lf (tty);
-	}
+        ft2.get_slot(slot, utf32_str[i]);
+        my_draw_bitmap_mono(&slot->bitmap, tty->cur_x * 8, tty->cur_y * 18 , tty->fg_color, tty->bg_color);
+
+        if (tty->need_wrap) 
+        {
+          cr (tty);
+          lf (tty);
+        }
+
 	if (tty->insert_mode)
-	  insert_char (tty, 2);
+	  insert_char (tty, slot->bitmap.width/8);
 
-	index = (tty->origin + tty->cur_x + tty->cur_y * NUM_OF_COL) %
-	  tty->buf_size;
-	tty->text_buf[index] = tty->param.par[0];
-	tty->text_buf[index + 1] = *buf;
-	tty->attr_buf[index] = tty->attr_buf[index + 1] =
-	  COLOR_COMPOSE (tty->fg_color, tty->bg_color);
-	if (hztty_list == tty)
-	  draw_hanzi_char (tty->cur_x, tty->cur_y,
-			   bitmap, tty->fg_color, tty->bg_color);
-	if (tty->cur_x + 2 == NUM_OF_COL)
-	  tty->need_wrap = tty->autowrap_mode;
-	else
-	  tty->cur_x += 2;
-	continue;
-      } else {
-	print_ascii_char (tty, tty->param.par[0]);
-	goto begin;
+        if ((tty->cur_x + (slot->bitmap.width/8)) == NUM_OF_COL)
+          tty->need_wrap = tty->autowrap_mode;
+        else
+          tty->cur_x += (slot->bitmap.width/8);
+       
+        #if 0
+        tty->cur_x += slot->bitmap.width;
+        if (tty->cur_x > 640)
+        {
+          tty->cur_y += 18;
+          tty->cur_x = 0;
+        }
+        #endif
       }
     }
+
+    #if 1
 
     switch (utf32_str[i])
     {
@@ -970,7 +944,7 @@ void hztty_write(hz_tty * tty, unsigned char *buf, int num)
     switch (tty->terminal_state) {
     case STATE_ESCAPE:
       tty->terminal_state = STATE_NORMAL;
-      switch (*buf) {
+      switch (utf32_str[i]) {
       case '[':
 	tty->terminal_state = STATE_SQUARE;
 	continue;
@@ -1020,7 +994,7 @@ void hztty_write(hz_tty * tty, unsigned char *buf, int num)
       continue;
     case STATE_HASH:
       tty->terminal_state = STATE_NORMAL;
-      if (*buf == '8') {
+      if (utf32_str[i] == '8') {
 	int i, j;
 	if (hztty_list == tty)
 	  for (i = 0; i < NUM_OF_ROW; i++)
@@ -1030,26 +1004,26 @@ void hztty_write(hz_tty * tty, unsigned char *buf, int num)
       }
       continue;
     case STATE_SETG0:
-      if (*buf == '0')
+      if (utf32_str[i] == '0')
 	tty->G0_charset = GRAF_TRANS;
-      else if (*buf == 'B')
+      else if (utf32_str[i] == 'B')
 	tty->G0_charset = NORM_TRANS;
-      else if (*buf == 'U')
+      else if (utf32_str[i] == 'U')
 	tty->G0_charset = NULL_TRANS;
-      else if (*buf == 'K')
+      else if (utf32_str[i] == 'K')
 	tty->G0_charset = USER_TRANS;
       if (tty->charset == 0)
 	tty->Translate = tty->G0_charset;
       tty->terminal_state = STATE_NORMAL;
       continue;
     case STATE_SETG1:
-      if (*buf == '0')
+      if (utf32_str[i] == '0')
 	tty->G1_charset = GRAF_TRANS;
-      else if (*buf == 'B')
+      else if (utf32_str[i] == 'B')
 	tty->G1_charset = NORM_TRANS;
-      else if (*buf == 'U')
+      else if (utf32_str[i] == 'U')
 	tty->G1_charset = NULL_TRANS;
-      else if (*buf == 'K')
+      else if (utf32_str[i] == 'K')
 	tty->G1_charset = USER_TRANS;
       if (tty->charset == 1)
 	tty->Translate = tty->G1_charset;
@@ -1060,24 +1034,24 @@ void hztty_write(hz_tty * tty, unsigned char *buf, int num)
 	tty->param.par[tty->npar] = 0;
       tty->npar = 0;
       tty->terminal_state = STATE_GETPARS;
-      if (*buf == '[') {	/* Function key */
+      if (utf32_str[i] == '[') {	/* Function key */
 	tty->terminal_state = STATE_FUNCKEY;
 	continue;
       }
-      tty->ques = (*buf == '?');
+      tty->ques = (utf32_str[i] == '?');
       if (tty->ques)
 	continue;
     case STATE_GETPARS:
-      if (*buf == ';' && tty->npar < NPAR - 1) {
+      if (utf32_str[i] == ';' && tty->npar < NPAR - 1) {
 	tty->npar++;
 	continue;
-      } else if (*buf >= '0' && *buf <= '9') {
+      } else if (utf32_str[i] >= '0' && utf32_str[i] <= '9') {
 	tty->param.par[tty->npar] *= 10;
-	tty->param.par[tty->npar] += *buf - '0';
+	tty->param.par[tty->npar] += utf32_str[i] - '0';
 	continue;
       }
       tty->terminal_state = STATE_NORMAL;
-      switch (*buf) {
+      switch (utf32_str[i]) {
       case 'h':
 	set_mode (tty, 1);
 	continue;
@@ -1097,7 +1071,7 @@ void hztty_write(hz_tty * tty, unsigned char *buf, int num)
 	tty->ques = 0;
 	continue;
       }
-      switch (*buf) {
+      switch (utf32_str[i]) {
       case 'G':
       case '`':
 	if (tty->param.par[0])
