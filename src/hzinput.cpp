@@ -14,6 +14,8 @@
 #include "jmcce.h"
 #include "newimp.h"
 #include "new_chewing.h"
+#include "ft2.h"
+#include "wstring2utf8.h"
 
 #include <string>
 
@@ -221,10 +223,26 @@ input_draw_hanzi (int x, int y, unsigned char *bitmap, int fg, int bg)
 
 
 
-void
-input_print_string (int x, int y, const unsigned char *string, int fg, int bg)
+void input_print_string (int x, int y, const unsigned char *string, int fg, int bg)
 {
+  Ft2 *ft2 = get_ft2("../fonts/unifont.pcf.gz");
+  char *tmp_str = strdup(string);
+  std::string utf8_str(tmp_str);
+  free(tmp_str);
+  std::wstring utf32_str = utf8_to_wstring(utf8_str);
 
+  for (size_t i=0 ; i < utf32_str.size() ; ++i)
+  {
+    FT_GlyphSlot slot;
+
+    ft2->get_slot(slot, utf32_str[i]);
+    my_draw_bitmap_mono(&slot->bitmap, x * 8, INPUT_AREAY + y * 18 , fg, bg);
+    x += (slot->bitmap.width/8);
+  }
+
+#if 0
+
+  std::wstring utf32_str = utf8_to_wstring(utf8_str);
   unsigned char *bitmap;
 
   while (*string) {
@@ -246,7 +264,7 @@ input_print_string (int x, int y, const unsigned char *string, int fg, int bg)
       input_draw_ascii (x++, y, *string++, fg, bg);
 
   }
-
+#endif
 }
 
 
