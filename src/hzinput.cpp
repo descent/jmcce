@@ -1248,7 +1248,7 @@ void hz_input_init (void)
   if (gDontLoadInputMethod != 1) {
 
     if (gEncode == BIG5) {
-      INIfile_load((std::string(jmcce_conf_path + "/../conf/jmcceb5.ini")).c_str());
+      INIfile_load((std::string(jmcce_conf_path + "/../conf/jmcceb5.ini.utf8")).c_str());
     }
     #if 0
     if (gEncode == GB) {
