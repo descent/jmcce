@@ -394,11 +394,11 @@ NEW_InputTable_load (int p_loadno)
     temp_table->AutoSelect = (int) (tui_header.szAutoSelect);
     temp_table->ChoiceCharByPhrase = (int) (tui_header.szChoiceCharByPhrase);
 
-    strcpy (temp_table->ename, tui_header.szEngName);	/* Åª¨ú¿é¤Jªk¤§­^¤å¦WºÙ */
+    strcpy (temp_table->ename, tui_header.szEngName);	/* è®€å–è¼¸å…¥æ³•ä¹‹è‹±æ–‡åç¨± */
 
 
-    _lread (temp_table->tui_file_pointer[1], (char *) (temp_table->tui_index_table[1]), 95 * 95 * 4);	/* Åª¨ú¨Ã¸ü¤J 95*95 ­Óªø¾ã¼Æ¤§¦V¶q¯Á¤Şªí */
-    /* ¨Ã¸ü¤J temp_table->tui_index_table ¥ş°ì 95x95 °}¦C¤¤ */
+    _lread (temp_table->tui_file_pointer[1], (char *) (temp_table->tui_index_table[1]), 95 * 95 * 4);	/* è®€å–ä¸¦è¼‰å…¥ 95*95 å€‹é•·æ•´æ•¸ä¹‹å‘é‡ç´¢å¼•è¡¨ */
+    /* ä¸¦è¼‰å…¥ temp_table->tui_index_table å…¨åŸŸ 95x95 é™£åˆ—ä¸­ */
     for (c5 = 2; c5 <= 5; c5++) {
 
       if (((temp_table->tui_file_pointer[c5]) =
@@ -507,7 +507,7 @@ NEWDispSelection (char *szOut, char *root_buff, int tty_fd, int disp_selkey)
   int c5;
 
   for (c5 = 1; c5 <= 5; c5++) {
-    tTUI_file_pointer[c5] = (gsCurrent_input_table->tui_file_pointer[c5]);	/* ­«­n¡I¡I¨ú±o²{¦æ¿é¤JªkÁ`¸ê®Æµ²ºc¤¤ªº tui ÀÉ®×«ü¼Ğ¡I */
+    tTUI_file_pointer[c5] = (gsCurrent_input_table->tui_file_pointer[c5]);	/* é‡è¦ï¼ï¼å–å¾—ç¾è¡Œè¼¸å…¥æ³•ç¸½è³‡æ–™çµæ§‹ä¸­çš„ tui æª”æ¡ˆæŒ‡æ¨™ï¼ */
   }
 
   ClrSelArea ();
@@ -613,7 +613,7 @@ NEWDispSelection (char *szOut, char *root_buff, int tty_fd, int disp_selkey)
 
   for (ii = gCurrentPageIndex; ii < rPhrase_count; ii++) {
 
-    if ((tList_count >= MAX_SEL_COUNT) || (tPOS >= MAX_SEL_LENGTH)) {	/* ¤S§ä¨ì¤F¦ı¬O¤w¸g¨ì¹F 10 ­Ó¤F¡A©Îªø«×¶W¹L¤F */
+    if ((tList_count >= MAX_SEL_COUNT) || (tPOS >= MAX_SEL_LENGTH)) {	/* åˆæ‰¾åˆ°äº†ä½†æ˜¯å·²ç¶“åˆ°é” 10 å€‹äº†ï¼Œæˆ–é•·åº¦è¶…éäº† */
       gCurrentPageIndex = gPageIndexFirst[gPage_no];
 
       gMultiPageMode = 1;
@@ -789,7 +789,7 @@ NEW_hz_filter (int tty_fd, unsigned char key, int pListRightNow)
     case '\010':		/* BackSpace Ctrl+H */
     case '\177':		/* BackSpace */
 
-      for (ii = gsCurrent_input_table->MaxPress - 1; ii >= 0; ii--) {	/* ¦]¬°©ñ¤J¦r®Ú½w½Ä°Ïªº¦ì¸m¥i¯à¤£³sÄò¡A¦]¦¹¨ú±o¤£³sÄò¦ì¸m¤¤³Ì¤jªº¦³¦r®Ú¦ì¸m */
+      for (ii = gsCurrent_input_table->MaxPress - 1; ii >= 0; ii--) {	/* å› ç‚ºæ”¾å…¥å­—æ ¹ç·©è¡å€çš„ä½ç½®å¯èƒ½ä¸é€£çºŒï¼Œå› æ­¤å–å¾—ä¸é€£çºŒä½ç½®ä¸­æœ€å¤§çš„æœ‰å­—æ ¹ä½ç½® */
 	if (gRoot_buff[ii] != ' ')
 	  break;
       }
@@ -917,10 +917,10 @@ NEW_hz_filter (int tty_fd, unsigned char key, int pListRightNow)
     default:
 
       if (gsCurrent_input_table->CaseTransPolicy == 1)
-	key = toupper (key);	/* ÀÉ®×»s§@®É¬O¤j¼g¡A¤p¼g¤@«ßÂà¤j¼g¦A§ä */
+	key = toupper (key);	/* æª”æ¡ˆè£½ä½œæ™‚æ˜¯å¤§å¯«ï¼Œå°å¯«ä¸€å¾‹è½‰å¤§å¯«å†æ‰¾ */
 
       if (gsCurrent_input_table->CaseTransPolicy == 2)
-	key = tolower (key);	/* ÀÉ®×»s§@®É¬O¤p¼g¡A¤j¼g¤@«ßÂà¤p¼g¦A§ä */
+	key = tolower (key);	/* æª”æ¡ˆè£½ä½œæ™‚æ˜¯å°å¯«ï¼Œå¤§å¯«ä¸€å¾‹è½‰å°å¯«å†æ‰¾ */
 
 
 
@@ -1071,11 +1071,11 @@ NEW_hz_filter (int tty_fd, unsigned char key, int pListRightNow)
 	    if (position != 'F') {
 	      gRoot_buff[position - 49] = (key);
 	    } else {
-	      gRoot_buff[gsCurrent_input_table->MaxPress - 1] = (key);	/* ©ñ¤J³Ì¥½¤@­Ó«öÁäªº¦r®Ú½w½Ä°Ï¦ì¸m */
+	      gRoot_buff[gsCurrent_input_table->MaxPress - 1] = (key);	/* æ”¾å…¥æœ€æœ«ä¸€å€‹æŒ‰éµçš„å­—æ ¹ç·©è¡å€ä½ç½® */
 	      gFinalkey_flag = 1;
 	    }
 
-	    for (ii = gsCurrent_input_table->MaxPress; ii >= 0; ii--) {	/* ¦]¬°©ñ¤J¦r®Ú½w½Ä°Ïªº¦ì¸m¥i¯à¤£³sÄò¡A¦]¦¹¨ú±o¤£³sÄò¦ì¸m¤¤³Ì¤jªº¦³¦r®Ú¦ì¸m */
+	    for (ii = gsCurrent_input_table->MaxPress; ii >= 0; ii--) {	/* å› ç‚ºæ”¾å…¥å­—æ ¹ç·©è¡å€çš„ä½ç½®å¯èƒ½ä¸é€£çºŒï¼Œå› æ­¤å–å¾—ä¸é€£çºŒä½ç½®ä¸­æœ€å¤§çš„æœ‰å­—æ ¹ä½ç½® */
 	      if (gRoot_buff[ii] != ' ')
 		break;
 	    }
@@ -1085,14 +1085,14 @@ NEW_hz_filter (int tty_fd, unsigned char key, int pListRightNow)
 	  if (gEncode == BIG5) {
 	    input_print_string (POS_OF_INPUTNAME +
 				strlen (gsCurrent_input_table->cname), 1,
-				"¶W¹L¤¹³\\½XªøµL®Ä...", HINT_NOTFOUNDCOLOR,
+				"è¶…éå…è¨±\ç¢¼é•·ç„¡æ•ˆ...", HINT_NOTFOUNDCOLOR,
 				INPUT_BGCOLOR);
 	  }
 
 	  if (gEncode == GB) {
 	    input_print_string (POS_OF_INPUTNAME +
 				strlen (gsCurrent_input_table->cname), 1,
-				string_BIG5toGB ("¤w¶W¹L¤¹³\\½XªøµL®Ä..."),
+				string_BIG5toGB ("å·²è¶…éå…è¨±\ç¢¼é•·ç„¡æ•ˆ..."),
 				HINT_NOTFOUNDCOLOR, INPUT_BGCOLOR);
 	  }
 
@@ -1163,14 +1163,14 @@ NEW_hz_filter (int tty_fd, unsigned char key, int pListRightNow)
 	    if (gEncode == BIG5) {
 	      input_print_string (POS_OF_INPUTNAME +
 				  strlen (gsCurrent_input_table->cname), 1,
-				  "¦¹Áä¤J½XµL¦rµü...", HINT_NOTFOUNDCOLOR,
+				  "æ­¤éµå…¥ç¢¼ç„¡å­—è©...", HINT_NOTFOUNDCOLOR,
 				  INPUT_BGCOLOR);
 	    }
 
 	    if (gEncode == GB) {
 	      input_print_string (POS_OF_INPUTNAME +
 				  strlen (gsCurrent_input_table->cname), 1,
-				  string_BIG5toGB ("¦¹Áä¤J½XµL¦rµü..."),
+				  string_BIG5toGB ("æ­¤éµå…¥ç¢¼ç„¡å­—è©..."),
 				  HINT_NOTFOUNDCOLOR, INPUT_BGCOLOR);
 	    }
 
@@ -1251,14 +1251,14 @@ NEW_hz_filter (int tty_fd, unsigned char key, int pListRightNow)
 	    if (gEncode == BIG5) {
 	      input_print_string (POS_OF_INPUTNAME +
 				  strlen (gsCurrent_input_table->cname), 1,
-				  "¦¹Áä¤J½XµL¦rµü...", HINT_NOTFOUNDCOLOR,
+				  "æ­¤éµå…¥ç¢¼ç„¡å­—è©...", HINT_NOTFOUNDCOLOR,
 				  INPUT_BGCOLOR);
 	    }
 
 	    if (gEncode == GB) {
 	      input_print_string (POS_OF_INPUTNAME +
 				  strlen (gsCurrent_input_table->cname), 1,
-				  string_BIG5toGB ("¦¹Áä¤J½XµL¦rµü..."),
+				  string_BIG5toGB ("æ­¤éµå…¥ç¢¼ç„¡å­—è©..."),
 				  HINT_NOTFOUNDCOLOR, INPUT_BGCOLOR);
 	    }
 
@@ -1272,7 +1272,7 @@ NEW_hz_filter (int tty_fd, unsigned char key, int pListRightNow)
       }
 
 
-      NEWDispRootArea ();	/* Åã¥Ü²{¤w¿é¤Jªº¦r®Ú */
+      NEWDispRootArea ();	/* é¡¯ç¤ºç¾å·²è¼¸å…¥çš„å­—æ ¹ */
 
       if (pListRightNow == 1) {
 
@@ -1539,7 +1539,7 @@ find:
   if (next_offset > 0)
     read_len = next_offset - start_offset;
   else
-    read_len = 999999999L;	//ÀÉ®×³Ì«á
+    read_len = 999999999L;	//æª”æ¡ˆæœ€å¾Œ
 
   return read_len;
 }
@@ -1575,7 +1575,7 @@ g_TUI_Search_Exact (char *result_phrase, char *root_buff,
 
     _llseek (p_fp, start_offset, SEEK_SET);
 
-    s_read_len = Find_BlockLength (root_buff[0], root_buff[1], szPos);	//¨ú±o¨ì¤U¤@²Õ¨â½XµüÁä¶¡¦³¦h¤ÖÁ`ªø«×
+    s_read_len = Find_BlockLength (root_buff[0], root_buff[1], szPos);	//å–å¾—åˆ°ä¸‹ä¸€çµ„å…©ç¢¼è©éµé–“æœ‰å¤šå°‘ç¸½é•·åº¦
 
     n = _lread (p_fp, (char *) &id, 1);
 
@@ -1981,7 +1981,7 @@ int NEWIncrePreview (char *szOut, char *root_buff, int tty_fd, int disp_selkey, 
     int s0 = (int) root_buff[0] - 32;
     int s1 = (int) root_buff[1] - 32;
 
-    long start_offset = gsCurrent_input_table->tui_index_table[pp][s0][s1];	// ¨ÌµüÁä«e¨â½X¨ú±o¨ú±o¯Á¤Ş¦V¶qªí°_©l­È
+    long start_offset = gsCurrent_input_table->tui_index_table[pp][s0][s1];	// ä¾è©éµå‰å…©ç¢¼å–å¾—å–å¾—ç´¢å¼•å‘é‡è¡¨èµ·å§‹å€¼
 
     char id;
     int n;
@@ -1995,7 +1995,7 @@ int NEWIncrePreview (char *szOut, char *root_buff, int tty_fd, int disp_selkey, 
 
     _llseek (temp_file_pointer, start_offset, SEEK_SET);
 
-    s_read_len = Find_BlockLength (root_buff[0], root_buff[1], gsCurrent_input_table->tui_index_table[pp]);	//¨ú±o¨ì¤U¤@²Õ¨â½XµüÁä¶¡¦³¦h¤ÖÁ`ªø«×
+    s_read_len = Find_BlockLength (root_buff[0], root_buff[1], gsCurrent_input_table->tui_index_table[pp]);	//å–å¾—åˆ°ä¸‹ä¸€çµ„å…©ç¢¼è©éµé–“æœ‰å¤šå°‘ç¸½é•·åº¦
 
 
 
