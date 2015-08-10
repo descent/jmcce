@@ -199,11 +199,14 @@ void show_zuin_buffer(ChewingContext *ctx )
         input_print_string (16, 0, "       ", INPUT_FGCOLOR, INPUT_BGCOLOR);
     for (int i=0 ; i < zuin_count ; ++i)
     {
+      #if 0
         std::string big5_str;
         if (utf8_to_big5(zuin_string, big5_str) == 0)
         {
           input_print_string (ZUIN_POS_X, ZUIN_POS_Y, big5_str.c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
         }
+      #endif
+      input_print_string (ZUIN_POS_X, ZUIN_POS_Y, zuin_string, INPUT_FGCOLOR, INPUT_BGCOLOR);
     }
 
 	//addstr( zuin_string );
@@ -234,6 +237,7 @@ void show_commit_string(ChewingContext *ctx, bool commit_action, int tty_fd)
   if (chewing_commit_Check(ct_)) 
   {
     char *buf = chewing_commit_String(ct_);
+    #if 0
     std::string big5_str;
     if (utf8_to_big5(buf, big5_str) == 0)
     {
@@ -248,6 +252,15 @@ void show_commit_string(ChewingContext *ctx, bool commit_action, int tty_fd)
         input_print_string (EDIT_BUFFER_POS_X, EDIT_BUFFER_POS_Y, "                ", INPUT_FGCOLOR, INPUT_BGCOLOR);
       }
     }
+    #endif
+      if (commit_action)
+      {
+        write (tty_fd, buf, strlen(buf));
+        // clear zuin buf, choose buf, edit buf
+        input_print_string (ZUIN_POS_X, ZUIN_POS_Y, "          ", INPUT_FGCOLOR, INPUT_BGCOLOR);
+        input_print_string (CHOOSE_BUFFER_POS_X, CHOOSE_BUFFER_POS_Y, "                                        ", INPUT_FGCOLOR, INPUT_BGCOLOR);
+        input_print_string (EDIT_BUFFER_POS_X, EDIT_BUFFER_POS_Y, "                ", INPUT_FGCOLOR, INPUT_BGCOLOR);
+      }
 
     free(buf);
   }
@@ -286,9 +299,13 @@ void show_edit_buffer(ChewingContext *ctx )
 
   input_print_string (EDIT_BUFFER_POS_X, EDIT_BUFFER_POS_Y, "                ", INPUT_FGCOLOR, INPUT_BGCOLOR);
 
+#if 0
   std::string big5_str;
   if (utf8_to_big5(buffer_string, big5_str) == 0)
     input_print_string (EDIT_BUFFER_POS_X, EDIT_BUFFER_POS_Y, big5_str.c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
+#endif
+
+  input_print_string (EDIT_BUFFER_POS_X, EDIT_BUFFER_POS_Y, buffer_string, INPUT_FGCOLOR, INPUT_BGCOLOR);
 
         #if 0
 	mvaddstr( x, y, buffer_string );
