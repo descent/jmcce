@@ -6,7 +6,7 @@
 /****************************************************************************/
 
 //#define POS_OF_VERSIONSTRING 0
-#define VERSION_STRING "descent modify jmcce 1.4 rc2 80x24"
+#define VERSION_STRING "descent modify jmcce 1.6 α 80x24"
 //#define INPUT_FGCOLOR 0
 //#define INPUT_BGCOLOR 0
 
