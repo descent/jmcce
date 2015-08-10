@@ -222,6 +222,13 @@ input_draw_hanzi (int x, int y, unsigned char *bitmap, int fg, int bg)
 }
 
 
+void input_print_wc(int x, int y, wchar_t wc, int fg, int bg)
+{
+  Ft2 *ft2 = get_ft2("../fonts/unifont.pcf.gz");
+  FT_GlyphSlot slot;
+  ft2->get_slot(slot, wc);
+  my_draw_bitmap_mono(&slot->bitmap, x * 8, INPUT_AREAY + y * 18 , fg, bg);
+}
 
 void input_print_string (int x, int y, const unsigned char *string, int fg, int bg)
 {
