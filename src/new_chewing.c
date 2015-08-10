@@ -1,7 +1,9 @@
 #include "new_chewing.h"
 #include "hzinput.h"
-
 #include "chewing.h"
+#include "ft2.h"
+#include "wstring2utf8.h"
+
 #if 0
 /* Only used by calculating char position */
 #include "internal/chewing-utf8-util.h"
@@ -140,13 +142,15 @@ void show_choose_buffer(ChewingContext *ctx )
 
     cand_string = chewing_cand_String( ctx );
     sprintf( str, " %s ", cand_string );
+    select_str.push_back(cand_string); 
 
+#if 0
     std::string big5_str;
     if (utf8_to_big5(cand_string, big5_str) == 0)
       select_str.push_back(big5_str); 
     else
       select_str.push_back("??");
-
+#endif
 
     free( cand_string );
     i++;
@@ -160,14 +164,26 @@ void show_choose_buffer(ChewingContext *ctx )
 
   input_print_string (input_pos+1, CHOOSE_BUFFER_POS_Y, "                                   ", INPUT_FGCOLOR, INPUT_BGCOLOR);
   int index=1;
-  for (int i=0 ; i < list_num ; ++i)
+
+  //char *tmp_str = strdup(cand_string);
+  //free(tmp_str);
+
+  //for (size_t i=0 ; i < select_str.size() ; ++i)
+  for (size_t i=0 ; i < select_str.size() ; ++i)
   {
     char index_str[4];
 
     sprintf(index_str, "%d", index);
-    input_print_string (input_pos, CHOOSE_BUFFER_POS_Y, index_str, INPUT_FGCOLOR, INPUT_BGCOLOR);
-    input_print_string (input_pos+1, CHOOSE_BUFFER_POS_Y, select_str[i].c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
-    input_pos += strlen(select_str[i].c_str())+2;
+    input_print_string(input_pos, CHOOSE_BUFFER_POS_Y, index_str, INPUT_FGCOLOR, INPUT_BGCOLOR);
+    if (select_str[i].c_str())
+      input_print_string(input_pos+1, CHOOSE_BUFFER_POS_Y, select_str[i].c_str(), INPUT_FGCOLOR, INPUT_BGCOLOR);
+    #if 0
+    std::string utf8_str(select_str[i]);
+    std::wstring utf32_str = utf8_to_wstring(utf8_str);
+    input_print_wc(input_pos+1, CHOOSE_BUFFER_POS_Y, utf32_str[i], INPUT_FGCOLOR, INPUT_BGCOLOR);
+    #endif
+    //input_pos += strlen(select_str[i].c_str())+2;
+    input_pos += 4;
     ++index;
   }
 
