@@ -45,7 +45,7 @@ vgatest: vgatest.o
 asm_routine.o: asm_routine.S
 	$(CC) $(CFLAGS) -c $<
 
-sources = c_routine.c  error.c  hbffont.c  jmcce.c console.c  hist.c     hztty.c    vgatest.c new_chewing.c 
+sources = c_routine.c  error.c  hbffont.c  jmcce.c console.c  hist.c     hztty.c 
 include $(sources:.c=.d)
 #include $(sources:.cpp=.dpp)
 
