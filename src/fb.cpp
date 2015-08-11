@@ -115,7 +115,9 @@ void Fb::setpixelrgb(int x, int y, int r, int g, int b)
   // location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
   //int byte_per_pixel = vinfo.bits_per_pixel/8;
 
-  location = (y * vinfo.xres + x) * (finfo.line_length/vinfo.xres);
+  //location = (y * vinfo.xres + x) * (finfo.line_length/vinfo.xres);
+  location = y * finfo.line_length + x * (vinfo.bits_per_pixel/8);
+        
   printf("x: %d, y: %d\n", x, y);
   printf("location: %d\n", location);
   printf("vinfo.xres: %d\n", vinfo.xres);
