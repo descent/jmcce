@@ -77,7 +77,7 @@ int console_mode = NORMAL_MODE;
 int active_console = 1;
 
 int gFont_bytes = 32;
-int gEncode;
+int gEncode=BIG5;
 int gDontLoadInputMethod = 0;
 
 
@@ -988,7 +988,7 @@ char jmcce_path[256];
 int
 main (int argc, char **argv)
 {
-  char *_lang;
+  // char *_lang;
   struct passwd *pw;
 
   fs=fopen("./log", "w");
@@ -996,6 +996,7 @@ main (int argc, char **argv)
   getcwd(jmcce_path, 256-1);
 
 
+#if 0
   _lang = setlocale (LC_CTYPE, "");
 
   if (_lang != NULL && strncmp (_lang, "zh_CN", 5) == 0) {
@@ -1007,7 +1008,6 @@ main (int argc, char **argv)
     gEncode = BIG5;
     setenv ("LC_ALL", "zh_TW.Big5", 1);
   }
-
   if (argc > 1) {
     if (strcmp (argv[1], "-d") == 0) {
       gDontLoadInputMethod = 1;
@@ -1040,6 +1040,7 @@ main (int argc, char **argv)
       exit (0);
     }
   }
+#endif
 
   if (geteuid() != 0) {
   
