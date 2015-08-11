@@ -511,8 +511,15 @@ fb_drawline (int x1, int y1, int x2, int y2)
 
 void fb_clearblock (int sx, int sy, int ex, int ey, u8 bg)
 {
+
+#if 1
   for (int i = sy ; i < ey ; ++i)
-    fb_drawline(sx, i, sy, i);
+  {
+    // extern FILE *fs;
+    // fprintf(fs, "sx: %d, i: %d, ex: %d, i: %d\n", sx, i, ex, i);
+    fb_drawline(sx, i, ex, i, bg);
+  }
+#endif
 }
 
 void fb_clearblock (int sx, int sy, int ex, int ey)
