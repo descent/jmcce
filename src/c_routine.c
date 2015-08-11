@@ -447,14 +447,20 @@ void vgalib_clear_block(int col,int y,int width,int height,int bgcolor)
 void
 c_clear_block (int col, int y, int width, int height, int bgcolor1)
 {
+
+  extern FILE *fs;
+
+  fprintf(fs, "col: %d, y: %d, width: %d, height: %d, bgcolor1: %d\n", col, y, width, height, bgcolor1);
+
   if (!use_fb) {
     vgalib_clear_block (col*8, y, width*8, height, bgcolor1);
     return;
   }
 
-  bgcolor = RED;
+  //bgcolor = RED;
   //fb_clearblock (col * 8, y, col * 8 + width * 8, y + height);
-  fb_clearblock (col*8, y, width*8, height, RED);
+  fb_clearblock (col*8, y, width*8, height, bgcolor1);
+  // fb_clearblock (col*8, y, width*8, height, RED);
 }
 
 void vgalib_clear_lines(int sx, int sy, int ex, int ey, int color)
@@ -541,8 +547,8 @@ c_toggle_cursor (int col, int y)
   }
 
   clear_cursor ();
-  fb_drawline (col * 8, y + 1, ((col + 1) * 8) - 1, y + 1);
-  fb_drawline (col * 8, y, ((col + 1) * 8) - 1, y);
+  fb_drawline (col * 8, y + 1, ((col + 1) * 8) - 1, y + 1, RED);
+  fb_drawline (col * 8, y, ((col + 1) * 8) - 1, y, RED);
   cursor_x0 = col;
   cursor_y0 = y;
 }
