@@ -389,11 +389,11 @@ void color2rgb(u8 color, u8 &r, u8 &g, u8 &b)
 
 /*for 256 color*/
 
-int fb_drawpixel (int x, int y)
+int fb_drawpixel (int x, int y, int color)
 {				/* ok */
   u8 r, g, b;
 
-  color2rgb(fgcolor, r, g, b);
+  color2rgb(color, r, g, b);
   return fb_drawpixel (x, y, r, g, b);
 }
 
@@ -465,9 +465,8 @@ int fb_drawpixel (int x, int y, char r, char g, char b)
   return 0;
 }
 
-int
-fb_drawline (int x1, int y1, int x2, int y2)
-{				/* ok */
+int fb_drawline (int x1, int y1, int x2, int y2, int color)
+{		
   int dx = x2 - x1;
   int dy = y2 - y1;
   int ax = abs (dx) << 1;
@@ -481,7 +480,7 @@ fb_drawline (int x1, int y1, int x2, int y2)
   if (ax > ay) {
     int d = ay - (ax >> 1);
     while (x != x2) {
-      fb_drawpixel (x, y);
+      fb_drawpixel (x, y, color);
 
       if ((d > 0) || ((d == 0) && (sx == 1))) {
 	y += sy;
@@ -493,7 +492,7 @@ fb_drawline (int x1, int y1, int x2, int y2)
   } else {
     int d = ax - (ay >> 1);
     while (y != y2) {
-      fb_drawpixel (x, y);
+      fb_drawpixel (x, y, color);
 
       if ((d > 0) || ((d == 0) && (sy == 1))) {
 	x += sx;
@@ -503,7 +502,7 @@ fb_drawline (int x1, int y1, int x2, int y2)
       d += ax;
     }
   }
-  fb_drawpixel (x, y);
+  fb_drawpixel (x, y, color);
 
   return 0;
 }

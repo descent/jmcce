@@ -13,32 +13,6 @@
 #include <linux/vt.h>
 #include <linux/kd.h>
 
-#include "type.h"
-
-#define FB_DEV  "/dev/fb0"
-typedef unsigned char BYTE;
-extern size_t vsize;
-extern int fh;
-extern unsigned char fgcolor;
-extern unsigned char bgcolor;
-
-extern struct fb_var_screeninfo vinfo;
-extern void *addr;
-extern unsigned char *addr2;
-
-int fb_init ();
-void fb_clearblock (int sx, int sy, int ex, int ey);
-void fb_clearblock (int sx, int sy, int ex, int ey, u8 bg);
-void fb_setfgcolor (int);
-void fb_setbgcolor (int);
-int fb_drawline (int x1, int y1, int x2, int y2);	/* ok */
-
-int fb_drawpixel (int x, int y);	/* ok */
-
-int fb_drawpixel (int x, int y, char r, char g, char b);
-void color2rgb(u8 color, u8 &r, u8 &g, u8 &b);
-
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -66,7 +40,35 @@ void color2rgb(u8 color, u8 &r, u8 &g, u8 &b);
 #define LIGHTRED                (12)
 #define LIGHTMAGENTA            (13)
 #define LIGHTBROWN              (14)
+#define WHITE                   LIGHTWHITE
 #define LIGHTWHITE              (255)
+
+#include "type.h"
+
+#define FB_DEV  "/dev/fb0"
+typedef unsigned char BYTE;
+extern size_t vsize;
+extern int fh;
+extern unsigned char fgcolor;
+extern unsigned char bgcolor;
+
+extern struct fb_var_screeninfo vinfo;
+extern void *addr;
+extern unsigned char *addr2;
+
+int fb_init ();
+void fb_clearblock (int sx, int sy, int ex, int ey);
+void fb_clearblock (int sx, int sy, int ex, int ey, u8 bg);
+void fb_setfgcolor (int);
+void fb_setbgcolor (int);
+int fb_drawline (int x1, int y1, int x2, int y2, int color=BLACK);	/* ok */
+
+int fb_drawpixel (int x, int y, int color);	/* ok */
+
+int fb_drawpixel (int x, int y, char r, char g, char b);
+void color2rgb(u8 color, u8 &r, u8 &g, u8 &b);
+
+
 
 namespace LFB
 {
