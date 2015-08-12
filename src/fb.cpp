@@ -20,6 +20,15 @@ size_t vsize;
 int fh;
 int cursor_x, cursor_y;
 
+
+// from: Screen::~Screen() [fbterm-1.7/src/screen.cpp]
+
+static const int8_t show_cursor[] = "\e[?25h";
+static const int8_t hide_cursor[] = "\e[?25l";
+static const int8_t disable_blank[] = "\e[9;0]";
+static const int8_t enable_blank[] = "\e[9;10]";
+static const int8_t clear_screen[] = "\e[2J\e[H";
+
 Fb::Fb()
 {
   int ret = fb_init();
@@ -27,6 +36,8 @@ Fb::Fb()
 
 Fb::~Fb()
 {
+  ssize_t ret = write(STDIN_FILENO, enable_blank, sizeof(enable_blank) - 1);
+  ret = write(STDIN_FILENO, clear_screen, sizeof(clear_screen) - 1);
   munmap(fbp, screensize);
   close(fbfd);
   printf("munmap\n");
@@ -72,6 +83,11 @@ int Fb::fb_init()
    addr = fbp;
    addr2 = (unsigned char *)addr;
    ::vinfo = vinfo;
+
+
+  ssize_t ret = write(STDIN_FILENO, hide_cursor, sizeof(hide_cursor) - 1);
+  ret = write(STDIN_FILENO, disable_blank, sizeof(disable_blank) - 1);
+
    return 0;
 }
 
