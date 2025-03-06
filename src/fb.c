@@ -343,7 +343,7 @@ fb_init ()
   addr = mmap (0, vinfo.xres * vinfo.yres * vinfo.bits_per_pixel / 8,
 	       PROT_READ | PROT_WRITE, MAP_SHARED, fh, 0);
 
-  if (addr < 0) {
+  if (addr == MAP_FAILED) {
     perror ("mmap() " FB_DEV);
     close (fh);
     return -1;
