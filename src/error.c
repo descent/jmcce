@@ -39,8 +39,7 @@ debug (char *fmt, ...)
 
 #endif /* DEBUG */
 
-void
-error (char *fmt, ...)
+void error (const char *fmt, ...)
 {
   char buf[NUM_OF_COL];
   va_list ap;

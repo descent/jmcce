@@ -43,7 +43,6 @@
 #include "big2gb.h"
 
 
-
 /***************************************************************************
  *		 extern      variable defines				   *
  ***************************************************************************/
@@ -223,8 +222,7 @@ input_draw_hanzi (int x, int y, unsigned char *bitmap, int fg, int bg)
 
 
 
-void
-input_print_string (int x, int y, const unsigned char *string, int fg, int bg)
+void input_print_string (int x, int y, const char *string, int fg, int bg)
 {
 
   unsigned char *bitmap;

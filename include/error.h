@@ -17,7 +17,7 @@ void debug (char *fmt, ...);
 
 void error_init (void);
 void error_done (void);
-void error (char *fmt, ...);
+void error (const char *fmt, ...);
 void error_line (void);
 void out_of_memory (char *file_name, char *func_name, int line_no);
 
