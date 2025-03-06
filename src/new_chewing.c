@@ -27,7 +27,7 @@
 
 ChewingContext* ct_;
 
-const int MAX_PHONE_SEQ_LEN = 50;
+//const int MAX_PHONE_SEQ_LEN = 50;
 unsigned short g_lastPhoneSeq[MAX_PHONE_SEQ_LEN] = {0};
 
 namespace
@@ -50,8 +50,14 @@ extern FILE *fs;
 
 bool new_chew_init()
 {
-  chewing_Init("/usr/lib/i386-linux-gnu/libchewing3/chewing", ".");
+  //chewing_Init("/usr/lib/i386-linux-gnu/libchewing3/chewing", ".");
+  //chewing_Init("/usr/include/chewing", ".");
   ct_ = chewing_new();
+  if (!ct_) 
+  {
+    printf("init Chewing fail\n");
+    return false;
+  }
 
   /* Set keyboard type */
   //chewing_set_KBType( ct_, chewing_KBStr2Num( "KB_DEFAULT" ) );
@@ -70,7 +76,7 @@ bool new_chew_init()
         chewing_set_autoShiftCur( ct_, 1 );
         chewing_set_phraseChoiceRearward( ct_, 1 );
 
-
+  return true;
 }
 
 
