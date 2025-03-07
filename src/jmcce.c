@@ -103,11 +103,12 @@ void BarMenu (int xmax, int ymax, int leftmar, int stepwidth);
  * side effect: none
 */
 
+char buf[64];
+
 static bool
 is_console (void)
 {
   // ref : fbterm/input.cpp # TtyInput::createInstance()
-  char buf[64];
   if (ttyname_r(STDIN_FILENO, buf, sizeof(buf))) 
   {
     fprintf(stderr, "%s: stdin isn't a tty!\n", buf);
@@ -530,7 +531,8 @@ init (void)
   {
     exit(0);
   }
-  console_fd = open (CONSOLE, O_RDWR);
+  //console_fd = open (CONSOLE, O_RDWR);
+  console_fd = open (buf, O_RDWR);
 
   if (console_fd == -1) {
     fprintf (stderr, "fatal error: Cannot open console device\n");
@@ -1047,7 +1049,6 @@ main (int argc, char **argv)
      printf ("Jmcce : Operation not permitted, may use root permission.\n");
      exit (0);
   }
-  
 #endif 
   pw = getpwuid (getuid ());
   strcpy (home_dir, pw->pw_dir);
