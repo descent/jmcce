@@ -1,10 +1,10 @@
 FB=1
 #SVGA=1
-CC=g++-5
-CXX=g++-5
+CC=g++
+CXX=g++
 
-FT2_CFLAGS=`freetype-config --cflags`
-FT2_LIBS=`freetype-config --libs`
+FT2_CFLAGS=`pkg-config --cflags freetype2`
+FT2_LIBS=`pkg-config --libs freetype2`
 
 CFLAGS=-std=c++11 -DNEW_CHEWING -g -Iinclude -I../include -I../libchewing/include/ -fpermissive -I/usr/include/chewing -I/usr/include/i386-linux-gnu/chewing/ -I/usr/include/x86_64-linux-gnu/chewing/ -Wall -W ${FT2_CFLAGS}
 LDFLAGS = -lncurses -lutil -L/usr/local/lib -lchewing $(FT2_LIBS)
@@ -37,7 +37,7 @@ vgatest: vgatest.o
 	$(CC) -o $@ $^ -lvgagl -lvga 
 
 %.d: %.c
-	set -e; rm -f $@ ; $(CC) -MM $(CFLAGS) $< > $@.$$$$ ; sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@ ; rm -f $@.$$$$
+	set -e; rm -f $@ ; $(CC) -MM $(CFLAGS) $(FT2_CFLAGS) $< > $@.$$$$ ; sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@ ; rm -f $@.$$$$
 
 #%.dpp: %.cpp
 #	set -e; rm -f $@ ; $(CC) -MM $(CFLAGS) $< > $@.$$$$ ; sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@ ; rm -f $@.$$$$
