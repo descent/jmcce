@@ -1041,12 +1041,14 @@ main (int argc, char **argv)
     }
   }
 
+#if 0
   if (geteuid() != 0) {
   
      printf ("Jmcce : Operation not permitted, may use root permission.\n");
      exit (0);
   }
   
+#endif 
   pw = getpwuid (getuid ());
   strcpy (home_dir, pw->pw_dir);
 
