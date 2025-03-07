@@ -179,12 +179,22 @@ int fb_drawpixel (int x, int y, char r, char g, char b)
     case 32:
     {
       u8 r_, g_, b_;
+      int location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) + (y+vinfo.yoffset) * finfo.line_length;
+
 
       color2rgb(fgcolor, r_, g_, b_);
+      #if 0
       addr2[(vinfo.xres * y + x)*4] = b_;
       addr2[(vinfo.xres * y + x)*4+1] = g_;
       addr2[(vinfo.xres * y + x)*4+2] = r_;
-      addr2[(vinfo.xres * y + x)*4+3] = 0xff;
+      addr2[(vinfo.xres * y + x)*4+3] = 0;
+      #endif
+
+      *(addr2 + location) = b;        // Some blue
+      *(addr2 + location + 1) = g;     // A little green
+      *(addr2 + location + 2) = r;    // A lot of red
+      *(addr2 + location + 3) = 0;      // No transparency
+
       break;
     }
   }
