@@ -350,8 +350,7 @@ fb_init ()
   }
 #endif
 
-  addr = mmap (0, vinfo.xres * vinfo.yres * vinfo.bits_per_pixel / 8,
-	       PROT_READ | PROT_WRITE, MAP_SHARED, fh, 0);
+  addr = mmap (0, finfo.smem_len, PROT_READ | PROT_WRITE, MAP_SHARED, fh, 0); // from: fbterm-1.7 fbdev.cpp
 
   if (addr == MAP_FAILED) {
     perror ("mmap() " FB_DEV);
